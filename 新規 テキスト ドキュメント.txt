@@ -1,0 +1,15 @@
+呪い
+女性キャラの討伐時に追加→女性キャラに追加ダメージ
+ゴールド獲得時に追加→追加ゴールドを獲得
+エリートモンスターの出現率アップ→エリートモンスターの出現率ダウン
+個体差固定→個体差最小
+
+呪いの
+
+魔物のしずく
+
+無印
+startGameR(speed1, speed2, count, onEnd)
+startGameA(speed1, speed2, type, count1, count2, onEnd)
+startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) 
+startGameS(speed1, count1, probability, speed2, count2, onEnd)

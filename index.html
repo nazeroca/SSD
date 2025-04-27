@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>SSD</title>
+  <style>
+    html, body { margin: 0; height: 100%; background-color: #111; font-family: sans-serif; }
+    .container { display: flex; flex-direction: column; width: 100vw; height: 100vh; background-color: #222; overflow: hidden; }
+    .top-screen { flex: 8; position: relative; background-color: #888; }
+    .bottom-screen { flex: 2; position: relative; background-color: #000; overflow: hidden; }
+    .circle { position: absolute; top: 50%; left: 100%; transform: translateY(-50%); width: 80px; height: 80px; background-color: white; border-radius: 50%; }
+    .judgeline { position: absolute; width: 2px; height: 100%; background-color: white; left: 20%; top: 0; }
+    .button-group { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; z-index: 10; white-space: pre-wrap;}
+    .start-button { padding: 20px 40px; font-size: 24px; border: none; cursor: pointer; border-radius: 8px; color: white; margin: 10px; white-space: pre-wrap; }
+    .hidden { display: none; }
+    .info { position: absolute; top: 10px; left: 10px; color: white; font-size: 18px; z-index: 20; font-weight:Bold;}
+    .text-window { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 90%; background-color: rgba(0, 0, 0, 0.85); color: white; font-size: 24px; padding: 20px; box-sizing: border-box; z-index: 15; border: 2px solid white; border-radius: 12px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); white-space: pre-wrap; }
+    #fade-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s;
+      z-index: 999;
+    }
+    /* ゴールド表示は画面右上に固定 */
+    #gold-display {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: yellow;
+      font-weight:Bold;
+      font-size: 18px;
+      z-index: 30;
+    }
+    #monster-img {
+  width: 20vw ;
+  height: auto ;
+}
+
+#scene-img {
+  width: 20vw;
+  max-width: 500px;
+  height: auto;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="fade-overlay"></div>
+    <div class="top-screen">
+      <!-- モンスター表示用コンテナの例 -->
+<div id="monster-container" class="hidden" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%);">
+  <img id="monster-img" src="" alt="Monster" style="display: block; width: 150px;">
+  <div id="monster-hp-bar" style="width: 150px; height: 20px; background-color: rgb(255, 2, 2);  margin-top: 5px;">
+    <div id="monster-hp" style="height: 100%; background-color: rgb(0, 209, 0); width: 100%;"></div>
+  </div>
+  <!-- HP数値表示 -->
+  <div id="monster-hp-text" style="text-align: center; color: white; margin-top: 5px; font-size: 20px;font-weight:Bold;"></div>
+</div>
+
+
+<!-- 新規追加：戦闘以外用のシーン画像表示コンテナ -->
+<div id="scene-container" class="hidden" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%);">
+  <img id="scene-img" src="" alt="Scene Image" style="display: block; width: 150px;">
+</div>
+
+      <!-- ゴールドの表示用 -->
+      <div id="gold-display">Gold: 0</div>
+      <div class="button-group hidden" id="button-group"></div>
+      <div class="info" id="info"></div>
+      <div class="text-window hidden" id="text-window"></div>
+    </div>
+    <div class="bottom-screen" id="game-area">
+      <div class="judgeline"></div>
+    </div>
+  </div>
+
+  <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
+  <audio id="typing-sound" src="./sounds/B.mp3" preload="auto"></audio>
+  <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
+<audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
+
+  <!-- 読み込み順序に注意（eventファイル類を main.js の前に） -->
+  <script src="./events/オープニング.js"></script>
+  <script src="./monsters/スライム.js"></script>
+  <script src="./monsters/魔導士.js"></script>
+  <script src="./events/event03.js"></script>
+  <script src="./monsters/ナイトメア.js"></script>
+  <script src="./monsters/スライムの群れ.js"></script>
+  <script src="./events/ショップ.js"></script>
+  <script src="./monsters/ミノタウロス.js"></script>
+  <script src="./monsters/デュラハン.js"></script>
+  <script src="./monsters/ネクロマンサー.js"></script>
+  <script src="./monsters/ドラキュラ.js"></script>
+  <script src="./monsters/メタルスライム.js"></script>
+  <script src="./events/ブラックジャック.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
