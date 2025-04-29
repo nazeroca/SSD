@@ -20,7 +20,7 @@ let gold = 10;  // ゴールド用の変数
 function updateGoldDisplay() {
   const goldDisplay = document.getElementById('gold-display');
   if (goldDisplay) {
-    goldDisplay.textContent = "Gold: " + gold;
+    goldDisplay.textContent = "🪙: " + gold;
   }
 }
 // 戦闘専用：HPバーも付き

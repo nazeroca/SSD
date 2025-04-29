@@ -4,17 +4,108 @@
   <meta charset="UTF-8">
   <title>SSD</title>
   <style>
-    html, body { margin: 0; height: 100%; background-color: #111; font-family: sans-serif; }
-    .container { display: flex; flex-direction: column; width: 100vw; height: 100vh; background-color: #222; overflow: hidden; }
-    .top-screen { flex: 8; position: relative; background-color: #888; }
-    .bottom-screen { flex: 2; position: relative; background-color: #000; overflow: hidden; }
-    .circle { position: absolute; top: 50%; left: 100%; transform: translateY(-50%); width: 80px; height: 80px; background-color: white; border-radius: 50%; }
-    .judgeline { position: absolute; width: 2px; height: 100%; background-color: white; left: 20%; top: 0; }
-    .button-group { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; z-index: 10; white-space: pre-wrap;}
-    .start-button { padding: 20px 40px; font-size: 24px; border: none; cursor: pointer; border-radius: 8px; color: white; margin: 10px; white-space: pre-wrap; }
-    .hidden { display: none; }
-    .info { position: absolute; top: 10px; left: 10px; color: white; font-size: 18px; z-index: 20; font-weight:Bold;}
-    .text-window { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); width: 90%; background-color: rgba(0, 0, 0, 0.85); color: white; font-size: 24px; padding: 20px; box-sizing: border-box; z-index: 15; border: 2px solid white; border-radius: 12px; box-shadow: 0 0 10px rgba(255, 255, 255, 0.3); white-space: pre-wrap; }
+    html, body {
+      margin: 0;
+      height: 100%;
+      background-color: #111;
+      font-family: sans-serif;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;  /* 画面全体をカバー */
+      height: 100vh;
+      background-color: #222;
+      overflow: hidden;
+    }
+    .top-screen {
+      flex: 8;
+      position: relative;
+      background-color: #888;
+    }
+    .bottom-screen {
+      flex: 2;
+      position: relative;
+      background-color: #000;
+      overflow: hidden;
+    }
+    /* 円 : サイズを vmin 単位に */
+    .circle {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  /* 例: 20vh * 0.8 = 16vh を vmin に置き換える場合（状況に依存） */
+  width: 16vh;
+  height: 16vh;
+  background-color: white;
+  border-radius: 50%;
+}
+
+    /* 判定ライン : 幅を vmin 単位に */
+    .judgeline {
+      position: absolute;
+      width: 15px;
+      height: 100%;
+      background-color: rgb(0, 255, 115);
+      left: 20%;
+      top: 0;
+    }
+    /* ボタン群の配置 */
+    .button-group {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 5vmin;
+      flex-wrap: wrap;
+      justify-content: center;
+      z-index: 10;
+      white-space: pre-wrap;
+    }
+    /* スタートボタン : 内側余白、フォントサイズ、角丸などを vmin 単位に */
+    .start-button {
+      padding: 2vmin 4vmin;
+      font-size: 4vmin;
+      border: none;
+      cursor: pointer;
+      border-radius: 1vmin;
+      color: white;
+      margin: 1vmin;
+      white-space: pre-wrap;
+    }
+    .hidden {
+      display: none;
+    }
+    /* 情報表示 */
+    .info {
+      position: absolute;
+      top: 1vmin;
+      left: 1vmin;
+      color: white;
+      font-size: 3vmin;
+      z-index: 20;
+      font-weight: Bold;
+    }
+    /* テキストウィンドウ：幅は 90% のまま */
+    .text-window {
+      position: absolute;
+      bottom: 4vmin;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 4vmin;
+      padding: 2vmin 2vmin;
+      box-sizing: border-box;
+      z-index: 15;
+      border: 0.2vmin solid white;
+      border-radius: 1.2vmin;
+      box-shadow: 0 0 1vmin rgba(255, 255, 255, 0.3);
+      white-space: pre-wrap;
+    }
     #fade-overlay {
       position: fixed;
       top: 0;
@@ -27,51 +118,49 @@
       transition: opacity 0.5s;
       z-index: 999;
     }
-    /* ゴールド表示は画面右上に固定 */
+    /* ゴールド表示 */
     #gold-display {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      color: yellow;
-      font-weight:Bold;
-      font-size: 18px;
+      top: 1vmin;
+      right: 1vmin;
+      color: rgb(255, 242, 0);
+      font-weight: Bold;
+      font-size: 3vmin;
       z-index: 30;
     }
+    /* モンスター画像 */
     #monster-img {
-  width: 20vw ;
-  height: auto ;
-}
-
-#scene-img {
-  width: 20vw;
-  max-width: 500px;
-  height: auto;
-}
-
+      width: 30vmin;
+      height: auto;
+    }
+    /* シーン画像 */
+    #scene-img {
+      width: 30vmin;
+      height: auto;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div id="fade-overlay"></div>
     <div class="top-screen">
-      <!-- モンスター表示用コンテナの例 -->
-<div id="monster-container" class="hidden" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%);">
-  <img id="monster-img" src="" alt="Monster" style="display: block; width: 150px;">
-  <div id="monster-hp-bar" style="width: 150px; height: 20px; background-color: rgb(255, 2, 2);  margin-top: 5px;">
-    <div id="monster-hp" style="height: 100%; background-color: rgb(0, 209, 0); width: 100%;"></div>
-  </div>
-  <!-- HP数値表示 -->
-  <div id="monster-hp-text" style="text-align: center; color: white; margin-top: 5px; font-size: 20px;font-weight:Bold;"></div>
-</div>
-
-
-<!-- 新規追加：戦闘以外用のシーン画像表示コンテナ -->
-<div id="scene-container" class="hidden" style="position: absolute; top: 10px; left: 50%; transform: translateX(-50%);">
-  <img id="scene-img" src="" alt="Scene Image" style="display: block; width: 150px;">
-</div>
-
-      <!-- ゴールドの表示用 -->
-      <div id="gold-display">Gold: 0</div>
+      <!-- モンスター表示用コンテナ -->
+      <div id="monster-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
+        <img id="monster-img" src="" alt="Monster">
+        <div id="monster-hp-bar" style="width: 30vmin; height: 3vmin; background-color: rgb(255, 2, 2); margin-top: 0.5vmin;">
+          <div id="monster-hp" style="height: 100%; background-color: rgb(0, 209, 0); width: 100%;"></div>
+        </div>
+        <!-- HP数値表示 -->
+        <div id="monster-hp-text" style="text-align: center; color: white; margin-top: 0.5vmin; font-size: 4vmin; font-weight: Bold;"></div>
+      </div>
+      
+      <!-- 戦闘以外用のシーン画像表示コンテナ -->
+      <div id="scene-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
+        <img id="scene-img" src="" alt="Scene Image">
+      </div>
+      
+      <!-- ゴールド表示 -->
+      <div id="gold-display">🪙: 0</div>
       <div class="button-group hidden" id="button-group"></div>
       <div class="info" id="info"></div>
       <div class="text-window hidden" id="text-window"></div>
@@ -80,12 +169,12 @@
       <div class="judgeline"></div>
     </div>
   </div>
-
+  
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
   <audio id="typing-sound" src="./sounds/B.mp3" preload="auto"></audio>
   <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
-<audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
-
+  <audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
+  
   <!-- 読み込み順序に注意（eventファイル類を main.js の前に） -->
   <script src="./events/オープニング.js"></script>
   <script src="./monsters/スライム.js"></script>
