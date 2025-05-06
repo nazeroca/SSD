@@ -298,6 +298,13 @@ const eventFunctions = {
   'event28': startEvent28,
   'event29': startEvent29,
   'event30': startEvent30,
+  'event31': startEvent31,
+  'event32': startEvent32,
+  'event33': startEvent33,
+  'event34': startEvent34,
+  'event35': startEvent35,
+  'event36': startEvent36,
+  'event37': startEvent37,
   'event49': startEvent49
 };
 
