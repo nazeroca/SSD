@@ -1,6 +1,7 @@
 function startEvent05() {
   currentEvent = 'event05';
-  const pgold = 5;
+  eventCount++;
+  updateEventCountDisplay();
   // サイクル回数をランダムに決定（5～10回）
   const totalCycles = Math.floor(secureRandom() * 6) + 2;
 
@@ -14,41 +15,42 @@ function startEvent05() {
   function runCycle(cycleIndex, totalCycles) {
     const laterCycleCount = getSecureRandomInRange(20, 30);
     // まず「テキストA」を表示
-    document.getElementById('monster-img').src = './image/event1.png';
+    document.getElementById('monster-img').src = './image/スライム.png';
     showTextTypingEffect("スライムが現れた！", function() {
       // サイクルごとに、1回目と以降でパラメータを切り替える
       if (cycleIndex === 0) {
         initializeMonster(firstCycleCount);
         startGame(firstCycleSpeed, firstCycleCount, function() {
-          gold += pgold;
-    updateGoldDisplay();
-    showTextTypingEffect(`スライムを倒した！\n${pgold}ゴールドを獲得！`, () => {
-          showTextTypingEffect("向こうから群れを成したスライムが襲ってきた！\n急いで倒さなければ！", function() {
-            if (cycleIndex < totalCycles - 1) {
-              runCycle(cycleIndex + 1, totalCycles);
-            } else {
-              fadeOutIn(function() {
-                startRandomEvent(['event01','event05']);
-              });
-            }
-          });
+    showTextTypingEffect(`スライムを倒した！`, () => {
+
+
+        showTextTypingEffect("向こうから群れを成したスライムが襲ってきた！\n急いで倒さなければ！", function() {
+          if (cycleIndex < totalCycles - 1) {
+            runCycle(cycleIndex + 1, totalCycles);
+          } else {
+            fadeOutIn(function() {
+              startRandomEvent(['event01','event05']);
+            });
+          }
+        });
+          
         });
         });
       } else {
         initializeMonster(laterCycleCount);
         startGame(laterCycleSpeed, laterCycleCount, function() {
-          gold += pgold;
-          updateGoldDisplay();
-          showTextTypingEffect(`スライムを倒した！\n${pgold}ゴールドを獲得！`, () => {
-            if (cycleIndex < totalCycles - 1) {
-              runCycle(cycleIndex + 1, totalCycles);
-            } else {
-              showTextTypingEffect('何とか全て倒せたようだ…', () => {
-                fadeOutIn(() => {
-                  startRandomEvent(['event01','event05']);
-                });
-              });
-            }
+          showTextTypingEffect(`スライムを倒した！`, () => {
+              fadeOutIn(() => {
+                if (cycleIndex < totalCycles - 1) {
+                  runCycle(cycleIndex + 1, totalCycles);
+                } else {
+                  showTextTypingEffect('何とか全て倒せたようだ…', () => {
+                    fadeOutIn(() => {
+                      startRandomEvent(['event01','event05']);
+                    });
+                  });
+                }
+              });       
           });
         });
       }

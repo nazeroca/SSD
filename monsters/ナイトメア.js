@@ -1,14 +1,15 @@
 // event4.js
 function startEvent04() {
   currentEvent = 'event04';
-  let noteCount = 25
-  if(!flagA){noteCount = getSecureRandomInRange(15, 25);}
+  eventCount++;
+  updateEventCountDisplay();
+  let noteCount = getSecureRandomInRange(15, 25);
   
   // テキストEを表示
   
   showTextTypingEffect('ナイトメアが現れた！', () => {
     // ノーツを流す
-    document.getElementById('monster-img').src = './image/event4.png';
+    document.getElementById('monster-img').src = './image/ナイトメア.png';
     initializeMonster(noteCount);
     startGameR(1000, 4000, noteCount, () => {
       // ノーツ流れ終わったらテキストFを表示
@@ -21,8 +22,7 @@ function startEvent04() {
 }
 
 function showRandomButtonsForEvent4() {
-  let noteCount = 25
-  if(!flagA){noteCount = getSecureRandomInRange(15, 25);}
+  let noteCount = getSecureRandomInRange(15, 25);
   // ランダムにボタンを2つ表示（当たり・ハズレ）
   const buttons = [
     { label: '目を覚ます', color: '#000000', isWinner: true },
@@ -44,14 +44,14 @@ function showRandomButtonsForEvent4() {
         buttonGroup.classList.add('hidden');
         showTextTypingEffect('あなたは無事目を覚ますことが出来た。', () => {
           fadeOutIn(() => {
-            startRandomEvent(['event04']);
+            startRandomEvent([currentEvent]);
           });
         });
       } else {
         // ハズレボタンを選んだ場合、再度ノーツを流す
         buttonGroup.classList.add('hidden');
         showTextTypingEffect('起きることが出来ない！', () => {
-        document.getElementById('monster-img').src = './image/event4.png';
+        document.getElementById('monster-img').src = './image/ナイトメア.png';
     initializeMonster(noteCount);
         startGameR(1000, 4000, noteCount, () => {
           // ノーツ流れ終わったらテキストGを表示

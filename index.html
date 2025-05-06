@@ -2,10 +2,13 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SSD</title>
   <style>
     html, body {
+      overflow: hidden;  /* スクロールバーを消し、スクロール自体を禁止 */
       margin: 0;
+      padding: 0;
       height: 100%;
       background-color: #111;
       font-family: sans-serif;
@@ -13,10 +16,11 @@
     .container {
       display: flex;
       flex-direction: column;
-      width: 100vw;  /* 画面全体をカバー */
+      width: 100vw;
       height: 100vh;
       background-color: #222;
       overflow: hidden;
+      position: relative;
     }
     .top-screen {
       flex: 8;
@@ -29,29 +33,28 @@
       background-color: #000;
       overflow: hidden;
     }
-    /* 円 : サイズを vmin 単位に */
+    /* 円のノーツ */
     .circle {
-  position: absolute;
-  top: 50%;
-  left: 100%;
-  transform: translateY(-50%);
-  /* 例: 20vh * 0.8 = 16vh を vmin に置き換える場合（状況に依存） */
-  width: 16vh;
-  height: 16vh;
-  background-color: white;
-  border-radius: 50%;
-}
-
-    /* 判定ライン : 幅を vmin 単位に */
+      position: absolute;
+      top: 50%;
+      left: 100%;
+      transform: translateY(-50%);
+      width: 16vh;
+      height: 16vh;
+      background-color: white;
+      border-radius: 50%;
+      will-change: transform;
+    }
+    /* 判定ライン */
     .judgeline {
       position: absolute;
-      width: 15px;
+      width: 2vw;
       height: 100%;
       background-color: rgb(0, 255, 115);
       left: 20%;
       top: 0;
     }
-    /* ボタン群の配置 */
+    /* ボタン群 */
     .button-group {
       position: absolute;
       top: 50%;
@@ -64,7 +67,6 @@
       z-index: 10;
       white-space: pre-wrap;
     }
-    /* スタートボタン : 内側余白、フォントサイズ、角丸などを vmin 単位に */
     .start-button {
       padding: 2vmin 4vmin;
       font-size: 4vmin;
@@ -78,17 +80,17 @@
     .hidden {
       display: none;
     }
-    /* 情報表示 */
+    /* イベント回数表示用（infoDisplay） */
     .info {
       position: absolute;
       top: 1vmin;
       left: 1vmin;
       color: white;
-      font-size: 3vmin;
+      font-size: 9vmin;
       z-index: 20;
       font-weight: Bold;
     }
-    /* テキストウィンドウ：幅は 90% のまま */
+    /* テキストウィンドウ */
     .text-window {
       position: absolute;
       bottom: 4vmin;
@@ -106,6 +108,7 @@
       box-shadow: 0 0 1vmin rgba(255, 255, 255, 0.3);
       white-space: pre-wrap;
     }
+    /* フェードオーバーレイ */
     #fade-overlay {
       position: fixed;
       top: 0;
@@ -118,77 +121,204 @@
       transition: opacity 0.5s;
       z-index: 999;
     }
-    /* ゴールド表示 */
-    #gold-display {
+    #monster-img, #scene-img {
+      width: 30vmin;
+      height: auto;
+    }
+    /* フラグ表示用の円グラフ風コンテナ */
+    #flag-container {
       position: absolute;
       top: 1vmin;
       right: 1vmin;
-      color: rgb(255, 242, 0);
-      font-weight: Bold;
+      width: 15vmin;
+      height: 24vmin; /* 円部分21vmin＋タイトル分の高さ */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 40;
+    }
+    #flag-title {
       font-size: 3vmin;
-      z-index: 30;
+      color: white;
+      margin-bottom: 0.5vmin;
+      text-align: center;
+      white-space: pre-line;
+      font-weight: bold;
     }
-    /* モンスター画像 */
-    #monster-img {
-      width: 30vmin;
-      height: auto;
+    #flag-grid {
+      width: 15vmin;
+      height: 15vmin;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* 背景は main.js の updateFlagGrid() で conic-gradient が設定されます */
     }
-    /* シーン画像 */
-    #scene-img {
-      width: 30vmin;
-      height: auto;
+
+    /* ▼ 設定ボタン（歯車） */
+    #settings-button {
+      position: absolute;
+      bottom: 1vmin;
+      left: 1vmin;
+      font-size: 10vmin;
+      cursor: pointer;
+      z-index: 50;
+      user-select: none;
     }
+    
+    /* ▼ 設定ウインドウ */
+    #settings-window {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 3vmin;
+      transform: translate(-50%, -50%);
+      background-color: #333;
+      color: white;
+      padding: 4vmin;
+      border-radius: 1vmin;
+      z-index: 1000;
+      width: 80vw;
+      max-width: 300px;
+      display: none;
+      box-shadow: 0 0 1vmin rgba(0,0,0,0.5);
+    }
+    /* ×ボタン */
+    #settings-window .close-button {
+      position: absolute;
+      top: 1vmin;
+      right: 1vmin;
+      cursor: pointer;
+      font-size: 4vmin;
+      user-select: none;
+    }
+    /* ※ もともとの .flag-cell は不要なため削除またはコメントアウトしてください */
   </style>
 </head>
 <body>
   <div class="container">
     <div id="fade-overlay"></div>
     <div class="top-screen">
-      <!-- モンスター表示用コンテナ -->
+      <!-- モンスター表示エリア -->
       <div id="monster-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
         <img id="monster-img" src="" alt="Monster">
         <div id="monster-hp-bar" style="width: 30vmin; height: 3vmin; background-color: rgb(255, 2, 2); margin-top: 0.5vmin;">
           <div id="monster-hp" style="height: 100%; background-color: rgb(0, 209, 0); width: 100%;"></div>
         </div>
-        <!-- HP数値表示 -->
         <div id="monster-hp-text" style="text-align: center; color: white; margin-top: 0.5vmin; font-size: 4vmin; font-weight: Bold;"></div>
       </div>
-      
-      <!-- 戦闘以外用のシーン画像表示コンテナ -->
+      <!-- シーン表示エリア -->
       <div id="scene-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
         <img id="scene-img" src="" alt="Scene Image">
       </div>
-      
-      <!-- ゴールド表示 -->
-      <div id="gold-display">🪙: 0</div>
-      <div class="button-group hidden" id="button-group"></div>
+      <!-- イベント回数表示（オープニング以外で更新） -->
       <div class="info" id="info"></div>
+      <!-- フラグ表示（円グラフ風） -->
+      <div id="flag-container">
+        <div id="flag-title">魔導書の<br>取得状況</div>
+        <div id="flag-grid"></div>
+      </div>
+      <!-- ボタン群 -->
+      <div class="button-group hidden" id="button-group"></div>
+      <!-- テキストウィンドウ -->
       <div class="text-window hidden" id="text-window"></div>
     </div>
     <div class="bottom-screen" id="game-area">
       <div class="judgeline"></div>
+      <!-- 設定ボタン -->
+      <div id="settings-button">⚙️</div>
+    </div>
+  </div>
+  
+  <!-- 設定ウインドウ -->
+  <div id="settings-window">
+    <div class="close-button" id="close-settings">×</div>
+    <div class="settings-row">
+      <label for="hitsound-volume">ノーツ音</label>
+      <input type="range" id="hitsound-volume" min="0" max="100" value="100">
+    </div>
+    <div class="settings-row">
+      <label for="other-sounds-toggle">効果音</label>
+      <input type="checkbox" id="other-sounds-toggle" checked>
+    </div>
+    <div class="settings-row">
+      <label for="fallduration-slider">落下速度</label>
+      <input type="range" id="fallduration-slider" min="1000" max="5000" step="500" value="3000">
     </div>
   </div>
   
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
-  <audio id="typing-sound" src="./sounds/B.mp3" preload="auto"></audio>
   <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
   <audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
+
   
-  <!-- 読み込み順序に注意（eventファイル類を main.js の前に） -->
-  <script src="./events/オープニング.js"></script>
-  <script src="./monsters/スライム.js"></script>
-  <script src="./monsters/魔導士.js"></script>
-  <script src="./events/event03.js"></script>
-  <script src="./monsters/ナイトメア.js"></script>
-  <script src="./monsters/スライムの群れ.js"></script>
-  <script src="./events/ショップ.js"></script>
-  <script src="./monsters/ミノタウロス.js"></script>
-  <script src="./monsters/デュラハン.js"></script>
-  <script src="./monsters/ネクロマンサー.js"></script>
-  <script src="./monsters/ドラキュラ.js"></script>
-  <script src="./monsters/メタルスライム.js"></script>
-  <script src="./events/ブラックジャック.js"></script>
+  <!-- 初期 -->
+  <script src="オープニング.js"></script>
+  <script src="./monsters/スライム.js"></script><!-- なし -->
+  <script src="./monsters/魔導士.js"></script><!-- なし特殊 -->
+  <script src="./monsters/天使.js"></script><!-- なし特殊 -->
+  <script src="./monsters/ゾンビ.js"></script><!-- ランダム -->
+  <script src="./monsters/ゴーレム.js"></script><!-- なし -->
+  <script src="./monsters/宝箱.js"></script><!-- なし特殊 -->
+  <script src="./monsters/ナイトメア.js"></script><!-- ランダム特殊 -->
+  <script src="./monsters/雪女.js"></script><!-- 加速 -->
+  
+  
+  
+  <script src="./monsters/ドラキュラ.js"></script><!-- 確率 -->
+  
+  
+  
+
+    <!-- ノーマル -->
+    <script src="./monsters/ミノタウロス.js"></script><!-- ランダム -->
+    <script src="./monsters/デュラハン.js"></script><!-- 加速 -->
+  <script src="./monsters/赤ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./monsters/青ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./monsters/緑ドラゴン.js"></script><!-- 確率 -->
+  <script src="./monsters/ネクロマンサー.js"></script><!-- トリプル -->
+  <script src="./monsters/ゾンビ犬.js"></script><!-- ランダム -->
+  <script src="./monsters/メタルスライム.js"></script><!-- なし特殊 -->
+  <script src="./monsters/幽霊.js"></script><!-- 確率 -->
+  <script src="./monsters/ゴブリン.js"></script><!-- 確率 -->
+
+    <!-- ハード -->
+    <script src="./monsters/シスター.js"></script><!-- なし特殊 -->
+    <script src="./monsters/スレイプニル.js"></script><!-- 加速 -->
+  <script src="./monsters/ダークエルフ.js"></script><!-- なし -->
+  <script src="./monsters/ケルベロス.js"></script><!-- トリプル -->
+  <script src="./monsters/ハスター.js"></script><!-- ランダム -->
+  <script src="./monsters/スライムの群れ.js"></script><!-- なし特殊 -->
+
+  <script src="./monsters/メデューサ.js"></script><!-- 確率 -->
+
+
+
+
+  <script src="./monsters/メデューサE.js"></script><!-- 確率 -->
+  <script src="./monsters/オーク.js"></script><!-- なし -->
+  <script src="./monsters/人魂.js"></script><!-- トリプル -->
+  <script src="./monsters/ヴォーパル.js"></script><!-- 加速 -->
+  <script src="./monsters/ハーピー.js"></script><!-- 加速 -->
+  <script src="./monsters/グリフォン.js"></script><!-- 加速 -->
+  <script src="./monsters/レヴィアタン.js"></script><!-- 加速 -->
+  <script src="./monsters/クトゥグア.js"></script><!-- 確率 -->
+  <script src="./monsters/ラミア.js"></script><!-- トリプル -->
+
+   <!-- ハード -->
+       <!-- ハード -->
+
+
+
+  <!-- イベント -->
+  <script src="./monsters/黒ドラゴン.js"></script><!-- トリプル -->
+  <script src="./monsters/宝箱E.js"></script><!-- トリプル -->
+  <script src="./monsters/青魔導書.js"></script>
+  <script src="./monsters/堕天使.js"></script>
+
+
+  <script src="startGames.js"></script>
   <script src="main.js"></script>
 </body>
 </html>

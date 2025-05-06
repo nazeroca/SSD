@@ -1,7 +1,9 @@
 function startEvent11() {
   currentEvent = 'event11';
-  const pgold = 100;
-  showTextTypingEffect('メタルスライムが現れた！\n戦闘は熾烈なものになりそうだが、戦おうか？', () => {
+  eventCount++;
+  updateEventCountDisplay();
+  removeEvent('event11');
+  showTextTypingEffect('メタルスライムが現れた！\n戦闘は苛烈になりそうだが、逃げ出そうか？', () => {
     buttonGroup.innerHTML = '';
     const btnA = document.createElement('button');
     btnA.className = 'start-button';
@@ -9,27 +11,61 @@ function startEvent11() {
     btnA.style.backgroundColor = '#33CC99';
     btnA.onclick = () => {
       buttonGroup.classList.add('hidden');
-      document.getElementById('monster-img').src = './image/event11.png';
-    initializeMonster(100);
-    startGame(1000, 100, () => {
-      showTextTypingEffect(`メタルスライムを倒した！\n${pgold}ゴールドを獲得！`, () => {
-        gold += pgold;
-        updateGoldDisplay();
-        
-        // flagA がある場合は、追加のノーツを gold の値と同じ回数流す
-        if (flagA) {
-          showTextTypingEffect('呪いの黄金指輪が反応している！\nゴールドの数だけ追加で攻撃！', () => {
-          startGame(1000, pgold, () => {
-            fadeOutIn(() => {
-              startRandomEvent(['event11']);
-            });
-          });
+      document.getElementById('monster-img').src = './image/メタルスライム.png';
+    initializeMonster(50);
+    startGame(1000, 2, () => {
+      showTextTypingEffect(`メタルスライムを倒した！`, () => {
+        const randomIndex = Math.floor(secureRandom() * 3);
+  
+  if (randomIndex === 0) {
+    if (flagR) {
+      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
         });
-        } else {
-          fadeOutIn(() => {
-            startRandomEvent(['event11']);
-          });
-        }
+      });
+    } else {
+      flagR = true;
+      updateFlagGrid();
+      showTextTypingEffect(`赤の魔導書を入手した！`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+      });
+    }
+  } else if (randomIndex === 1) {
+    if (flagG) {
+      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+      });
+    } else {
+      flagG = true;
+      updateFlagGrid();
+      showTextTypingEffect(`緑の魔導書を入手した！`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+      });
+    }
+  } else {  // randomIndex === 2
+    if (flagB) {
+      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+      });
+    } else {
+      flagB = true;
+      updateFlagGrid();
+      showTextTypingEffect(`青の魔導書を入手した！`, () => {
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+      });
+    }
+  }
       });
     });
     };
@@ -40,11 +76,13 @@ btnB.textContent = '逃げる';
 btnB.style.backgroundColor = '#FF9933';
 btnB.onclick = () => {
   buttonGroup.classList.add('hidden');
-  showTextTypingEffect('あなたは逃げ出した！', () => {
-    fadeOutIn(() => {
-      startRandomEvent(['event11']);
+
+    showTextTypingEffect('あなたは逃げ出した！', () => {
+      fadeOutIn(() => {
+        startRandomEvent([currentEvent]);
+      });
     });
-  });
+  
 };
 
 
