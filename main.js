@@ -14,7 +14,7 @@ let circleCount = 0;
 let maxCircles = 100;
 let circles = [];
 
-let flagR = true;
+let flagR = false;
 let flagG = false;
 let flagB = false;  
 
@@ -96,7 +96,7 @@ function defeatMonster() {
   }
 }
 
-function showTextTypingEffect(text, callback, speed = 75) {
+function showTextTypingEffect(text, callback, speed = 50) {
   textWindow.classList.remove('hidden');
   textWindow.textContent = '';
   let index = 0;
@@ -117,7 +117,7 @@ function showTextTypingEffect(text, callback, speed = 75) {
   typeChar();
 }
 
-function showTextTypingEffectS(speaker, text, callback, speed = 75) {
+function showTextTypingEffectS(speaker, text, callback, speed = 50) {
   textWindow.classList.remove('hidden');
   textWindow.innerHTML = '';
 
@@ -248,65 +248,58 @@ function fadeOutIn(callback) {
 function openSettings() {
   const settingsWindow = document.getElementById('settings-window');
   settingsWindow.style.display = 'block';
-  document.getElementById('hitsound-volume').value = Math.round(hitSound.volume * 100);
+  // 初期値の表示（ノーツ音量は内部が 0〜1 のため変換）
+  document.getElementById('volume-value').textContent = Math.round(hitSound.volume * 100) + '%';
+  document.getElementById('fallduration-value').textContent = fallDuration;
   document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
-  document.getElementById('fallduration-slider').value = fallDuration;
 }
 
 function closeSettings() {
   const settingsWindow = document.getElementById('settings-window');
   settingsWindow.style.display = 'none';
-  const vol = document.getElementById('hitsound-volume').value;
-  hitSound.volume = vol / 100;
-  otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
-  fallDuration = parseInt(document.getElementById('fallduration-slider').value, 10);
 }
+
+// ノーツ音量の変更（20%刻み）
+document.getElementById('volume-decrease').addEventListener('click', function() {
+  let current = Math.round(hitSound.volume * 100);
+  if (current > 0) {
+    current -= 20;
+    hitSound.volume = current / 100;
+    document.getElementById('volume-value').textContent = current + '%';
+  }
+});
+
+document.getElementById('volume-increase').addEventListener('click', function() {
+  let current = Math.round(hitSound.volume * 100);
+  if (current < 100) {
+    current += 20;
+    hitSound.volume = current / 100;
+    document.getElementById('volume-value').textContent = current + '%';
+  }
+});
+
+// 落下速度の変更（範囲：1000～5000、間隔500）
+document.getElementById('fallduration-decrease').addEventListener('click', function() {
+  if (fallDuration > 1000) {
+    fallDuration -= 500;
+    document.getElementById('fallduration-value').textContent = fallDuration;
+  }
+});
+
+document.getElementById('fallduration-increase').addEventListener('click', function() {
+  if (fallDuration < 5000) {
+    fallDuration += 500;
+    document.getElementById('fallduration-value').textContent = fallDuration;
+  }
+});
+
 
 document.getElementById('settings-button').addEventListener('click', openSettings);
 document.getElementById('close-settings').addEventListener('click', closeSettings);
 
 
 // イベント名と関数の対応表をグローバル変数で定義
-const eventFunctions = {
-  'event01': startEvent01,
-  'event02': startEvent02,
-  'event03': startEvent03,
-  'event04': startEvent04,
-  'event05': startEvent05,
-  'event06': startEvent06,
-  'event07': startEvent07,
-  'event08': startEvent08,
-  'event09': startEvent09,
-  'event10': startEvent10,
-  'event11': startEvent11,
-  'event12': startEvent12,
-  'event13': startEvent13,
-  'event14': startEvent14,
-  'event15': startEvent15,
-  'event16': startEvent16,
-  'event17': startEvent17,
-  'event18': startEvent18,
-  'event19': startEvent19,
-  'event20': startEvent20,
-  'event21': startEvent21,
-  'event22': startEvent22,
-  'event23': startEvent23,
-  'event24': startEvent24,
-  'event25': startEvent25,
-  'event26': startEvent26,
-  'event27': startEvent27,
-  'event28': startEvent28,
-  'event29': startEvent29,
-  'event30': startEvent30,
-  'event31': startEvent31,
-  'event32': startEvent32,
-  'event33': startEvent33,
-  'event34': startEvent34,
-  'event35': startEvent35,
-  'event36': startEvent36,
-  'event37': startEvent37,
-  'event49': startEvent49
-};
+
 
 // function startRandomEvent(exclude = []) {
 //   // 文字列が "event" で始まっていない場合もカバーするための正規化関数
@@ -352,13 +345,35 @@ function getSecureRandomInRange(min, max) {
   return Math.floor(randomFraction * range) + min;
 }
 
-
+const eventFunctions = {
+  'event01': startEvent01,
+  'event02': startEvent02,
+  'event06': startEvent06,
+  'event12': startEvent12,
+  'event14': startEvent14,
+  'event15': startEvent15,
+  'event17': startEvent17,
+  'event21': startEvent21,
+  'event23': startEvent23,
+  'event25': startEvent25,
+  'event31': startEvent31,
+  'event49': startEvent49
+};
 
 // 各イベントの重みを設定（数値が大きいほど選ばれやすくなる）
 // ここでは special イベントは低い重み(例: 0.2)となっている
 const eventWeights = {
-  'event49': 0.01,
-  'event11': 0.2
+  'event01': 3,
+  'event02': 3,
+  'event06': 3,
+  'event12': 3,
+  'event14': 3,
+  'event15': 3,
+  'event17': 3,
+  'event21': 3,
+  'event23': 3,
+  'event25': 3,
+  'event31': 3
 };
 
 // イベントの追加用関数
@@ -372,6 +387,30 @@ function removeEvent(eventKey) {
   delete eventFunctions[eventKey];
   delete eventWeights[eventKey];
 }
+
+
+function showPopupMessage(message, displayTime = 3000) {
+  const topScreen = document.querySelector('.top-screen');
+  if (!topScreen) return;
+  
+  // ポップアップ要素作成
+  const popup = document.createElement('div');
+  popup.className = 'popup-message';
+  popup.textContent = message;
+  
+  // top-screenに追加
+  topScreen.appendChild(popup);
+  
+  // 一定時間後にフェードアウト＆削除
+  setTimeout(() => {
+    popup.classList.add('fade-out');
+    popup.addEventListener('transitionend', () => {
+      popup.remove();
+    });
+  }, displayTime);
+}
+
+
 
 // ランダムイベントを開始する関数（exclude に指定したものは除外）
 // 重み付けでランダム選出する仕組みを実装
@@ -394,6 +433,37 @@ function startRandomEvent(exclude = []) {
     .filter(key => !normalizedExclude.includes(key));
 
   if (possibleEventKeys.length === 0) return;
+  
+  if(eventCount==8){
+    addEvent('event26', startEvent26, 4);
+    addEvent('event36', startEvent36, 4);
+    addEvent('event18', startEvent18, 4);
+    addEvent('event13', startEvent13, 4);
+    addEvent('event05', startEvent05, 4);
+    addEvent('event16', startEvent16, 4);
+    addEvent('event08', startEvent08, 4);
+    addEvent('event10', startEvent10, 4);
+    addEvent('event04', startEvent04, 4);
+    addEvent('event09', startEvent09, 4);
+    addEvent('event07', startEvent07, 4);
+    addEvent('event11', startEvent11, 1);
+    addEvent('event22', startEvent22, 4);
+    addEvent('event20', startEvent20, 4);
+    addEvent('event33', startEvent33, 4);
+  }else if(eventCount==16){
+    addEvent('event35', startEvent35, 5);
+    addEvent('event03', startEvent03, 5);
+    addEvent('event32', startEvent32, 5);
+    addEvent('event19', startEvent19, 5);
+    addEvent('event34', startEvent34, 5);
+    addEvent('event37', startEvent37, 5);
+    addEvent('event29', startEvent29, 5);
+    addEvent('event27', startEvent27, 5);
+    addEvent('event28', startEvent28, 5);
+  }else if(eventCount==24){
+    addEvent('event24', startEvent24, 5);
+    addEvent('event60', startEvent60, 10);
+  }
 
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;
@@ -418,6 +488,14 @@ function startRandomEvent(exclude = []) {
 
   // 選ばれたイベントの関数を実行
   eventFunctions[selectedKey]();
+
+  if (eventCount === 8) {
+    showPopupMessage('8Fに到達！\n新しいモンスターが登場するようになった。');
+  }else if(eventCount === 16) {
+    showPopupMessage('16Fに到達！\n新しいモンスターが登場するようになった。');
+  }else if(eventCount === 24) {
+    showPopupMessage('24Fに到達！\n魔王を含む新しいモンスターが登場するようになった。');
+  }
 }
 
 // // ----- 使用例 -----

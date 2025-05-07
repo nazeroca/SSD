@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>SSD</title>
   <style>
-    html, body {
-      overflow: hidden;  /* スクロールバーを消し、スクロール自体を禁止 */
+    html,
+    body {
+      overflow: hidden;
+      /* スクロールバーを消し、スクロール自体を禁止 */
       margin: 0;
       padding: 0;
       height: 100%;
       background-color: #111;
       font-family: sans-serif;
     }
+
     .container {
       display: flex;
       flex-direction: column;
@@ -22,21 +26,24 @@
       overflow: hidden;
       position: relative;
     }
+
     .top-screen {
-      flex: 8;
+      flex: 3;
       position: relative;
       background-color: #888;
     }
+
     .bottom-screen {
-      flex: 2;
+      flex: 1;
       position: relative;
       background-color: #000;
       overflow: hidden;
     }
+
     /* 円のノーツ */
     .circle {
       position: absolute;
-      top: 50%;
+      top: 40%;
       left: 100%;
       transform: translateY(-50%);
       width: 16vh;
@@ -45,6 +52,7 @@
       border-radius: 50%;
       will-change: transform;
     }
+
     /* 判定ライン */
     .judgeline {
       position: absolute;
@@ -54,6 +62,7 @@
       left: 20%;
       top: 0;
     }
+
     /* ボタン群 */
     .button-group {
       position: absolute;
@@ -67,6 +76,7 @@
       z-index: 10;
       white-space: pre-wrap;
     }
+
     .start-button {
       padding: 2vmin 4vmin;
       font-size: 4vmin;
@@ -77,9 +87,11 @@
       margin: 1vmin;
       white-space: pre-wrap;
     }
+
     .hidden {
       display: none;
     }
+
     /* イベント回数表示用（infoDisplay） */
     .info {
       position: absolute;
@@ -90,6 +102,7 @@
       z-index: 20;
       font-weight: Bold;
     }
+
     /* テキストウィンドウ */
     .text-window {
       position: absolute;
@@ -99,7 +112,7 @@
       width: 80%;
       background-color: rgba(0, 0, 0, 0.85);
       color: white;
-      font-size: 4vmin;
+      font-size: 5vmin;
       padding: 2vmin 2vmin;
       box-sizing: border-box;
       z-index: 15;
@@ -108,6 +121,7 @@
       box-shadow: 0 0 1vmin rgba(255, 255, 255, 0.3);
       white-space: pre-wrap;
     }
+
     /* フェードオーバーレイ */
     #fade-overlay {
       position: fixed;
@@ -121,23 +135,49 @@
       transition: opacity 0.5s;
       z-index: 999;
     }
-    #monster-img, #scene-img {
+    .popup-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center; /* テキストも中央揃え */
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #ff5656;
+  font-size: 4vmin;
+  padding: 2vmin 4vmin;
+  border-radius: 1vmin;
+  z-index: 1000;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+
+.popup-message.fade-out {
+  opacity: 0;
+}
+
+
+    #monster-img,
+    #scene-img {
       width: 30vmin;
       height: auto;
     }
+
     /* フラグ表示用の円グラフ風コンテナ */
     #flag-container {
       position: absolute;
       top: 1vmin;
       right: 1vmin;
       width: 15vmin;
-      height: 24vmin; /* 円部分21vmin＋タイトル分の高さ */
+      height: 24vmin;
+      /* 円部分21vmin＋タイトル分の高さ */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       z-index: 40;
     }
+
     #flag-title {
       font-size: 3vmin;
       color: white;
@@ -146,6 +186,7 @@
       white-space: pre-line;
       font-weight: bold;
     }
+
     #flag-grid {
       width: 15vmin;
       height: 15vmin;
@@ -159,57 +200,94 @@
     /* ▼ 設定ボタン（歯車） */
     #settings-button {
       position: absolute;
-      bottom: 1vmin;
+      top: 1vmin;
       left: 1vmin;
       font-size: 10vmin;
       cursor: pointer;
       z-index: 50;
       user-select: none;
     }
-    
+
     /* ▼ 設定ウインドウ */
     #settings-window {
+      text-align: center;
       position: fixed;
       top: 50%;
       left: 50%;
-      font-size: 3vmin;
+      font-size: 8vmin;
       transform: translate(-50%, -50%);
       background-color: #333;
       color: white;
       padding: 4vmin;
       border-radius: 1vmin;
       z-index: 1000;
-      width: 80vw;
-      max-width: 300px;
+      width: 70vw;
+      height: 50vh;
       display: none;
-      box-shadow: 0 0 1vmin rgba(0,0,0,0.5);
+      box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
     }
+
+    /* 設定ウィンドウ内のボタンのスタイル */
+    #settings-window button {
+      background-color: #555;
+      border: none;
+      color: #fff;
+      font-size: 8vmin;
+      padding: 0.5vmin 1.5vmin;
+      margin: 0.5vmin;
+      border-radius: 1vmin;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    #settings-window button:hover {
+      background-color: #777;
+    }
+
+    #settings-window button:active {
+      transform: scale(0.95);
+      background-color: #999;
+    }
+
+    #other-sounds-toggle {
+      transform: scale(10);
+      vertical-align: middle;
+      margin-left: 5vmin;
+      /* 位置調整はお好みで */
+    }
+
     /* ×ボタン */
     #settings-window .close-button {
       position: absolute;
       top: 1vmin;
       right: 1vmin;
       cursor: pointer;
-      font-size: 4vmin;
+      font-size: 8vmin;
       user-select: none;
     }
+
     /* ※ もともとの .flag-cell は不要なため削除またはコメントアウトしてください */
   </style>
 </head>
+
 <body>
   <div class="container">
     <div id="fade-overlay"></div>
     <div class="top-screen">
       <!-- モンスター表示エリア -->
-      <div id="monster-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
+      <div id="monster-container" class="hidden"
+        style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
         <img id="monster-img" src="" alt="Monster">
-        <div id="monster-hp-bar" style="width: 30vmin; height: 3vmin; background-color: rgb(255, 2, 2); margin-top: 0.5vmin;">
+        <div id="monster-hp-bar"
+          style="width: 30vmin; height: 3vmin; background-color: rgb(255, 2, 2); margin-top: 0.5vmin;">
           <div id="monster-hp" style="height: 100%; background-color: rgb(0, 209, 0); width: 100%;"></div>
         </div>
-        <div id="monster-hp-text" style="text-align: center; color: white; margin-top: 0.5vmin; font-size: 4vmin; font-weight: Bold;"></div>
+        <div id="monster-hp-text"
+          style="text-align: center; color: white; margin-top: 0.5vmin; font-size: 4vmin; font-weight: Bold;"></div>
       </div>
       <!-- シーン表示エリア -->
-      <div id="scene-container" class="hidden" style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
+      <div id="scene-container" class="hidden"
+        style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
         <img id="scene-img" src="" alt="Scene Image">
       </div>
       <!-- イベント回数表示（オープニング以外で更新） -->
@@ -230,95 +308,90 @@
       <div id="settings-button">⚙️</div>
     </div>
   </div>
-  
-  <!-- 設定ウインドウ -->
+
   <div id="settings-window">
     <div class="close-button" id="close-settings">×</div>
     <div class="settings-row">
-      <label for="hitsound-volume">ノーツ音</label>
-      <input type="range" id="hitsound-volume" min="0" max="100" value="100">
+      <label>ノーツ音：</label>
+      <button id="volume-decrease">−</button>
+      <span id="volume-value">100%</span>
+      <button id="volume-increase">+</button>
     </div>
     <div class="settings-row">
-      <label for="other-sounds-toggle">効果音</label>
+      <label for="other-sounds-toggle">効果音：</label>
       <input type="checkbox" id="other-sounds-toggle" checked>
     </div>
     <div class="settings-row">
-      <label for="fallduration-slider">落下速度</label>
-      <input type="range" id="fallduration-slider" min="1000" max="5000" step="500" value="3000">
+      <label>落下速度：</label>
+      <button id="fallduration-decrease">−</button>
+      <span id="fallduration-value">3000</span>
+      <button id="fallduration-increase">+</button>
     </div>
   </div>
-  
+
+
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
   <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
   <audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
 
-  
+
   <!-- 初期 -->
   <script src="オープニング.js"></script>
-  <script src="./monsters/スライム.js"></script><!-- なし -->
-  <script src="./monsters/魔導士.js"></script><!-- なし特殊 -->
-  <script src="./monsters/天使.js"></script><!-- なし特殊 -->
-  <script src="./monsters/ゾンビ.js"></script><!-- ランダム -->
-  <script src="./monsters/ゴーレム.js"></script><!-- なし -->
-  <script src="./monsters/宝箱.js"></script><!-- なし特殊 -->
-  <script src="./monsters/ナイトメア.js"></script><!-- ランダム特殊 -->
-  <script src="./monsters/雪女.js"></script><!-- 加速 -->
-  
-  
-  
-  <script src="./monsters/ドラキュラ.js"></script><!-- 確率 -->
-  
-  
-  
-
-    <!-- ノーマル -->
-    <script src="./monsters/ミノタウロス.js"></script><!-- ランダム -->
-    <script src="./monsters/デュラハン.js"></script><!-- 加速 -->
-  <script src="./monsters/赤ドラゴン.js"></script><!-- なし特殊 -->
-  <script src="./monsters/青ドラゴン.js"></script><!-- なし特殊 -->
-  <script src="./monsters/緑ドラゴン.js"></script><!-- 確率 -->
-  <script src="./monsters/ネクロマンサー.js"></script><!-- トリプル -->
-  <script src="./monsters/ゾンビ犬.js"></script><!-- ランダム -->
-  <script src="./monsters/メタルスライム.js"></script><!-- なし特殊 -->
-  <script src="./monsters/幽霊.js"></script><!-- 確率 -->
-  <script src="./monsters/ゴブリン.js"></script><!-- 確率 -->
-
-    <!-- ハード -->
-    <script src="./monsters/シスター.js"></script><!-- なし特殊 -->
-    <script src="./monsters/スレイプニル.js"></script><!-- 加速 -->
-  <script src="./monsters/ダークエルフ.js"></script><!-- なし -->
-  <script src="./monsters/ケルベロス.js"></script><!-- トリプル -->
-  <script src="./monsters/ハスター.js"></script><!-- ランダム -->
-  <script src="./monsters/スライムの群れ.js"></script><!-- なし特殊 -->
-
-  <script src="./monsters/メデューサ.js"></script><!-- 確率 -->
 
 
+  <script src="./.easy/ヴォーパル.js"></script><!-- 加速 -->
+  <script src="./.easy/ゴーレム.js"></script><!-- なし -->
+  <script src="./.easy/ゴブリン.js"></script><!-- 確率 -->
+  <script src="./.easy/スライム.js"></script><!-- なし -->
+  <script src="./.easy/ゾンビ.js"></script><!-- ランダム -->
+  <script src="./.easy/ゾンビ犬.js"></script><!-- ランダム -->
+  <script src="./.easy/人魂.js"></script><!-- トリプル -->
+  <script src="./.easy/雪女.js"></script><!-- 加速 -->
+  <script src="./.easy/天使.js"></script><!-- なし特殊 -->
+  <script src="./.easy/魔導士.js"></script><!-- なし特殊 -->
+  <script src="./.easy/幽霊.js"></script><!-- 確率 -->
+
+  <!-- ノーマル8F -->
+  <script src="./.normal/オーク.js"></script><!-- なし -->
+  <script src="./.normal/グリフォン.js"></script><!-- 加速 -->
+  <script src="./.normal/ケルベロス.js"></script><!-- トリプル -->
+  <script src="./.normal/シスター.js"></script><!-- なし特殊 -->
+  <script src="./.normal/スライムの群れ.js"></script><!-- なし特殊 -->
+  <script src="./.normal/ダークエルフ.js"></script><!-- なし -->
+  <script src="./.normal/デュラハン.js"></script><!-- 加速 -->
+  <script src="./.normal/ドラキュラ.js"></script><!-- 確率 -->
+  <script src="./.normal/ナイトメア.js"></script><!-- ランダム特殊 -->
+  <script src="./.normal/ネクロマンサー.js"></script><!-- トリプル -->
+  <script src="./.normal/ミノタウロス.js"></script><!-- ランダム -->
+  <script src="./.normal/メタルスライム.js"></script><!-- なし特殊 -->
+  <script src="./.normal/メデューサ.js"></script><!-- 確率 -->
+  <script src="./.normal/宝箱.js"></script><!-- なし特殊 -->
+  <script src="./.normal/宝箱E.js"></script><!-- トリプル -->
+
+  <!-- ハード16F -->
+  <script src="./.hard/クトゥグア.js"></script><!-- 確率 -->
+  <script src="./.hard/スレイプニル.js"></script><!-- 加速 -->
+  <script src="./.hard/ハーピー.js"></script><!-- 加速 -->
+  <script src="./.hard/ハスター.js"></script><!-- ランダム -->
+  <script src="./.hard/ラミア.js"></script><!-- トリプル -->
+  <script src="./.hard/レヴィアタン.js"></script><!-- 加速 -->
+  <script src="./.hard/青ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./.hard/青魔導書.js"></script>
+  <script src="./.hard/赤ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./.hard/緑ドラゴン.js"></script><!-- 確率 -->
 
 
-  <script src="./monsters/メデューサE.js"></script><!-- 確率 -->
-  <script src="./monsters/オーク.js"></script><!-- なし -->
-  <script src="./monsters/人魂.js"></script><!-- トリプル -->
-  <script src="./monsters/ヴォーパル.js"></script><!-- 加速 -->
-  <script src="./monsters/ハーピー.js"></script><!-- 加速 -->
-  <script src="./monsters/グリフォン.js"></script><!-- 加速 -->
-  <script src="./monsters/レヴィアタン.js"></script><!-- 加速 -->
-  <script src="./monsters/クトゥグア.js"></script><!-- 確率 -->
-  <script src="./monsters/ラミア.js"></script><!-- トリプル -->
-
-   <!-- ハード -->
-       <!-- ハード -->
-
-
+  <!-- 魔王出現24F -->
+  <script src="./.extra/メデューサE.js"></script><!-- 確率 -->
+  <script src="./.extra/魔王.js"></script><!-- 確率 -->
 
   <!-- イベント -->
-  <script src="./monsters/黒ドラゴン.js"></script><!-- トリプル -->
-  <script src="./monsters/宝箱E.js"></script><!-- トリプル -->
-  <script src="./monsters/青魔導書.js"></script>
-  <script src="./monsters/堕天使.js"></script>
+  <script src="./.event/黒ドラゴン.js"></script><!-- トリプル -->
+  <script src="./.event/堕天使.js"></script>
 
 
   <script src="startGames.js"></script>
   <script src="main.js"></script>
 </body>
+
 </html>
