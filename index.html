@@ -106,7 +106,7 @@
     /* テキストウィンドウ */
     .text-window {
       position: absolute;
-      bottom: 4vmin;
+      bottom: 7vmin;
       left: 50%;
       transform: translateX(-50%);
       width: 80%;
@@ -135,26 +135,62 @@
       transition: opacity 0.5s;
       z-index: 999;
     }
-    .popup-message {
+
+/* 上部領域（.top-screen）を基準とするため、position: relative; を指定 */
+.top-screen {
+  position: relative;
+  overflow: hidden; /* 長いテロップがはみ出しても隠す */
+}
+
+/* テロップ用基本スタイル */
+.teletext {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center; /* テキストも中央揃え */
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #ff5656;
+  bottom: 0;               /* 上部領域の一番下 */
+  left: 100%;              /* 初期は右端（画面外） */
+  transform: translateX(-50%); /* 横方向は中央ずらし */
+  white-space: nowrap;
+  padding: 5px 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
   font-size: 4vmin;
-  padding: 2vmin 4vmin;
-  border-radius: 1vmin;
-  z-index: 1000;
-  opacity: 1;
-  transition: opacity 0.5s ease;
-}
-
-
-.popup-message.fade-out {
   opacity: 0;
+  z-index: 1000;
 }
+
+/* 右から中央へのスライドイン */
+@keyframes slideInAnimation {
+  from {
+    left: 100%;
+    opacity: 0;
+  }
+  to {
+    left: 50%;   /* 横中央で表示（親幅の50%） */
+    opacity: 1;
+  }
+}
+
+/* 中央から左へのスライドアウト */
+@keyframes slideOutAnimation {
+  from {
+    left: 50%;
+    opacity: 1;
+  }
+  to {
+    left: 0%;    /* 左側へ移動 */
+    opacity: 0;
+  }
+}
+
+.slide-in {
+  animation: slideInAnimation 1s forwards;
+}
+
+.slide-out {
+  animation: slideOutAnimation 1s forwards;
+}
+
+
+
 
 
     #monster-img,
@@ -214,7 +250,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      font-size: 8vmin;
+      font-size: 5vmin;
       transform: translate(-50%, -50%);
       background-color: #333;
       color: white;
@@ -222,7 +258,7 @@
       border-radius: 1vmin;
       z-index: 1000;
       width: 70vw;
-      height: 50vh;
+      height: 30vh;
       display: none;
       box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
     }
@@ -232,7 +268,7 @@
       background-color: #555;
       border: none;
       color: #fff;
-      font-size: 8vmin;
+      font-size: 5vmin;
       padding: 0.5vmin 1.5vmin;
       margin: 0.5vmin;
       border-radius: 1vmin;
@@ -249,12 +285,45 @@
       background-color: #999;
     }
 
-    #other-sounds-toggle {
-      transform: scale(10);
-      vertical-align: middle;
-      margin-left: 5vmin;
-      /* 位置調整はお好みで */
-    }
+    /* トグルボタン（ここでは効果音用チェックボックス）の例 */
+/* デフォルトのスタイルをリセットし、カスタムスタイルを適用 */
+#other-sounds-toggle {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 5vmin;   /* 画面サイズに対して相対的な幅 */
+  height: 5vmin;  /* 画面サイズに対して相対的な高さ */
+  border: 0.5vmin solid #ccc;
+  border-radius: 0.5vmin;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* チェックされた状態の例 */
+#other-sounds-toggle:checked {
+  background-color: #39aaeb;
+  border-color: #ccc;
+  border-radius: 0.5vmin;
+}
+#debug-toggle {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 5vmin;   /* 画面サイズに対して相対的な幅 */
+  height: 5vmin;  /* 画面サイズに対して相対的な高さ */
+  border: 0.5vmin solid #ccc;
+  border-radius: 0.5vmin;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+/* チェックされた状態の例 */
+#debug-toggle:checked {
+  background-color: #39aaeb;
+  border-color: #ccc;
+  border-radius: 0.5vmin;
+}
+
 
     /* ×ボタン */
     #settings-window .close-button {
@@ -327,12 +396,22 @@
       <span id="fallduration-value">3000</span>
       <button id="fallduration-increase">+</button>
     </div>
+    <!-- 設定ウィンドウ内にデバッグモード用トグルボタンを追加 -->
+<div class="settings-row">
+  <label for="debug-toggle">デバッグモード：
+  </label>
+  <input type="checkbox" id="debug-toggle">
+</div>
   </div>
 
 
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
   <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
   <audio id="defeat-sound" src="./sounds/D.mp3" preload="auto"></audio>
+  <audio id="reflect-sound" src="./sounds/E.mp3" preload="auto"></audio>
+  <audio id="heal-sound" src="./sounds/F.mp3" preload="auto"></audio>
+  <audio id="barrier-sound" src="./sounds/G.mp3" preload="auto"></audio>
+  <audio id="lit-sound" src="./sounds/H.mp3" preload="auto"></audio>
 
 
   <!-- 初期 -->
@@ -383,11 +462,26 @@
 
   <!-- 魔王出現24F -->
   <script src="./extra/メデューサE.js"></script><!-- 確率 -->
+  <script src="./extra/クトゥグアE.js"></script><!-- 確率 -->
+  <script src="./extra/ハスターE.js"></script><!-- 確率 -->
+  <script src="./extra/レヴィアタンE.js"></script><!-- 確率 -->
   <script src="./extra/魔王.js"></script><!-- 確率 -->
 
   <!-- イベント -->
   <script src="./event/黒ドラゴン.js"></script><!-- トリプル -->
   <script src="./event/堕天使.js"></script>
+
+
+  <script src="./hard/雪女E.js"></script><!-- 確率 -->
+  <script src="./hard/ナイトメアE.js"></script><!-- 確率 -->
+  <script src="./hard/ネクロマンサーE.js"></script><!-- 確率 -->
+  <script src="./normal/ゴーレムE.js"></script><!-- 確率 -->
+  <script src="./normal/ゾンビE.js"></script><!-- 確率 -->
+  <script src="./normal/ゾンビ犬E.js"></script><!-- 確率 -->
+  <script src="./hard/ドラキュラE.js"></script><!-- 確率 -->
+  <script src="./easy/ゴブリンE.js"></script><!-- 確率 -->
+  <script src="./hard/オークE.js"></script><!-- 確率 -->
+  <script src="./hard/デュラハンE.js"></script><!-- 確率 -->
 
 
   <script src="startGames.js"></script>

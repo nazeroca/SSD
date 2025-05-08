@@ -1,5 +1,6 @@
 function startGame(speed, count, onEnd) {
   buttonGroup.classList.add('hidden');
+  showTeletext(`${speed/1000}秒で${count}個の攻撃`);
   circleCount = 0;
   maxCircles = count;
   circles = [];
@@ -24,11 +25,11 @@ function startGame(speed, count, onEnd) {
   }
 };
 setTimeout(checkEnd, 1000);
-
 }
 
 function startGameR(speed1, speed2, count, onEnd) {
   buttonGroup.classList.add('hidden');
+  showTeletext(`${speed1/1000}秒～${speed2/1000}秒でランダムに${count}個`);
   circleCount = 0;
   maxCircles = count;
   circles = [];
@@ -67,9 +68,60 @@ function startGameR(speed1, speed2, count, onEnd) {
   setTimeout(checkEnd, 1000);
 }
 
+function startGameR2(speed1, speed2, count, onEnd) {
+  buttonGroup.classList.add('hidden');
+  showTeletext(`${speed1/1000}秒～${speed2/1000}秒でランダムに${count}個、高速で流れる確率アップ`);
+  circleCount = 0;
+  maxCircles = count;
+  circles = [];
+
+  // ゲーム終了時のコールバックを保持
+  gameOnEndCallback = onEnd;
+
+  // 再帰的にノーツを生成する関数
+  function spawnNext() {
+    if (circleCount < maxCircles) {
+      spawnCircle();
+      // 以下が変更点
+      // 一様乱数 u を取得し、四分円状の変換を適用
+      const u = secureRandom();
+      const factor = 1 - Math.sqrt(1 - u * u);
+      // factor が 0 なら delay は speed1 (最も短い遅延)、1 なら speed2 (最も長い遅延)
+      const delay = speed1 + factor * (speed2 - speed1);
+      setTimeout(spawnNext, delay);
+    }
+  }
+  // 最初のノーツを生成
+  spawnNext();
+
+  // ノーツの全削除（またはレーンからの退出）をチェックするループ
+  const checkEnd = () => {
+    const allGone = circles.every(c => {
+      const left = parseInt(c.style.left || '9999', 10);
+      return left <= -80;
+    });
+    if (allGone && circleCount >= maxCircles) {
+      // もし全てのノーツが消えていて、かつモンスターのHPがまだ残っている場合、強制的に敗北処理を実行
+      if (monsterHP > 0) {
+        defeatMonster();
+      }
+      onEnd();
+    } else {
+      setTimeout(checkEnd, 200);
+    }
+  };
+  setTimeout(checkEnd, 1000);
+}
+
+
 function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   // ノーツ生成の初期化
   buttonGroup.classList.add('hidden');
+  if(speed1>speed2){
+  showTeletext(`${speed1/1000}秒から${speed2/1000}秒へ加速`);
+  }else{
+    showTeletext(`${speed1/1000}秒から${speed2/1000}秒へ減速`);  
+  }
   circleCount = 0;
   maxCircles = count1 + count2;
   circles = [];
@@ -124,10 +176,69 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   setTimeout(checkEnd, 1000);
 }
 
+function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd) {
+  // ノーツ生成の初期化
+  buttonGroup.classList.add('hidden');
+  showTeletext(`${speed1/1000}秒⇒${speed2/1000}秒⇒${speed3/1000}秒へ徐々に加減速`);
+  circleCount = 0;
+  maxCircles = count1 + count2;
+  circles = [];
+  
+  // ゲーム終了時のコールバックをグローバルに保持（必要な場合）
+  gameOnEndCallback = onEnd;
+  
+  // noteIndex は生成したノーツの総数として扱う（0～maxCircles-1）
+  let noteIndex = 0;
+  
+  // 再帰的にノーツを生成する関数
+  function spawnNext() {
+    if (noteIndex < maxCircles) {
+      spawnCircle();
+      noteIndex++;
+      
+      let delay;
+      if (noteIndex <= count1) {
+        // 第1フェーズ：speed1 から speed2 へ、count1個、type1乗のease-out
+        let t = noteIndex / count1; // tは0〜1の間
+        let factor = 1 - Math.pow((1 - t), type1);
+        delay = speed1 - (speed1 - speed2) * factor;
+      } else {
+        // 第2フェーズ：speed2 から speed3 へ、count2個、type2乗のease-out
+        let noteIndex2 = noteIndex - count1;  // 第2フェーズの進行状況
+        let t = noteIndex2 / count2;
+        let factor = 1 - Math.pow((1 - t), type2);
+        delay = speed2 - (speed2 - speed3) * factor;
+      }
+      
+      setTimeout(spawnNext, delay);
+    }
+  }
+  spawnNext();
+  
+  // 終了チェック：全ノーツがレーンから消えているか？
+  const checkEnd = () => {
+    const allGone = circles.every(c => {
+      const left = parseInt(c.style.left || '9999', 10);
+      return left <= -80;
+    });
+    if (allGone && circleCount >= maxCircles) {
+      // もし全てのノーツが消えていて、かつモンスターのHPがまだ残っている場合、強制的に敗北処理を実行
+      if (monsterHP > 0) {
+        defeatMonster();
+      }
+      onEnd();
+    } else {
+      setTimeout(checkEnd, 200);
+    }
+  };
+  setTimeout(checkEnd, 1000);
+}
+
+
 function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
   // ボタン群は非表示
   buttonGroup.classList.add('hidden');
-  
+  showTeletext(`${speed1/1000}秒⇒${speed2/1000}秒⇒${speed3/1000}秒の三段階変化`);
   // ノーツの初期化
   circleCount = 0;
   maxCircles = count1 + count2 + count3;
@@ -184,8 +295,68 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
   setTimeout(checkEnd, 1000);
 }
 
-function startGameS(speed1, count1, probability, speed2, count2, onEnd) {
+function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
+  // ボタン群は非表示
   buttonGroup.classList.add('hidden');
+  showTeletext(`${speed1/1000}秒⇔${speed2/1000}秒で反復${sets}セット`);
+
+  // ノーツの初期化
+  circleCount = 0;
+  maxCircles = sets * (count1 + count2);
+  circles = [];
+
+  // ゲーム終了時のコールバックをグローバルに保持
+  gameOnEndCallback = onEnd;
+
+  // 生成済みノーツ数（0～maxCircles-1）
+  let noteIndex = 0;
+
+  // ノーツを再帰的に生成する関数
+  function spawnNext() {
+    if (noteIndex < maxCircles) {
+      spawnCircle();  // ノーツを生成＆アニメーション開始
+      noteIndex++;
+
+      // 各セット内でのノーツ番号（0～(count1+count2)-1）
+      let indexInSet = (noteIndex - 1) % (count1 + count2);
+      let delay;
+      if (indexInSet < count1) {
+        // 1フェーズ目：セット内の先頭 count1 個は speed1 の間隔
+        delay = speed1;
+      } else {
+        // 2フェーズ目：次の count2 個は speed2 の間隔
+        delay = speed2;
+      }
+
+      setTimeout(spawnNext, delay);
+    }
+  }
+  // 最初のノーツを生成
+  spawnNext();
+
+  // すべてのノーツがレーンから消えたかどうかをチェック
+  const checkEnd = () => {
+    const allGone = circles.every(c => {
+      const left = parseInt(c.style.left || '9999', 10);
+      return left <= -80;
+    });
+    if (allGone && circleCount >= maxCircles) {
+      // モンスターのHPが残っている場合は敗北処理を強制実行
+      if (monsterHP > 0) {
+        defeatMonster();
+      }
+      onEnd();
+    } else {
+      setTimeout(checkEnd, 200);
+    }
+  };
+  setTimeout(checkEnd, 1000);
+}
+
+
+function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
+  buttonGroup.classList.add('hidden');
+  showTeletext(`${probability*100}%の確率で${speed2/1000}秒${count2}個の追撃発生`);
   circleCount = 0;
   maxCircles = 1000;
   circles = [];
@@ -250,3 +421,5 @@ function startGameS(speed1, count1, probability, speed2, count2, onEnd) {
 
   spawnMain();
 }
+
+

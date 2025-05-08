@@ -16,7 +16,7 @@ function startEvent00() {
 
     // ボタンがクリックされたら、ボタン群を非表示にし、フェード処理後に次のイベントへ移行する
     btn.onclick = () => {
-      clearTimeout(autoSelectTimer);
+  
       hideSceneImage();
       buttonGroup.classList.add('hidden');
       fadeOutIn(() => {
@@ -27,13 +27,5 @@ function startEvent00() {
     // ボタンを追加して、表示する
     buttonGroup.appendChild(btn);
     buttonGroup.classList.remove('hidden');
-
-    autoSelectTimer = setTimeout(() => {
-      const buttons = buttonGroup.querySelectorAll('button');
-      if (buttons.length > 0) {
-        const randomIndex = Math.floor(Math.random() * buttons.length);
-        buttons[randomIndex].click();
-      }
-    }, 10000);
   });
 }

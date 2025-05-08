@@ -1,6 +1,11 @@
 const gameArea = document.getElementById('game-area');
 const buttonGroup = document.getElementById('button-group');
 const hitSound = document.getElementById('hit-sound');
+const reflectSound = document.getElementById('reflect-sound');
+const healSound = document.getElementById('heal-sound');
+const barrierSound = document.getElementById('barrier-sound');
+const litSound = document.getElementById('lit-sound');
+const defeatSound = document.getElementById('defeat-sound');
 const infoDisplay = document.getElementById('info');
 const textWindow = document.getElementById('text-window');
 // 既存グローバル変数の上部あたりに追加
@@ -23,27 +28,15 @@ let flagDR = false;
 let flagDG = false;
 let flagDB = false; 
 
-let ange = 1;
+let ange = 0;
+
+let debugModeEnabled = false;
+
 
 
 
 let currentEvent = null;
 
-function showBattleImage(imageSrc) {
-  const container = document.getElementById("monster-container");
-  const img = document.getElementById("monster-img");
-  const hpBar = document.getElementById("monster-hp-bar");
-  container.classList.remove("hidden");
-  img.src = imageSrc;
-  if (hpBar) {
-    hpBar.style.display = "";
-  }
-}
-
-function hideBattleImage() {
-  const container = document.getElementById("monster-container");
-  container.classList.add("hidden");
-}
 
 function showSceneImage(imageSrc) {
   const container = document.getElementById("scene-container");
@@ -89,7 +82,6 @@ function defeatMonster() {
   if (monsterContainer) {
     monsterContainer.classList.add('hidden');
   }
-  const defeatSound = document.getElementById('defeat-sound');
   if (defeatSound && otherSoundsEnabled) {
     defeatSound.currentTime = 0;
     defeatSound.play().catch(error => console.error("Defeat sound error:", error));
@@ -127,12 +119,12 @@ function showTextTypingEffectS(speaker, text, callback, speed = 50) {
   speakerDiv.style.position = 'absolute';
   speakerDiv.style.top = '0';
   speakerDiv.style.left = '0';
-  speakerDiv.style.padding = '5px';
+  speakerDiv.style.padding = '2vmin';
   speakerDiv.style.fontWeight = 'bold';
 
   const messageDiv = document.createElement('div');
   messageDiv.className = 'message';
-  messageDiv.style.marginTop = '30px';
+  messageDiv.style.marginTop = '5vmin';
 
   textWindow.appendChild(speakerDiv);
   textWindow.appendChild(messageDiv);
@@ -157,6 +149,8 @@ function spawnCircle(options = {}) {
   if (circleCount >= maxCircles) return;
   const circle = document.createElement('div');
   circle.classList.add('circle');
+  circle.style.backgroundColor = options.color || '#fff';
+
   gameArea.appendChild(circle);
   circles.push(circle);
   const startTime = performance.now();
@@ -171,7 +165,7 @@ function spawnCircle(options = {}) {
       circle.style.left = posX + 'px';
       const judgeX = gameArea.clientWidth * 0.2;
       const center = posX + 40;
-      if (!circle.played && Math.abs(center - judgeX) < 5) {
+      if (!circle.played && center - judgeX < 0) {
         hitSound.currentTime = 0;
         hitSound.play().catch(error => console.error('音声再生エラー:', error));
         circle.played = true;
@@ -201,6 +195,51 @@ function spawnCircle(options = {}) {
   requestAnimationFrame(animate);
   circleCount++;
 }
+
+
+function showTeletext(message) {
+  // 上部領域 (.top-screen) を取得
+  const topArea = document.querySelector('.top-screen');
+  if (!topArea) {
+    console.error('上部領域 (.top-screen) が見つかりません。');
+    return;
+  }
+  
+  // すでにテロップが表示されていれば、消失を待ってから再表示する
+  if (topArea.querySelector('.teletext')) {
+    setTimeout(() => {
+      showTeletext(message);
+    }, 500); // 500ms 待機して再チェック
+    return;
+  }
+  
+  // テロップ要素を作成
+  const teletext = document.createElement('div');
+  teletext.className = 'teletext';
+  teletext.textContent = message;
+  
+  // 上部領域に追加
+  topArea.appendChild(teletext);
+  
+  // すぐにスライドイン開始
+  teletext.classList.add('slide-in');
+  
+  // スライドイン完了（約1秒）後＋5秒表示＝6秒後にテロップをスライドアウトさせる
+  setTimeout(() => {
+    teletext.classList.remove('slide-in');
+    teletext.classList.add('slide-out');
+    
+    // スライドアウト完了後（1秒後）にテロップ要素を削除
+    setTimeout(() => {
+      teletext.remove();
+    }, 1000);
+  }, 4000);
+}
+
+
+
+
+
 
 function updateFlagGrid() {
   const grid = document.getElementById("flag-grid");
@@ -248,16 +287,19 @@ function fadeOutIn(callback) {
 function openSettings() {
   const settingsWindow = document.getElementById('settings-window');
   settingsWindow.style.display = 'block';
-  // 初期値の表示（ノーツ音量は内部が 0〜1 のため変換）
-  document.getElementById('volume-value').textContent = Math.round(hitSound.volume * 100) + '%';
-  document.getElementById('fallduration-value').textContent = fallDuration;
   document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
+  // デバッグモードのトグルボタンの状態を反映
+  document.getElementById('debug-toggle').checked = debugModeEnabled;
 }
 
 function closeSettings() {
   const settingsWindow = document.getElementById('settings-window');
   settingsWindow.style.display = 'none';
+  otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
+  debugModeEnabled = document.getElementById('debug-toggle').checked;
+  console.log(debugModeEnabled)
 }
+
 
 // ノーツ音量の変更（20%刻み）
 document.getElementById('volume-decrease').addEventListener('click', function() {
@@ -357,7 +399,7 @@ const eventFunctions = {
   'event23': startEvent23,
   'event25': startEvent25,
   'event31': startEvent31,
-  'event49': startEvent49
+  'event52': startEvent52
 };
 
 // 各イベントの重みを設定（数値が大きいほど選ばれやすくなる）
@@ -380,41 +422,52 @@ const eventWeights = {
 function addEvent(eventKey, eventFunction, weight = 1) {
   eventFunctions[eventKey] = eventFunction;
   eventWeights[eventKey] = weight;
+  console.log(`added ${eventKey}`)
 }
 
 // イベントの削除用関数
 function removeEvent(eventKey) {
   delete eventFunctions[eventKey];
   delete eventWeights[eventKey];
-}
-
-
-function showPopupMessage(message, displayTime = 3000) {
-  const topScreen = document.querySelector('.top-screen');
-  if (!topScreen) return;
-  
-  // ポップアップ要素作成
-  const popup = document.createElement('div');
-  popup.className = 'popup-message';
-  popup.textContent = message;
-  
-  // top-screenに追加
-  topScreen.appendChild(popup);
-  
-  // 一定時間後にフェードアウト＆削除
-  setTimeout(() => {
-    popup.classList.add('fade-out');
-    popup.addEventListener('transitionend', () => {
-      popup.remove();
-    });
-  }, displayTime);
+  console.log(`removed ${eventKey}`)
 }
 
 
 
-// ランダムイベントを開始する関数（exclude に指定したものは除外）
-// 重み付けでランダム選出する仕組みを実装
+
 function startRandomEvent(exclude = []) {
+  // デバッグモードが有効の場合、任意のイベント番号入力用のプロンプトを表示
+  if (debugModeEnabled) {
+    let debugInput = prompt(
+      "【デバッグモード】実行したいイベント番号を入力してください。\n（例：38）\n何も入力しなければランダム選択されます。"
+    );
+    if (debugInput !== null && debugInput.trim() !== "") {
+      const formatKey = key => {
+        if (typeof key === "string" && key.startsWith("event")) {
+          const numberPart = key.slice(5);
+          return "event" + numberPart.padStart(2, "0");
+        } else {
+          return "event" + key.toString().padStart(2, "0");
+        }
+      };
+      const debugKey = formatKey(debugInput.trim());
+      // eventFunctions に存在するか、グローバルスコープ (window) に "startEvent" + 数字 で存在するかチェック
+      let debugEventFunction = eventFunctions[debugKey];
+      if (!debugEventFunction && typeof window["startEvent" + debugInput.trim()] === "function") {
+        debugEventFunction = window["startEvent" + debugInput.trim()];
+      }
+      if (typeof debugEventFunction === "function") {
+        debugEventFunction();
+        return;
+      } else {
+        alert("エラー: イベント " + debugKey + " は存在しません。");
+        return startRandomEvent(exclude);
+      }
+    }
+  }
+  
+  // 以下は通常のランダムイベント選択処理
+
   // 文字列が "event" で始まっていない場合もカバーするための正規化関数
   const formatKey = key => {
     if (typeof key === "string" && key.startsWith("event")) {
@@ -434,7 +487,7 @@ function startRandomEvent(exclude = []) {
 
   if (possibleEventKeys.length === 0) return;
   
-  if(eventCount==8){
+  if (eventCount == 8) {
     addEvent('event26', startEvent26, 4);
     addEvent('event36', startEvent36, 4);
     addEvent('event18', startEvent18, 4);
@@ -450,7 +503,10 @@ function startRandomEvent(exclude = []) {
     addEvent('event22', startEvent22, 4);
     addEvent('event20', startEvent20, 4);
     addEvent('event33', startEvent33, 4);
-  }else if(eventCount==16){
+    addEvent('event45', startEvent45, 4);
+    addEvent('event47', startEvent47, 4);
+    addEvent('event48', startEvent48, 4);
+  } else if (eventCount == 16) {
     addEvent('event35', startEvent35, 5);
     addEvent('event03', startEvent03, 5);
     addEvent('event32', startEvent32, 5);
@@ -460,8 +516,19 @@ function startRandomEvent(exclude = []) {
     addEvent('event29', startEvent29, 5);
     addEvent('event27', startEvent27, 5);
     addEvent('event28', startEvent28, 5);
-  }else if(eventCount==24){
+    addEvent('event49', startEvent49, 1);
+    addEvent('event28', startEvent28, 5);
+    addEvent('event51', startEvent51, 5);
+    addEvent('event50', startEvent50, 5);
+    addEvent('event46', startEvent46, 5);
+    addEvent('event44', startEvent44, 5);
+    addEvent('event43', startEvent43, 5);
+    addEvent('event42', startEvent42, 5);
+  } else if (eventCount == 24) {
     addEvent('event24', startEvent24, 5);
+    addEvent('event41', startEvent41, 5);
+    addEvent('event40', startEvent40, 5);
+    addEvent('event39', startEvent39, 5);
     addEvent('event60', startEvent60, 10);
   }
 
@@ -489,12 +556,13 @@ function startRandomEvent(exclude = []) {
   // 選ばれたイベントの関数を実行
   eventFunctions[selectedKey]();
 
+  // ポップアップの表示
   if (eventCount === 8) {
-    showPopupMessage('8Fに到達！\n新しいモンスターが登場するようになった。');
-  }else if(eventCount === 16) {
-    showPopupMessage('16Fに到達！\n新しいモンスターが登場するようになった。');
-  }else if(eventCount === 24) {
-    showPopupMessage('24Fに到達！\n魔王を含む新しいモンスターが登場するようになった。');
+    showTeletext(`新しい魔物が登場するようになった。`);
+  } else if (eventCount === 16) {
+    showTeletext(`新しい魔物が登場するようになった。`);
+  } else if (eventCount === 24) {
+    showTeletext(`魔王を含む新しい魔物が登場するようになった。`);
   }
 }
 
