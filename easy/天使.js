@@ -2,7 +2,9 @@ function startEvent06() {
   currentEvent = 'event06';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/天使.png');
   showTextTypingEffect('天使が現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/天使.png';
     initializeMonster(10);
     startGame(10000, 10, () => {

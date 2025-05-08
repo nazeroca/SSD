@@ -2,11 +2,12 @@ function startEvent05() {
   currentEvent = 'event05';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/スライム.png');
   // サイクル回数をランダムに決定（5～10回）
   const totalCycles = Math.floor(secureRandom() * 6) + 2;
 
   // パラメータの定義
-  const firstCycleSpeed = 4000;    // 1回目の生成間隔（ミリ秒）
+  const firstCycleSpeed = 3000;    // 1回目の生成間隔（ミリ秒）
   const firstCycleCount = getSecureRandomInRange(20, 30);     // 1回目のノーツ個数（モンスターのHP）
 
   const laterCycleSpeed = 1000;    // 2回目以降の生成間隔（ミリ秒）
@@ -17,6 +18,7 @@ function startEvent05() {
     // まず「テキストA」を表示
     document.getElementById('monster-img').src = './image/スライム.png';
     showTextTypingEffect("スライムが現れた！", function() {
+      hideSceneImage();
       // サイクルごとに、1回目と以降でパラメータを切り替える
       if (cycleIndex === 0) {
         initializeMonster(firstCycleCount);
@@ -40,7 +42,6 @@ function startEvent05() {
         initializeMonster(laterCycleCount);
         startGame(laterCycleSpeed, laterCycleCount, function() {
           showTextTypingEffect(`スライムを倒した！`, () => {
-              fadeOutIn(() => {
                 if (cycleIndex < totalCycles - 1) {
                   runCycle(cycleIndex + 1, totalCycles);
                 } else {
@@ -49,8 +50,7 @@ function startEvent05() {
                       startRandomEvent(['event01','event05']);
                     });
                   });
-                }
-              });       
+                }     
           });
         });
       }

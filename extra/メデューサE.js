@@ -3,10 +3,12 @@ function startEvent24() {
   eventCount++;
   updateEventCountDisplay();
   let noteCount = getSecureRandomInRange(60, 80);
+  showSceneImage('./image/メデューサE.png');
   showTextTypingEffect('エリートメデューサが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/メデューサE.png';
     initializeMonster(noteCount);
-    startGameS(700, noteCount, 0.08, 5000, 1, () => {
+    startGameP(700, noteCount, 0.08, 5000, 1, () => {
       
       showTextTypingEffect(`エリートメデューサを倒した！`, () => {
 

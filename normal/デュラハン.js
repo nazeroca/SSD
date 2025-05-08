@@ -2,12 +2,13 @@ function startEvent08() {
   currentEvent = 'event08';
   eventCount++;
   updateEventCountDisplay();
-
+  showSceneImage('./image/デュラハン.png');
   let noteCount = getSecureRandomInRange(20, 40);
   showTextTypingEffect('デュラハンが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/デュラハン.png';
-    initializeMonster(noteCount+10);
-    startGameA(3000,1000, 2,noteCount,10, () => {
+    initializeMonster(noteCount+20);
+    startGameA(3000,750, 1,noteCount,20, () => {
       showTextTypingEffect(`デュラハンを倒した！`, () => {
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);

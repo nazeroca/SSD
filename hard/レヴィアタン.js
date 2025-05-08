@@ -2,12 +2,13 @@ function startEvent37() {
   currentEvent = 'event37';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(20, 30);
+  let noteCount = getSecureRandomInRange(30, 40);
+  showSceneImage('./image/レヴィアタン.png');
   showTextTypingEffect('レヴィアタンが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/レヴィアタン.png';
-    initializeMonster(noteCount);
-    startGameA(4000,800, 1.8,noteCount,0, () => {
-      startGameA(800,4000, 1.8,noteCount,0, () => {
+    initializeMonster(2*noteCount);
+    startGameA2(3000,500, 3000, 2, noteCount, 0.5, noteCount, () => {
       
       showTextTypingEffect(`レヴィアタンを倒した！`, () => {
 
@@ -15,7 +16,6 @@ function startEvent37() {
           startRandomEvent([currentEvent]);
         });
     });
-  });
 });
   });
 }

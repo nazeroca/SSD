@@ -3,7 +3,9 @@ function startEvent01() {
   eventCount++;
   updateEventCountDisplay();
   let noteCount = getSecureRandomInRange(20, 30);
+  showSceneImage('./image/スライム.png');
   showTextTypingEffect('スライムが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/スライム.png';
     initializeMonster(noteCount);
     startGame(3000, noteCount, () => {

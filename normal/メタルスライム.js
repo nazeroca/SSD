@@ -2,6 +2,7 @@ function startEvent11() {
   currentEvent = 'event11';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/メタルスライム.png');
   removeEvent('event11');
   showTextTypingEffect('メタルスライムが現れた！\n戦闘は苛烈になりそうだが、逃げ出そうか？', () => {
     buttonGroup.innerHTML = '';
@@ -10,6 +11,7 @@ function startEvent11() {
     btnA.textContent = '戦う';
     btnA.style.backgroundColor = '#33CC99';
     btnA.onclick = () => {
+      hideSceneImage();
       clearTimeout(autoSelectTimer);
       buttonGroup.classList.add('hidden');
       document.getElementById('monster-img').src = './image/メタルスライム.png';
@@ -76,6 +78,7 @@ btnB.className = 'start-button';
 btnB.textContent = '逃げる';
 btnB.style.backgroundColor = '#FF9933';
 btnB.onclick = () => {
+  hideSceneImage();
   clearTimeout(autoSelectTimer);
   buttonGroup.classList.add('hidden');
 

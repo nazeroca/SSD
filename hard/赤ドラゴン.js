@@ -2,7 +2,9 @@ function startEvent27() {
   currentEvent = 'event27';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/赤ドラゴン.png');
   showTextTypingEffect('レッドドラゴンが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/赤ドラゴン.png';
     initializeMonster(100);
     startGame(2500, 100, () => {

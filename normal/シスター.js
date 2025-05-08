@@ -6,11 +6,12 @@ const startEvent13 = () => {
   updateEventCountDisplay();
     // 50〜100 の整数乱数をターゲット値として発生
     const target = getSecureRandomInRange(1, 100);
+    showSceneImage('./image/シスター.png');
     showTextTypingEffect('修道女が現れた！', () => {
     // 最初に「テキストA」を流す
     showTextTypingEffectS(`【修道女】`,`人は生まれ落ちた瞬間から業を背負っているのです。\nさぁ、あなたもそこで懺悔なさい。`, () => {
       // ノーツが流れる間、シーン画像 event13.png を表示
-      showSceneImage('./image/シスター.png');
+      
   
       // 停止ボタンを buttonGroup 内に配置（オープニング.js と同じ例のスタイル）
       buttonGroup.innerHTML = ''; // 既存のボタン類をクリア

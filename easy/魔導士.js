@@ -1,7 +1,7 @@
 // --- event1 用のボタン設定 ---
 const buttonConfigs = [
-  { label: '左の魔導士\n🧡高・🗡️低', speed: 2000, count: 40, color: '#F533FF', monsterImage: './image/青魔導士.png' },
-  { label: '右の魔導士\n🧡低・🗡️早', speed: 750, count: 25, color: '#3357FF', monsterImage: './image/紫魔導士.png' }
+  { label: '左の魔導士\n🧡高・🗡️低', speed: 2000, count: 40, color: '#F533FF', monsterImage: './image/紫魔導士.png' },
+  { label: '右の魔導士\n🧡低・🗡️早', speed: 750, count: 25, color: '#3357FF', monsterImage: './image/青魔導士.png' }
 ];
 
 // --- event1 のシナリオ ---
@@ -9,6 +9,7 @@ function startEvent02() {
   currentEvent = 'event02';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/魔導士.png');
   showTextTypingEffect('目の前に２人の黒魔導士が立ちはだかる！', () => {
     // ボタン1の生成
     const btn1 = document.createElement('button');
@@ -16,6 +17,7 @@ function startEvent02() {
     btn1.textContent = buttonConfigs[0].label;
     btn1.style.backgroundColor = buttonConfigs[0].color;
     btn1.onclick = () => {
+      hideSceneImage();
       clearTimeout(autoSelectTimer);
       buttonGroup.classList.add('hidden');
       // 選択されたボタンの設定をそのまま利用
@@ -39,6 +41,7 @@ function startEvent02() {
     btn2.textContent = buttonConfigs[1].label;
     btn2.style.backgroundColor = buttonConfigs[1].color;
     btn2.onclick = () => {
+      hideSceneImage();
       clearTimeout(autoSelectTimer);
       buttonGroup.classList.add('hidden');
       document.getElementById('monster-img').src = buttonConfigs[1].monsterImage;

@@ -2,7 +2,9 @@ function startEvent30() {
   currentEvent = 'event30';
   eventCount++;
   updateEventCountDisplay();
+  showSceneImage('./image/黒ドラゴン.png');
   showTextTypingEffect('ブラックドラゴンが現れた！', () => {
+    hideSceneImage();
     document.getElementById('monster-img').src = './image/黒ドラゴン.png';
     initializeMonster(100);
     startGameT(2500, 1500, 500, 30, 30, 30, () => {
