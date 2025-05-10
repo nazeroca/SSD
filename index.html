@@ -71,22 +71,39 @@
       transform: translate(-50%, -50%);
       display: flex;
       gap: 5vmin;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
       z-index: 10;
-      white-space: pre-wrap;
+      padding: 0 2vmin;
     }
 
+    /* スタートボタン */
     .start-button {
+      /* テキストが完全に中央にくるように inline-flex を指定 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
       padding: 2vmin 4vmin;
-      font-size: 4vmin;
+      font-size: 8vmin;
       border: none;
       cursor: pointer;
-      border-radius: 1vmin;
-      color: white;
+      border-radius: 3vmin;
       margin: 1vmin;
-      white-space: pre-wrap;
+      white-space: pre;
+
+      color: #fff;
+
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.4);
+    }
+
+
 
     .hidden {
       display: none;
@@ -136,58 +153,66 @@
       z-index: 999;
     }
 
-/* 上部領域（.top-screen）を基準とするため、position: relative; を指定 */
-.top-screen {
-  position: relative;
-  overflow: hidden; /* 長いテロップがはみ出しても隠す */
-}
+    /* 上部領域（.top-screen）を基準とするため、position: relative; を指定 */
+    .top-screen {
+      position: relative;
+      overflow: hidden;
+      /* 長いテロップがはみ出しても隠す */
+    }
 
-/* テロップ用基本スタイル */
-.teletext {
-  position: absolute;
-  bottom: 0;               /* 上部領域の一番下 */
-  left: 100%;              /* 初期は右端（画面外） */
-  transform: translateX(-50%); /* 横方向は中央ずらし */
-  white-space: nowrap;
-  padding: 5px 10px;
-  background: rgba(0, 0, 0, 0.7);
-  color: #fff;
-  font-size: 4vmin;
-  opacity: 0;
-  z-index: 1000;
-}
+    /* テロップ用基本スタイル */
+    .teletext {
+      position: absolute;
+      bottom: 0;
+      /* 上部領域の一番下 */
+      left: 100%;
+      /* 初期は右端（画面外） */
+      transform: translateX(-50%);
+      /* 横方向は中央ずらし */
+      white-space: nowrap;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 4vmin;
+      opacity: 0;
+      z-index: 1000;
+    }
 
-/* 右から中央へのスライドイン */
-@keyframes slideInAnimation {
-  from {
-    left: 100%;
-    opacity: 0;
-  }
-  to {
-    left: 50%;   /* 横中央で表示（親幅の50%） */
-    opacity: 1;
-  }
-}
+    /* 右から中央へのスライドイン */
+    @keyframes slideInAnimation {
+      from {
+        left: 100%;
+        opacity: 0;
+      }
 
-/* 中央から左へのスライドアウト */
-@keyframes slideOutAnimation {
-  from {
-    left: 50%;
-    opacity: 1;
-  }
-  to {
-    left: 0%;    /* 左側へ移動 */
-    opacity: 0;
-  }
-}
+      to {
+        left: 50%;
+        /* 横中央で表示（親幅の50%） */
+        opacity: 1;
+      }
+    }
 
-.slide-in {
-  animation: slideInAnimation 1s forwards;
-}
+    /* 中央から左へのスライドアウト */
+    @keyframes slideOutAnimation {
+      from {
+        left: 50%;
+        opacity: 1;
+      }
 
-.slide-out {
-  animation: slideOutAnimation 1s forwards;
-}
+      to {
+        left: 0%;
+        /* 左側へ移動 */
+        opacity: 0;
+      }
+    }
+
+    .slide-in {
+      animation: slideInAnimation 1s forwards;
+    }
+
+    .slide-out {
+      animation: slideOutAnimation 1s forwards;
+    }
 
 
 
@@ -233,7 +258,6 @@
       /* 背景は main.js の updateFlagGrid() で conic-gradient が設定されます */
     }
 
-    /* ▼ 設定ボタン（歯車） */
     #settings-button {
       position: absolute;
       top: 1vmin;
@@ -244,26 +268,40 @@
       user-select: none;
     }
 
-    /* ▼ 設定ウインドウ */
+    /* ▼ 設定ウインドウ（初期状態は非表示） */
     #settings-window {
       text-align: center;
       position: fixed;
       top: 50%;
       left: 50%;
-      font-size: 5vmin;
+      font-size: 7vmin;
       transform: translate(-50%, -50%);
       background-color: #333;
       color: white;
       padding: 4vmin;
       border-radius: 1vmin;
       z-index: 1000;
-      width: 70vw;
-      height: 30vh;
+      width: 80vw;
+      height: 40vh;
       display: none;
+      /* 非表示時は none */
       box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
     }
 
-    /* 設定ウィンドウ内のボタンのスタイル */
+    /* 設定ウインドウを開いた際に適用するクラス */
+    /* このクラスを追加すると、Flexbox による縦方向の均等配置が有効になります */
+    #settings-window.active {
+      display: flex;
+      /* 非表示を解除し、Flexboxを適用 */
+      flex-direction: column;
+      /* 子要素を縦に並べる */
+      justify-content: space-evenly;
+      /* 各行（子要素）をウインドウ内で均等に配置 */
+      align-items: center;
+      /* 横方向も中央揃え（必要に応じて） */
+    }
+
+    /* 設定ウインドウ内のボタンのスタイル（そのまま） */
     #settings-window button {
       background-color: #555;
       border: none;
@@ -285,44 +323,50 @@
       background-color: #999;
     }
 
+
     /* トグルボタン（ここでは効果音用チェックボックス）の例 */
-/* デフォルトのスタイルをリセットし、カスタムスタイルを適用 */
-#other-sounds-toggle {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 5vmin;   /* 画面サイズに対して相対的な幅 */
-  height: 5vmin;  /* 画面サイズに対して相対的な高さ */
-  border: 0.5vmin solid #ccc;
-  border-radius: 0.5vmin;
-  cursor: pointer;
-  vertical-align: middle;
-}
+    /* デフォルトのスタイルをリセットし、カスタムスタイルを適用 */
+    #other-sounds-toggle {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 5vmin;
+      /* 画面サイズに対して相対的な幅 */
+      height: 5vmin;
+      /* 画面サイズに対して相対的な高さ */
+      border: 0.5vmin solid #ccc;
+      border-radius: 0.5vmin;
+      cursor: pointer;
+      vertical-align: middle;
+    }
 
-/* チェックされた状態の例 */
-#other-sounds-toggle:checked {
-  background-color: #39aaeb;
-  border-color: #ccc;
-  border-radius: 0.5vmin;
-}
-#debug-toggle {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 5vmin;   /* 画面サイズに対して相対的な幅 */
-  height: 5vmin;  /* 画面サイズに対して相対的な高さ */
-  border: 0.5vmin solid #ccc;
-  border-radius: 0.5vmin;
-  cursor: pointer;
-  vertical-align: middle;
-}
+    /* チェックされた状態の例 */
+    #other-sounds-toggle:checked {
+      background-color: #39aaeb;
+      border-color: #ccc;
+      border-radius: 0.5vmin;
+    }
 
-/* チェックされた状態の例 */
-#debug-toggle:checked {
-  background-color: #39aaeb;
-  border-color: #ccc;
-  border-radius: 0.5vmin;
-}
+    #debug-toggle {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 5vmin;
+      /* 画面サイズに対して相対的な幅 */
+      height: 5vmin;
+      /* 画面サイズに対して相対的な高さ */
+      border: 0.5vmin solid #ccc;
+      border-radius: 0.5vmin;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    /* チェックされた状態の例 */
+    #debug-toggle:checked {
+      background-color: #39aaeb;
+      border-color: #ccc;
+      border-radius: 0.5vmin;
+    }
 
 
     /* ×ボタン */
@@ -395,13 +439,14 @@
       <button id="fallduration-decrease">−</button>
       <span id="fallduration-value">3000</span>
       <button id="fallduration-increase">+</button>
+      <label>ms</label>
     </div>
     <!-- 設定ウィンドウ内にデバッグモード用トグルボタンを追加 -->
-<div class="settings-row">
-  <label for="debug-toggle">デバッグモード：
-  </label>
-  <input type="checkbox" id="debug-toggle">
-</div>
+    <div class="settings-row">
+      <label for="debug-toggle">デバッグモード：
+      </label>
+      <input type="checkbox" id="debug-toggle">
+    </div>
   </div>
 
 
@@ -429,6 +474,7 @@
   <script src="./easy/天使.js"></script><!-- なし特殊 -->
   <script src="./easy/魔導士.js"></script><!-- なし特殊 -->
   <script src="./easy/幽霊.js"></script><!-- 確率 -->
+  <script src="./easy/ゴブリンE.js"></script><!-- 確率 -->
 
   <!-- ノーマル8F -->
   <script src="./normal/オーク.js"></script><!-- なし -->
@@ -446,6 +492,13 @@
   <script src="./normal/メデューサ.js"></script><!-- 確率 -->
   <script src="./normal/宝箱.js"></script><!-- なし特殊 -->
   <script src="./normal/宝箱E.js"></script><!-- トリプル -->
+  <script src="./normal/青ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./normal/青魔導書.js"></script>
+  <script src="./normal/赤ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./normal/緑ドラゴン.js"></script><!-- 確率 -->
+  <script src="./normal/ゴーレムE.js"></script><!-- 確率 -->
+  <script src="./normal/ゾンビE.js"></script><!-- 確率 -->
+  <script src="./normal/ゾンビ犬E.js"></script><!-- 確率 -->
 
   <!-- ハード16F -->
   <script src="./hard/クトゥグア.js"></script><!-- 確率 -->
@@ -454,10 +507,13 @@
   <script src="./hard/ハスター.js"></script><!-- ランダム -->
   <script src="./hard/ラミア.js"></script><!-- トリプル -->
   <script src="./hard/レヴィアタン.js"></script><!-- 加速 -->
-  <script src="./hard/青ドラゴン.js"></script><!-- なし特殊 -->
-  <script src="./hard/青魔導書.js"></script>
-  <script src="./hard/赤ドラゴン.js"></script><!-- なし特殊 -->
-  <script src="./hard/緑ドラゴン.js"></script><!-- 確率 -->
+  <script src="./hard/雪女E.js"></script><!-- 確率 -->
+  <script src="./hard/ナイトメアE.js"></script><!-- 確率 -->
+  <script src="./hard/ネクロマンサーE.js"></script><!-- 確率 -->
+  <script src="./hard/ドラキュラE.js"></script><!-- 確率 -->
+  <script src="./hard/オークE.js"></script><!-- 確率 -->
+  <script src="./hard/デュラハンE.js"></script><!-- 確率 -->
+  
 
 
   <!-- 魔王出現24F -->
@@ -471,17 +527,10 @@
   <script src="./event/黒ドラゴン.js"></script><!-- トリプル -->
   <script src="./event/堕天使.js"></script>
 
+  <script src="./normal/スフィンクス.js"></script>
 
-  <script src="./hard/雪女E.js"></script><!-- 確率 -->
-  <script src="./hard/ナイトメアE.js"></script><!-- 確率 -->
-  <script src="./hard/ネクロマンサーE.js"></script><!-- 確率 -->
-  <script src="./normal/ゴーレムE.js"></script><!-- 確率 -->
-  <script src="./normal/ゾンビE.js"></script><!-- 確率 -->
-  <script src="./normal/ゾンビ犬E.js"></script><!-- 確率 -->
-  <script src="./hard/ドラキュラE.js"></script><!-- 確率 -->
-  <script src="./easy/ゴブリンE.js"></script><!-- 確率 -->
-  <script src="./hard/オークE.js"></script><!-- 確率 -->
-  <script src="./hard/デュラハンE.js"></script><!-- 確率 -->
+
+  
 
 
   <script src="startGames.js"></script>

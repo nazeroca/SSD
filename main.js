@@ -286,7 +286,9 @@ function fadeOutIn(callback) {
 
 function openSettings() {
   const settingsWindow = document.getElementById('settings-window');
-  settingsWindow.style.display = 'block';
+  // active クラスを追加して、display を flex に変更
+  settingsWindow.classList.add('active');
+
   document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
   // デバッグモードのトグルボタンの状態を反映
   document.getElementById('debug-toggle').checked = debugModeEnabled;
@@ -294,11 +296,14 @@ function openSettings() {
 
 function closeSettings() {
   const settingsWindow = document.getElementById('settings-window');
-  settingsWindow.style.display = 'none';
+  // active クラスを削除して、設定ウインドウを非表示に戻す
+  settingsWindow.classList.remove('active');
+
   otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
   debugModeEnabled = document.getElementById('debug-toggle').checked;
-  console.log(debugModeEnabled)
+  console.log(debugModeEnabled);
 }
+
 
 
 // ノーツ音量の変更（20%刻み）
@@ -390,8 +395,8 @@ function getSecureRandomInRange(min, max) {
 const eventFunctions = {
   'event01': startEvent01,
   'event02': startEvent02,
-  'event06': startEvent06,
-  'event12': startEvent12,
+  'event03': startEvent03,
+  'event04': startEvent04,
   'event14': startEvent14,
   'event15': startEvent15,
   'event17': startEvent17,
@@ -407,8 +412,8 @@ const eventFunctions = {
 const eventWeights = {
   'event01': 3,
   'event02': 3,
-  'event06': 3,
-  'event12': 3,
+  'event03': 3,
+  'event04': 3,
   'event14': 3,
   'event15': 3,
   'event17': 3,
@@ -422,16 +427,41 @@ const eventWeights = {
 function addEvent(eventKey, eventFunction, weight = 1) {
   eventFunctions[eventKey] = eventFunction;
   eventWeights[eventKey] = weight;
-  console.log(`added ${eventKey}`)
 }
 
 // イベントの削除用関数
 function removeEvent(eventKey) {
   delete eventFunctions[eventKey];
   delete eventWeights[eventKey];
-  console.log(`removed ${eventKey}`)
 }
 
+function printEventProbabilities() {
+  // 全イベントの総重みを計算
+  let totalWeight = 0;
+  for (const key in eventWeights) {
+    totalWeight += eventWeights[key];
+  }
+  
+  // 重みごとにイベントキーをグループ化する
+  const groups = {};
+  for (const key in eventWeights) {
+    const weight = eventWeights[key];
+    if (!groups[weight]) {
+      groups[weight] = [];
+    }
+    groups[weight].push(key);
+  }
+  
+  // 各グループごとに、各イベントの確率を計算し、まとめて出力
+  for (const weight in groups) {
+    const group = groups[weight];
+    group.sort();
+    // 各イベントの確率は (weight ÷ totalWeight) × 100
+    // 小数点以下2桁まで表示
+    const probabilityPercent = ((Number(weight) / totalWeight) * 100).toFixed(2);
+    console.log(`${group.join(", ")}: ${probabilityPercent}% each`);
+  }
+}
 
 
 
@@ -439,7 +469,7 @@ function startRandomEvent(exclude = []) {
   // デバッグモードが有効の場合、任意のイベント番号入力用のプロンプトを表示
   if (debugModeEnabled) {
     let debugInput = prompt(
-      "【デバッグモード】実行したいイベント番号を入力してください。\n（例：38）\n何も入力しなければランダム選択されます。"
+      "【デバッグモード】"
     );
     if (debugInput !== null && debugInput.trim() !== "") {
       const formatKey = key => {
@@ -487,7 +517,7 @@ function startRandomEvent(exclude = []) {
 
   if (possibleEventKeys.length === 0) return;
   
-  if (eventCount == 8) {
+  if (eventCount == 1) {
     addEvent('event26', startEvent26, 4);
     addEvent('event36', startEvent36, 4);
     addEvent('event18', startEvent18, 4);
@@ -496,35 +526,35 @@ function startRandomEvent(exclude = []) {
     addEvent('event16', startEvent16, 4);
     addEvent('event08', startEvent08, 4);
     addEvent('event10', startEvent10, 4);
-    addEvent('event04', startEvent04, 4);
+    addEvent('event12', startEvent12, 4);
     addEvent('event09', startEvent09, 4);
     addEvent('event07', startEvent07, 4);
-    addEvent('event11', startEvent11, 1);
+    addEvent('event11', startEvent11, 2);
     addEvent('event22', startEvent22, 4);
     addEvent('event20', startEvent20, 4);
     addEvent('event33', startEvent33, 4);
     addEvent('event45', startEvent45, 4);
     addEvent('event47', startEvent47, 4);
     addEvent('event48', startEvent48, 4);
-  } else if (eventCount == 16) {
+    addEvent('event49', startEvent49, 1);
+    addEvent('event29', startEvent29, 5);
+    addEvent('event27', startEvent27, 5);
+    addEvent('event28', startEvent28, 5);
+    addEvent('event53', startEvent53, 5);
+  } else if (eventCount == 2) {
     addEvent('event35', startEvent35, 5);
-    addEvent('event03', startEvent03, 5);
+    addEvent('event06', startEvent06, 5);
     addEvent('event32', startEvent32, 5);
     addEvent('event19', startEvent19, 5);
     addEvent('event34', startEvent34, 5);
     addEvent('event37', startEvent37, 5);
-    addEvent('event29', startEvent29, 5);
-    addEvent('event27', startEvent27, 5);
-    addEvent('event28', startEvent28, 5);
-    addEvent('event49', startEvent49, 1);
-    addEvent('event28', startEvent28, 5);
     addEvent('event51', startEvent51, 5);
     addEvent('event50', startEvent50, 5);
     addEvent('event46', startEvent46, 5);
     addEvent('event44', startEvent44, 5);
     addEvent('event43', startEvent43, 5);
     addEvent('event42', startEvent42, 5);
-  } else if (eventCount == 24) {
+  } else if (eventCount == 3) {
     addEvent('event24', startEvent24, 5);
     addEvent('event41', startEvent41, 5);
     addEvent('event40', startEvent40, 5);
@@ -564,6 +594,7 @@ function startRandomEvent(exclude = []) {
   } else if (eventCount === 24) {
     showTeletext(`魔王を含む新しい魔物が登場するようになった。`);
   }
+  printEventProbabilities()
 }
 
 // // ----- 使用例 -----
@@ -577,8 +608,8 @@ function startRandomEvent(exclude = []) {
 // // もし "special" イベントの出現確率をさらに下げたい場合、
 // // eventWeights['special'] = 0.1; などと調整可能
 
-// // ランダムにイベントを開始（excludeに "event03" を指定した例）
-// startRandomEvent(['event03']);
+// // ランダムにイベントを開始（excludeに "event06" を指定した例）
+// startRandomEvent(['event06']);
 
 // // ランダムに選出されたイベントが重みを反映して呼び出される
 
