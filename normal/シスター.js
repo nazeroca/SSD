@@ -80,7 +80,7 @@ const startEvent13 = () => {
       });
   
       // 1000ms 間隔で 100 個のノーツを生成（初回フェーズでは buttonGroup 表示維持のため keepButtonGroup を true に）
-      let spawner = startGameG(1000, 100, () => {
+      let spawner = startGameG(1200, 100, () => {
         // 1回目のノーツ生成が完了した場合、まだ停止ボタンが押されていなければ自動的に停止処理を実行
         if (!stopTriggered) triggerStopAction();
       }, { keepButtonGroup: true });

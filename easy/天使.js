@@ -1,5 +1,5 @@
-function startEvent06() {
-  currentEvent = 'event06';
+function startEvent03() {
+  currentEvent = 'event03';
   eventCount++;
   updateEventCountDisplay();
   showSceneImage('./image/天使.png');

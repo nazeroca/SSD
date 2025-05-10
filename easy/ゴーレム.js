@@ -1,5 +1,5 @@
-function startEvent12() {
-  currentEvent = 'event12';
+function startEvent04() {
+  currentEvent = 'event04';
   eventCount++;
   updateEventCountDisplay();
   let noteCount = getSecureRandomInRange(40, 60);
@@ -8,7 +8,7 @@ function startEvent12() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ゴーレム.png';
     initializeMonster(noteCount);
-    startGame(3000, noteCount, () => {
+    startGame(4000, noteCount, () => {
       showTextTypingEffect(`ゴーレムを倒した！`, () => {
 
         fadeOutIn(() => {

@@ -1,4 +1,4 @@
-// event04.js
+// event12.js
 function startEvent43() {
   currentEvent = 'event43';
   eventCount++;
@@ -17,13 +17,13 @@ function startEvent43() {
       // ノーツ流れ終わったらテキストFを表示（悪夢状態を伝える）
       showTextTypingEffect('あなたはとても悪夢にうなされている…', () => {
         // 確率で結果を選ぶ処理へ
-        chooseOutcomeForEvent04(noteCount);
+        chooseOutcomeForEvent43(noteCount);
       });
     });
   });
 }
 
-function chooseOutcomeForEvent04(noteCount) {
+function chooseOutcomeForEvent43(noteCount) {
   // セキュアな乱数を使い、0.5未満なら起きる、0.5以上なら再挑戦とする（50/50の例）
   if (secureRandom() < 0.3) {
     // 起きる（当たり）
@@ -40,7 +40,7 @@ function chooseOutcomeForEvent04(noteCount) {
       initializeMonster(noteCount);
       startGameR(1000, 4000, noteCount, () => {
         // 再び確率で結果を判定する
-        chooseOutcomeForEvent04(noteCount);
+        chooseOutcomeForEvent43(noteCount);
       });
     });
   }

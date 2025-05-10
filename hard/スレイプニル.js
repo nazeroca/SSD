@@ -1,6 +1,6 @@
 // event3.js
-function startEvent03() {
-  currentEvent = 'event03';
+function startEvent06() {
+  currentEvent = 'event06';
   eventCount++;
   updateEventCountDisplay();
   showSceneImage('./image/スレイプニル.png');

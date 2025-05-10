@@ -16,7 +16,7 @@ function startEvent11() {
       buttonGroup.classList.add('hidden');
       document.getElementById('monster-img').src = './image/メタルスライム.png';
     initializeMonster(50);
-    startGame(1000, 50, () => {
+    startGame(800, 50, () => {
       showTextTypingEffect(`メタルスライムを倒した！`, () => {
         const randomIndex = Math.floor(secureRandom() * 3);
   
@@ -97,7 +97,7 @@ btnB.onclick = () => {
     autoSelectTimer = setTimeout(() => {
       const buttons = buttonGroup.querySelectorAll('button');
       if (buttons.length > 0) {
-        const randomIndex = Math.floor(Math.random() * buttons.length);
+        const randomIndex = Math.floor(secureRandom() * buttons.length);
         buttons[randomIndex].click();
       }
     }, 10000);

@@ -7,7 +7,7 @@ function startEvent05() {
   const totalCycles = Math.floor(secureRandom() * 6) + 2;
 
   // パラメータの定義
-  const firstCycleSpeed = 3000;    // 1回目の生成間隔（ミリ秒）
+  const firstCycleSpeed = 2500;    // 1回目の生成間隔（ミリ秒）
   const firstCycleCount = getSecureRandomInRange(20, 30);     // 1回目のノーツ個数（モンスターのHP）
 
   const laterCycleSpeed = 1000;    // 2回目以降の生成間隔（ミリ秒）

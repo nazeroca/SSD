@@ -43,7 +43,7 @@ function startEvent33() {
     autoSelectTimer = setTimeout(() => {
       const buttons = buttonGroup.querySelectorAll('button');
       if (buttons.length > 0) {
-        const randomIndex = Math.floor(Math.random() * buttons.length);
+        const randomIndex = Math.floor(secureRandom() * buttons.length);
         buttons[randomIndex].click();
       }
     }, 10000);

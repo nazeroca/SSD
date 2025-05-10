@@ -8,7 +8,7 @@ function startEvent01() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/スライム.png';
     initializeMonster(noteCount);
-    startGame(3000, noteCount, () => {
+    startGame(2500, noteCount, () => {
       
       showTextTypingEffect(`スライムを倒した！`, () => {
 

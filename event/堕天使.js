@@ -13,7 +13,7 @@ function startEvent38() {
     startGame(1500-Math.min(1000, 100*ange), 30+5*ange, () => {
       showTextTypingEffect(`堕天使を倒した！`, () => {
         ange += 1;
-        removeEvent('event06');
+        removeEvent('event03');
         fadeOutIn(() => {
           startRandomEvent([currentEvent]);
         });

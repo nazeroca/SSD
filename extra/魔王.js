@@ -122,68 +122,9 @@ function play(A) {
 
 
 
-function startGameMaou(speed, count, onEnd) {
-  buttonGroup.classList.add('hidden');
-  showTeletext(`${speed / 1000}秒で${count}個の攻撃`);
-  circleCount = 0;
-  maxCircles = count;
-  circles = [];
-  intervalId = setInterval(() => {
-    spawnCircleMaou();
-    if (circleCount >= maxCircles) clearInterval(intervalId);
-  }, speed);
 
-  const checkEnd = () => {
-    const allGone = circles.every(c => {
-      const left = parseInt(c.style.left || '9999', 10);
-      return left <= -80;
-    });
-    if (allGone && circleCount >= maxCircles) {
-      onEnd();
-    } else {
-      setTimeout(checkEnd, 200);
-    }
-  };
-  setTimeout(checkEnd, 1000);
-}
 
-function spawnCircleMaou(options = {}) {
-  if (circleCount >= maxCircles) return;
-  const circle = document.createElement('div');
-  circle.classList.add('circle');
-  circle.style.backgroundColor = options.color || '#fff';
-
-  gameArea.appendChild(circle);
-  circles.push(circle);
-  const startTime = performance.now();
-
-  function animate(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = elapsed / fallDuration;
-    if (progress < 1) {
-      const startX = gameArea.clientWidth;
-      const endX = -80;
-      const posX = startX + (endX - startX) * progress;
-      circle.style.left = posX + 'px';
-      const judgeX = gameArea.clientWidth * 0.2;
-      const center = posX + 40;
-      if (!circle.played && center - judgeX < 0) {
-        hitSound.currentTime = 0;
-        hitSound.play().catch(error => console.error('音声再生エラー:', error));
-        circle.played = true;
-        circle.remove();
-      }
-      requestAnimationFrame(animate);
-    } else {
-      circle.remove();
-      circles = circles.filter(c => c !== circle);
-    }
-  }
-  requestAnimationFrame(animate);
-  circleCount++;
-}
-
-function spawnCircleMaou2(options = {}) {
+function spawnCircleNone2(options = {}) {
   if (circleCount >= maxCircles) return;
   const circle = document.createElement('div');
   circle.classList.add('circle');
@@ -246,7 +187,7 @@ function startGameAMaou(speed1, speed2, type, count1, count2, onEnd) {
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (noteIndex < maxCircles) {
-      spawnCircleMaou2();
+      spawnCircleNone2();
       noteIndex++;
 
       let delay;
@@ -295,7 +236,7 @@ function startGameR2Maou(speed1, speed2, count, onEnd) {
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (circleCount < maxCircles) {
-      spawnCircleMaou();
+      spawnCircleNone();
       // 以下が変更点
       // 一様乱数 u を取得し、四分円状の変換を適用
       const u = secureRandom();
