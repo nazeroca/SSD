@@ -28,6 +28,9 @@ let flagDR = false;
 let flagDG = false;
 let flagDB = false; 
 
+let  = true; // スキップ可能状態を管理するフラグ
+
+
 let ange = 0;
 
 let debugModeEnabled = false;
@@ -35,7 +38,27 @@ let debugModeEnabled = false;
 
 
 
+let flagRB = true; // スキップ可能状態を管理するフラグ
+
+
+// グローバルフラグ（ボタンが押されたときに true に設定する）
+let skipOnEndProcessingB = false;
+
+
+
 let currentEvent = null;
+
+function play(A) {
+  if (!A) {
+    console.error("要素が見つかりません。");
+    return;
+  }
+  // 毎回 currentTime=0 にリセットして再生
+  A.currentTime = 0;
+  A.play().catch(error => {
+    console.error("再生エラー:", error);
+  });
+}
 
 
 function showSceneImage(imageSrc) {
@@ -106,8 +129,10 @@ function showTextTypingEffect(text, callback, speed = 50) {
       }, 800);
     }
   }
+  
   typeChar();
 }
+
 
 function showTextTypingEffectS(speaker, text, callback, speed = 50) {
   textWindow.classList.remove('hidden');
@@ -116,15 +141,15 @@ function showTextTypingEffectS(speaker, text, callback, speed = 50) {
   const speakerDiv = document.createElement('div');
   speakerDiv.className = 'speaker';
   speakerDiv.textContent = speaker;
-  speakerDiv.style.position = 'absolute';
   speakerDiv.style.top = '0';
   speakerDiv.style.left = '0';
-  speakerDiv.style.padding = '2vmin';
+  speakerDiv.style.padding = '0.5vmin';
   speakerDiv.style.fontWeight = 'bold';
 
   const messageDiv = document.createElement('div');
   messageDiv.className = 'message';
-  messageDiv.style.marginTop = '5vmin';
+  // ここで発言者と発言の間の空白を広げる（例：'6vmin' に変更）
+  messageDiv.style.marginTop = '0.5vmin';
 
   textWindow.appendChild(speakerDiv);
   textWindow.appendChild(messageDiv);
@@ -144,6 +169,29 @@ function showTextTypingEffectS(speaker, text, callback, speed = 50) {
   }
   typeChar();
 }
+
+
+
+function updateSkipButtonVisibility() {
+  const skipButton = document.getElementById('skip-button');
+  if (!skipButton) return;
+  
+  // : ボタン有効条件, skipOnEndProcessing の値によりスタイル調整
+  if (!flagRB && !skipOnEndProcessingB) {
+    skipButton.style.display = 'none';
+  } else {
+    skipButton.style.display = 'block';
+    if (flagRB && !skipOnEndProcessingB) {
+      skipButton.disabled = false;
+      play(healSound);
+      skipButton.style.opacity = '1';
+    } else if (!flagRB && skipOnEndProcessingB) {
+      skipButton.disabled = true;
+      skipButton.style.opacity = '0.5';
+    }
+  }
+}
+
 
 function spawnCircle(options = {}) {
   if (circleCount >= maxCircles) return;
@@ -303,6 +351,16 @@ function closeSettings() {
   debugModeEnabled = document.getElementById('debug-toggle').checked;
   console.log(debugModeEnabled);
 }
+
+const skipButton = document.getElementById('skip-button');
+skipButton.addEventListener('click', function() {
+  if (flagRB && !skipOnEndProcessingB) {
+    skipOnEndProcessingB = true;
+    flagRB = false;
+    updateSkipButtonVisibility();
+  }
+});
+
 
 
 
@@ -559,9 +617,12 @@ function startRandomEvent(exclude = []) {
     addEvent('event41', startEvent41, 5);
     addEvent('event40', startEvent40, 5);
     addEvent('event39', startEvent39, 5);
-    addEvent('event60', startEvent60, 10);
+    addEvent('event60', startEvent60, 1);
   }
-
+  if(eventCount>24){
+    removeEvent('event60');
+    addEvent('event60', startEvent60, eventCount-23);
+  }
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;
   const weightedEvents = [];
@@ -625,4 +686,5 @@ function startRandomEvent(exclude = []) {
 
 // 最初は必ずイベント0を実行する
 updateFlagGrid();
+updateSkipButtonVisibility();
 startEvent00 ();

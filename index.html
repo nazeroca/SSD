@@ -150,7 +150,7 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s;
-      z-index: 999;
+      z-index: 9999;
     }
 
     /* 上部領域（.top-screen）を基準とするため、position: relative; を指定 */
@@ -379,6 +379,27 @@
       user-select: none;
     }
 
+    /* 新規: スキップボタン専用 */
+.skip-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10vmin 1vmin;
+  font-size: 6vmin;
+  border: none;
+  border-radius: 1vmin;
+  background-color: #d33;  /* お好みの色 */
+  color: #fff;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.skip-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+
     /* ※ もともとの .flag-cell は不要なため削除またはコメントアウトしてください */
   </style>
 </head>
@@ -387,6 +408,11 @@
   <div class="container">
     <div id="fade-overlay"></div>
     <div class="top-screen">
+      <!-- 例: top-screen 内の適当な位置に追加 -->
+<div id="skip-button-container" style="position: absolute; top: 15vmin; left: 2vmin;">
+  <button id="skip-button" class="skip-button" style="display: none;">SKIP</button>
+</div>
+
       <!-- モンスター表示エリア -->
       <div id="monster-container" class="hidden"
         style="position: absolute; top: 4vmin; left: 50%; transform: translateX(-50%);">
@@ -405,6 +431,7 @@
       </div>
       <!-- イベント回数表示（オープニング以外で更新） -->
       <div class="info" id="info"></div>
+
       <!-- フラグ表示（円グラフ風） -->
       <div id="flag-container">
         <div id="flag-title">魔導書の<br>取得状況</div>
@@ -415,6 +442,9 @@
       <!-- テキストウィンドウ -->
       <div class="text-window hidden" id="text-window"></div>
     </div>
+
+
+
     <div class="bottom-screen" id="game-area">
       <div class="judgeline"></div>
       <!-- 設定ボタン -->
@@ -439,7 +469,6 @@
       <button id="fallduration-decrease">−</button>
       <span id="fallduration-value">3000</span>
       <button id="fallduration-increase">+</button>
-      <label>ms</label>
     </div>
     <!-- 設定ウィンドウ内にデバッグモード用トグルボタンを追加 -->
     <div class="settings-row">

@@ -1,62 +1,34 @@
 function startGame(speed, count, onEnd) {
   buttonGroup.classList.add('hidden');
-  showTeletext(`${speed/1000}秒ごとの${count}回攻撃`);
+  showTeletext(`${speed / 1000}秒ごとの${count}回攻撃`);
   circleCount = 0;
   maxCircles = count;
   circles = [];
+
+  // ノーツ生成開始前にテスト用スキップ状態チェック（必要ならここで設定する）
+  // ※各イベント開始時に必要なら、flagRB = true; updateSkipButtonVisibility() を呼び出す
+
   intervalId = setInterval(() => {
+    // 【変更】テスト用スキップが有効なら即中断
+    if (skipOnEndProcessingB) {
+      clearInterval(intervalId);
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      // ノーツ生成直後に「お守りの不思議な力が発動した！」と表示し、即 onEnd を実行
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     spawnCircle();
     if (circleCount >= maxCircles) clearInterval(intervalId);
   }, speed);
 
-  const checkEnd = () => {
-  const allGone = circles.every(c => {
-    const left = parseInt(c.style.left || '9999', 10);
-    return left <= -80;
-  });
-  if (allGone && circleCount >= maxCircles) {
-    // もし全てのノーツが消えていて、かつモンスターのHPがまだ残っている場合、強制的に敗北処理を実行
-    if (monsterHP > 0) {
-      defeatMonster();
-    }
-    onEnd();
-  } else {
-    setTimeout(checkEnd, 200);
-  }
-};
-setTimeout(checkEnd, 1000);
-}
-
-function startGameR(speed1, speed2, count, onEnd) {
-  buttonGroup.classList.add('hidden');
-  showTeletext(`${speed1/1000}秒～${speed2/1000}秒ごとに${count}回攻撃`);
-  circleCount = 0;
-  maxCircles = count;
-  circles = [];
-
-  // ゲーム終了時のコールバックを保持
-  gameOnEndCallback = onEnd;
-
-  // 再帰的にノーツを生成する関数
-  function spawnNext() {
-    if (circleCount < maxCircles) {
-      spawnCircle();
-      // speed1〜speed2 の間でランダムな遅延を算出
-      let delay = speed1 + secureRandom() * (speed2 - speed1);
-      setTimeout(spawnNext, delay);
-    }
-  }
-  // 最初のノーツを生成
-  spawnNext();
-
-  // ノーツの全削除（またはレーンからの退出）をチェックするループ
   const checkEnd = () => {
     const allGone = circles.every(c => {
       const left = parseInt(c.style.left || '9999', 10);
       return left <= -80;
     });
     if (allGone && circleCount >= maxCircles) {
-      // もし全てのノーツが消えていて、かつモンスターのHPがまだ残っている場合、強制的に敗北処理を実行
       if (monsterHP > 0) {
         defeatMonster();
       }
@@ -67,6 +39,54 @@ function startGameR(speed1, speed2, count, onEnd) {
   };
   setTimeout(checkEnd, 1000);
 }
+
+
+function startGameR(speed1, speed2, count, onEnd) {
+  buttonGroup.classList.add('hidden');
+  showTeletext(`${speed1/1000}秒～${speed2/1000}秒ごとに${count}回攻撃`);
+  circleCount = 0;
+  maxCircles = count;
+  circles = [];
+
+  // 再帰的にノーツを生成する関数
+  function spawnNext() {
+    // スキップボタンが押されている場合は即座に強制終了処理
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
+    if (circleCount < maxCircles) {
+      spawnCircle();
+      // speed1〜speed2 の間でランダムな遅延を算出
+      let delay = speed1 + secureRandom() * (speed2 - speed1);
+      setTimeout(spawnNext, delay);
+    }
+  }
+  // 最初のノーツ生成開始
+  spawnNext();
+
+  // 全ノーツが画面外に出たかチェックするループ
+  const checkEnd = () => {
+    // スキップボタンの強制終了が押されていれば即座に強制終了処理
+    const allGone = circles.every(c => {
+      const left = parseInt(c.style.left || '9999', 10);
+      return left <= -80;
+    });
+    if (allGone && circleCount >= maxCircles) {
+      if (monsterHP > 0) {
+        defeatMonster();
+      }
+      onEnd();
+    } else {
+      setTimeout(checkEnd, 200);
+    }
+  };
+  setTimeout(checkEnd, 1000);
+}
+
 
 function startGameR2(speed1, speed2, count, onEnd) {
   buttonGroup.classList.add('hidden');
@@ -80,6 +100,13 @@ function startGameR2(speed1, speed2, count, onEnd) {
 
   // 再帰的にノーツを生成する関数
   function spawnNext() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (circleCount < maxCircles) {
       spawnCircle();
       // 以下が変更点
@@ -135,6 +162,13 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   
   // 再帰的にノーツを生成する関数
   function spawnNext() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (noteIndex < maxCircles) {
       spawnCircle();
       noteIndex++;
@@ -192,6 +226,13 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
   
   // 再帰的にノーツを生成する関数
   function spawnNext() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (noteIndex < maxCircles) {
       spawnCircle();
       noteIndex++;
@@ -253,6 +294,13 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
 
   // ノーツを再帰的に生成する関数
   function spawnNext() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (noteIndex < maxCircles) {
       spawnCircle();  // ノーツを生成＆アニメーション開始
       noteIndex++;    // 生成済みカウントをincrement
@@ -313,6 +361,13 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
 
   // ノーツを再帰的に生成する関数
   function spawnNext() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (noteIndex < maxCircles) {
       spawnCircle();  // ノーツを生成＆アニメーション開始
       noteIndex++;
@@ -365,6 +420,13 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
   let mainSpawned = 0; 
 
   function spawnMain() {
+    if (skipOnEndProcessingB) {
+      defeatMonster();
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     if (mainSpawned < count1) {
       if (secureRandom() <= probability) {
         // extra group 発生時：spawnExtraGroup 内で count2 のノーツを生成し、
@@ -391,6 +453,13 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
     // グループ内の damage 適用状況を監視するオブジェクト
     let extraGroupTracker = { damageApplied: false };
     function spawnExtraOne() {
+      if (skipOnEndProcessingB) {
+        skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      defeatMonster();
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
       if (extraSpawned < count2) {
         // extra group の各ノーツ生成時には、オプションとして isExtra と tracker を渡す
         spawnCircle({ isExtra: true, extraGroupTracker: extraGroupTracker });
@@ -429,6 +498,14 @@ function startGameNone(speed, count, onEnd) {
   maxCircles = count;
   circles = [];
   intervalId = setInterval(() => {
+    if (skipOnEndProcessingB) {
+      clearInterval(intervalId);
+      skipOnEndProcessingB = false;
+      updateSkipButtonVisibility();
+      // ノーツ生成直後に「お守りの不思議な力が発動した！」と表示し、即 onEnd を実行
+      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      return;
+    }
     spawnCircleNone();
     if (circleCount >= maxCircles) clearInterval(intervalId);
   }, speed);
