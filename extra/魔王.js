@@ -5,11 +5,11 @@ function startEvent60() {
   showSceneImage('./image/魔王.png');
   let noteCount = 50;
   showTextTypingEffect('魔王が現れた！', () => {
-    showTextTypingEffectS('魔王', 'これでも喰らうがいい！', () => {
+    showTextTypingEffectS('【魔王】', 'これでも喰らうがいい！', () => {
       play(litSound);
       if (!flagR == true) {
         showTextTypingEffect('麻痺状態になってしまった…\n麻痺を解除するまで動けない！', () => {    
-        startGameMaou(450, noteCount, () => {
+        startGameNone(450, noteCount, () => {
           play(healSound);
           showTextTypingEffect('麻痺状態を解除した！', () => {
             startEvent602()
@@ -29,13 +29,13 @@ function startEvent602() {
   let N = 0.02;
   if (!flagB) {
     N = 0.2;
-    showTextTypingEffectS('魔王', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
+    showTextTypingEffectS('【魔王】', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
       play(barrierSound);
       showSceneImage('./image/バリア魔王.png');
       stage2(N);
     });
   } else {
-    showTextTypingEffectS('魔王', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
+    showTextTypingEffectS('【魔王】', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
       play(barrierSound);
       showSceneImage('./image/バリア魔王.png');
       showTextTypingEffect('魔導書の効果で、バリアに対する攻撃力があがった！', () => {
@@ -70,13 +70,13 @@ function startEvent603() {
   let delay = 5000;
   if (flagG) {
     delay = 30000;
-    showTextTypingEffectS('魔王', 'ふふ…いまさら小細工など不要か…\nいざ尋常に…！', () => {
+    showTextTypingEffectS('【魔王】', 'ふふ…いまさら小細工など不要か…\nいざ尋常に…！', () => {
       showTextTypingEffect('魔導書の効果で、自身への回復力があがった！', () => {
         stage3(delay);
       });
     });
   } else {
-    showTextTypingEffectS('魔王', 'ふふ…いまさら小細工など不要か…\nいざ尋常に…！', () => {
+    showTextTypingEffectS('【魔王】', 'ふふ…いまさら小細工など不要か…\nいざ尋常に…！', () => {
       stage3(delay);
     });
 
@@ -89,11 +89,11 @@ function stage3(delay) {
   document.getElementById('monster-img').src = './image/魔王.png';
     // テキスト表示完了後、delay ミリ秒待ってから startGameAMaou を呼び出す
     startGameAMaou(4000, 500, 2, 50, 10, () => {
-      showTextTypingEffectS('魔王', 'ふはは…やるではないか…', () => {
+      showTextTypingEffectS('【魔王】', 'ふはは…やるではないか…', () => {
         // テキスト表示完了後、delay ミリ秒待ってから startGameAMaou を呼び出す
         setTimeout(() => {
           startGameAMaou(3000, 500, 2, 75, 20, () => {
-            showTextTypingEffectS('魔王', '我もそろそろ本気を出すとするか…', () => {
+            showTextTypingEffectS('【魔王】', '我もそろそろ本気を出すとするか…', () => {
               // テキスト表示完了後、delay ミリ秒待ってから startGameAMaou を呼び出す
               setTimeout(() => {
                 startGameA(2000, 500, 2, 100, 30, () => {
@@ -108,17 +108,7 @@ function stage3(delay) {
 }
 
 
-function play(A) {
-  if (!A) {
-    console.error("要素が見つかりません。");
-    return;
-  }
-  // 毎回 currentTime=0 にリセットして再生
-  A.currentTime = 0;
-  A.play().catch(error => {
-    console.error("再生エラー:", error);
-  });
-}
+
 
 
 

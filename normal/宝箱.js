@@ -15,17 +15,31 @@ function startEvent20() {
       clearTimeout(autoSelectTimer);
       hideSceneImage();
       if (secureRandom() < 0.2 && !flagG) {
+        if (secureRandom() < 0.1 && !flagG) {
         buttonGroup.classList.add('hidden');
         showSceneImage('./image/財宝.png');
         flagG = true;
         updateFlagGrid();
         showTextTypingEffect('緑の魔導書を手に入れた！', () => {
           hideSceneImage();
-          removeEvent(currentEvent);
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);
           });
         });
+      }else{
+        buttonGroup.classList.add('hidden');
+        showSceneImage('./image/財宝.png');
+        flagG = true;
+        updateFlagGrid();
+        showTextTypingEffect('お守りを手に入れた！', () => {
+          hideSceneImage();
+          flagRB= true;
+      updateSkipButtonVisibility();
+          fadeOutIn(() => {
+            startRandomEvent([currentEvent]);
+          });
+        });
+      }
       } else {
         buttonGroup.classList.add('hidden');
         showSceneImage('./image/ミミック.png');

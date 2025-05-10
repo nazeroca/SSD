@@ -6,14 +6,14 @@ function startEvent53() {
 
   // Step 1: テキストAを表示
   showSceneImage('./image/スフィンクス.png');
-  showTextTypingEffect("テキストA", () => {
+  showTextTypingEffect("スフィンクスが現れた！", () => {
     // Step 2: ランダムな2桁×2桁の計算式を生成
     let num1 = Math.floor(secureRandom() * 90) + 10; // 10～99
     let num2 = Math.floor(secureRandom() * 90) + 10; // 10～99
-    let equation = num1 + " × " + num2 + " = ?";
+    let equation = num1 + " × " + num2 ;
     
     // テキストBとして計算式を表示
-    showTextTypingEffect("テキストB: " + equation, () => {
+    showTextTypingEffectS('【スフィンクス】',equation+'の各位の総和を計算し、その一の位を答えよ。\n少しばかり考えるとよい。', () => {
       // 計算して答えを求める
       let product = num1 * num2;
       // 各桁の和を求める（文字列に変換して各文字を数値へ）
@@ -26,7 +26,9 @@ function startEvent53() {
       
       // Step 3: 1000ms間隔で20個のノーツを流す
       startGameNone(2000, 20,  () => {
+        showTextTypingEffectS('【スフィンクス】','まだ考える時間が必要か…？', () => {
         addThinkOrAnswerButtons(correctAnswer) 
+        });
       });
     });
   });
@@ -61,7 +63,9 @@ function showChoiceButtons(correctAnswer) {
       buttonGroup.classList.add("hidden");
       if (choice === correctAnswer) {
         // 正解の場合
-        showTextTypingEffect("よかろう、ここを通れ。", () => {
+        showTextTypingEffectS('【スフィンクス】',"よかろう、ここを通れ。\nついでにこれを授けよう。", () => {
+          flagRB = true;
+    updateSkipButtonVisibility();
           hideSceneImage();
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);

@@ -6,7 +6,7 @@ function startEvent38() {
   let tx = [];
   if(ange==1){tx = `あなたに穢された…\n復讐する…`}else{tx = `あなたに…${ange}回も穢された…\n復讐する…`}
   showTextTypingEffect('堕天使が現れた！', () => {
-    showTextTypingEffectS('堕天使',tx, () => {
+    showTextTypingEffectS('【堕天使】',tx, () => {
       hideSceneImage();
     document.getElementById('monster-img').src = './image/堕天使.png';
     initializeMonster(30);
