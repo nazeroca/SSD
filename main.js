@@ -517,7 +517,7 @@ function startRandomEvent(exclude = []) {
 
   if (possibleEventKeys.length === 0) return;
   
-  if (eventCount == 1) {
+  if (eventCount == 8) {
     addEvent('event26', startEvent26, 4);
     addEvent('event36', startEvent36, 4);
     addEvent('event18', startEvent18, 4);
@@ -541,7 +541,7 @@ function startRandomEvent(exclude = []) {
     addEvent('event27', startEvent27, 5);
     addEvent('event28', startEvent28, 5);
     addEvent('event53', startEvent53, 5);
-  } else if (eventCount == 2) {
+  } else if (eventCount == 16) {
     addEvent('event35', startEvent35, 5);
     addEvent('event06', startEvent06, 5);
     addEvent('event32', startEvent32, 5);
@@ -554,7 +554,7 @@ function startRandomEvent(exclude = []) {
     addEvent('event44', startEvent44, 5);
     addEvent('event43', startEvent43, 5);
     addEvent('event42', startEvent42, 5);
-  } else if (eventCount == 3) {
+  } else if (eventCount == 24) {
     addEvent('event24', startEvent24, 5);
     addEvent('event41', startEvent41, 5);
     addEvent('event40', startEvent40, 5);
