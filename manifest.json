@@ -7,7 +7,7 @@
       "type": "image/png"
     },
     {
-      "src": "./PWAimage/slime192.png",
+      "src": "./PWAimage/slime512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
