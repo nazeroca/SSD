@@ -35,7 +35,7 @@ let ange = 0;
 
 let debugModeEnabled = false;
 
-
+let flagTim = false;
 
 
 let flagRB = true; // スキップ可能状態を管理するフラグ
@@ -526,33 +526,42 @@ function printEventProbabilities() {
 function startRandomEvent(exclude = []) {
   // デバッグモードが有効の場合、任意のイベント番号入力用のプロンプトを表示
   if (debugModeEnabled) {
-    let debugInput = prompt(
-      "【デバッグモード】"
-    );
-    if (debugInput !== null && debugInput.trim() !== "") {
-      const formatKey = key => {
-        if (typeof key === "string" && key.startsWith("event")) {
-          const numberPart = key.slice(5);
-          return "event" + numberPart.padStart(2, "0");
-        } else {
-          return "event" + key.toString().padStart(2, "0");
-        }
-      };
-      const debugKey = formatKey(debugInput.trim());
-      // eventFunctions に存在するか、グローバルスコープ (window) に "startEvent" + 数字 で存在するかチェック
-      let debugEventFunction = eventFunctions[debugKey];
-      if (!debugEventFunction && typeof window["startEvent" + debugInput.trim()] === "function") {
-        debugEventFunction = window["startEvent" + debugInput.trim()];
-      }
-      if (typeof debugEventFunction === "function") {
-        debugEventFunction();
-        return;
-      } else {
-        alert("エラー: イベント " + debugKey + " は存在しません。");
-        return startRandomEvent(exclude);
-      }
+  let debugInput = prompt("【デバッグモード】");
+  if (debugInput !== null && debugInput.trim() !== "") {
+    // 入力値の前後の空白を削除し、全角数字を半角数字に変換
+    debugInput = debugInput.trim().replace(/[０-９]/g, function(ch) {
+      return String.fromCharCode(ch.charCodeAt(0) - 0xFF10 + 0x30);
+    });
+    // 数字以外の文字は除去（例："abc１23" → "123"）
+    const digits = debugInput.replace(/\D/g, "");
+    
+    // 数字が2桁未満の場合はエラー表示
+    if (digits.length < 2) {
+      alert("入力形式が誤っています");
+      return startRandomEvent(exclude);
+    }
+    
+    // 数字が3桁以上なら、先頭2桁のみ参照する
+    const eventNumber = digits.length >= 3 ? digits.substring(0, 2) : digits;
+    
+    // "event" + 数字（2桁、足りなければ先頭に0を付与）でフォーマット
+    const formattedKey = "event" + eventNumber.padStart(2, "0");
+    
+    // eventFunctions に存在するか、グローバルスコープ (window) 内に "startEvent" + 数字 で存在するかチェック
+    let debugEventFunction = eventFunctions[formattedKey];
+    if (!debugEventFunction && typeof window["startEvent" + eventNumber] === "function") {
+      debugEventFunction = window["startEvent" + eventNumber];
+    }
+    if (typeof debugEventFunction === "function") {
+      debugEventFunction();
+      return;
+    } else {
+      alert("該当のイベントがありません");
+      return startRandomEvent(exclude);
     }
   }
+}
+
   
   // 以下は通常のランダムイベント選択処理
 
@@ -644,8 +653,13 @@ function startRandomEvent(exclude = []) {
     }
   }
 
+  if (eventCount === 30) {
+    startEvent49();
+  } else{
   // 選ばれたイベントの関数を実行
   eventFunctions[selectedKey]();
+  }
+  
 
   // ポップアップの表示
   if (eventCount === 8) {

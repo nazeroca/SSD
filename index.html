@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+  <link rel="manifest" href="manifest.json">
 
 <head>
   <meta charset="UTF-8">
@@ -557,6 +558,9 @@
   <script src="./event/堕天使.js"></script>
 
   <script src="./normal/スフィンクス.js"></script>
+  <script src="./normal/ヨグソトース.js"></script>
+    <script src="./normal/イース.js"></script>
+        <script src="./normal/ロボット.js"></script>
 
 
   
@@ -564,6 +568,19 @@
 
   <script src="startGames.js"></script>
   <script src="main.js"></script>
+
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/color-name/sw.js').then(function(registration) {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, function(err) {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
+  
 </body>
 
 </html>

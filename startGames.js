@@ -493,7 +493,9 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
 
 function startGameNone(speed, count, onEnd) {
   buttonGroup.classList.add('hidden');
+  if(currentEvent!=='event54'){
   showTeletext(`${speed / 1000}秒で${count}個の攻撃`);
+  }
   circleCount = 0;
   maxCircles = count;
   circles = [];
@@ -559,4 +561,5 @@ function spawnCircleNone(options = {}) {
   requestAnimationFrame(animate);
   circleCount++;
 }
+
 
