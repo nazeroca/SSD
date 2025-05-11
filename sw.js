@@ -1,4 +1,4 @@
-var CACHE_NAME = 'color-name';
+var CACHE_NAME = 'SSD';
 var urlsToCache = [
     '/', '/index.html', '/script.js', '/manifest.json'
 ];
