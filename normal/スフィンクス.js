@@ -13,7 +13,7 @@ function startEvent53() {
     let equation = num1 + " × " + num2 ;
     
     // テキストBとして計算式を表示
-    showTextTypingEffectS('【スフィンクス】',equation+'の各位の総和を計算し、その一の位を答えよ。\n少しばかり考えるとよい。', () => {
+    showTextTypingEffectS('【スフィンクス】',equation+'の各位の総和を計算し、その一の位を答えよ。', () => {
       // 計算して答えを求める
       let product = num1 * num2;
       // 各桁の和を求める（文字列に変換して各文字を数値へ）
@@ -66,14 +66,17 @@ function showChoiceButtons(correctAnswer) {
         showTextTypingEffectS('【スフィンクス】',"よかろう、ここを通れ。\nついでにこれを授けよう。", () => {
           flagRB = true;
     updateSkipButtonVisibility();
+    showTextTypingEffect("お守りを手に入れた！", () => {
           hideSceneImage();
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);
           });
         });
+        });
       } else {
         // 不正解の場合：500ms間隔で30個のノーツを流す（ペナルティ）
         showTextTypingEffect("この凡愚め…貴様に罰を下す…", () => {
+          hideSceneImage();
           document.getElementById('monster-img').src = './image/スフィンクス.png';
           initializeMonster(50);
           startGame(500, 50, () => {
@@ -109,6 +112,7 @@ function addThinkOrAnswerButtons(correctAnswer) {
   const btnThink = document.createElement("button");
   btnThink.className = "start-button";
   btnThink.textContent = "考える";
+  btnThink.style.backgroundColor = '#33CC99';
   // プレースホルダーのクリック処理（後で実装する）
   btnThink.onclick = () => {
     buttonGroup.classList.add("hidden");
@@ -124,6 +128,7 @@ function addThinkOrAnswerButtons(correctAnswer) {
   const btnAnswer = document.createElement("button");
   btnAnswer.className = "start-button";
   btnAnswer.textContent = "答える";
+  btnAnswer.style.backgroundColor = '#FF9933';
   btnAnswer.onclick = () => {
     clearTimeout(autoSelectTimer);
     buttonGroup.classList.add("hidden");

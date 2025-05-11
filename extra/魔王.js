@@ -29,13 +29,13 @@ function startEvent602() {
   let N = 0.02;
   if (!flagB) {
     N = 0.2;
-    showTextTypingEffectS('【魔王】', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
+    showTextTypingEffectS('【魔王】', 'ほう…我の魔法を解いたか…\nしかし、貴様にこのバリアは割れまい…', () => {
       play(barrierSound);
       showSceneImage('./image/バリア魔王.png');
       stage2(N);
     });
   } else {
-    showTextTypingEffectS('【魔王】', 'ほう…麻痺を解除したか…\nしかし、貴様にこのバリアは割れまい…', () => {
+    showTextTypingEffectS('【魔王】', 'ほう…我の魔法を解いたか…\nしかし、貴様にこのバリアは割れまい…', () => {
       play(barrierSound);
       showSceneImage('./image/バリア魔王.png');
       showTextTypingEffect('魔導書の効果で、バリアに対する攻撃力があがった！', () => {
