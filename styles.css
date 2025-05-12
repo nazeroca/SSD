@@ -1,0 +1,480 @@
+ html,
+    body {
+      overflow: hidden;
+      /* スクロールバーを消し、スクロール自体を禁止 */
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background-color: #111;
+      font-family: sans-serif;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+      background-color: #222;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .top-screen {
+      flex: 3;
+      position: relative;
+      background-color: #888;
+    }
+
+    .bottom-screen {
+      flex: 1;
+      position: relative;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    /* 円のノーツ */
+    .circle {
+      position: absolute;
+      top: 40%;
+      left: 100%;
+      transform: translateY(-50%);
+      width: 16vh;
+      height: 16vh;
+      background-color: white;
+      border-radius: 50%;
+      will-change: transform;
+    }
+
+    /* 判定ライン */
+    .judgeline {
+      position: absolute;
+      width: 2vw;
+      height: 100%;
+      background-color: rgb(0, 255, 115);
+      left: 20%;
+      top: 0;
+    }
+
+    /* ボタン群 */
+    .button-group {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      gap: 5vmin;
+      flex-wrap: nowrap;
+      justify-content: center;
+      z-index: 10;
+      padding: 0 2vmin;
+    }
+
+    /* スタートボタン */
+    .start-button {
+      /* テキストが完全に中央にくるように inline-flex を指定 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 4vmin 4vmin;
+      font-size: 8vmin;
+      border: none;
+      cursor: pointer;
+      border-radius: 3vmin;
+      margin: 1vmin;
+      white-space: pre;
+
+      color: #fff;
+
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .start-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0.8rem 1.5rem rgba(0, 0, 0, 0.4);
+    }
+
+
+
+    .hidden {
+      display: none;
+    }
+
+    /* イベント回数表示用（infoDisplay） */
+    .info {
+      position: absolute;
+      top: 1vmin;
+      left: 1vmin;
+      color: white;
+      font-size: 9vmin;
+      z-index: 20;
+      font-weight: Bold;
+    }
+
+    /* テキストウィンドウ */
+    .text-window {
+      position: absolute;
+      bottom: 7vmin;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: white;
+      font-size: 5vmin;
+      padding: 2vmin 2vmin;
+      box-sizing: border-box;
+      z-index: 15;
+      border: 0.2vmin solid white;
+      border-radius: 1.2vmin;
+      box-shadow: 0 0 1vmin rgba(255, 255, 255, 0.3);
+      white-space: pre-wrap;
+    }
+
+    /* フェードオーバーレイ */
+    #fade-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s;
+      z-index: 9999;
+    }
+
+    /* 上部領域（.top-screen）を基準とするため、position: relative; を指定 */
+    .top-screen {
+      position: relative;
+      overflow: hidden;
+      /* 長いテロップがはみ出しても隠す */
+    }
+
+    /* テロップ用基本スタイル */
+    .teletext {
+      position: absolute;
+      bottom: 0;
+      /* 上部領域の一番下 */
+      left: 100%;
+      /* 初期は右端（画面外） */
+      transform: translateX(-50%);
+      /* 横方向は中央ずらし */
+      white-space: nowrap;
+      padding: 5px 10px;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      font-size: 4vmin;
+      opacity: 0;
+      z-index: 1000;
+    }
+
+    /* 右から中央へのスライドイン */
+    @keyframes slideInAnimation {
+      from {
+        left: 100%;
+        opacity: 0;
+      }
+
+      to {
+        left: 50%;
+        /* 横中央で表示（親幅の50%） */
+        opacity: 1;
+      }
+    }
+
+    /* 中央から左へのスライドアウト */
+    @keyframes slideOutAnimation {
+      from {
+        left: 50%;
+        opacity: 1;
+      }
+
+      to {
+        left: 0%;
+        /* 左側へ移動 */
+        opacity: 0;
+      }
+    }
+
+    .slide-in {
+      animation: slideInAnimation 1s forwards;
+    }
+
+    .slide-out {
+      animation: slideOutAnimation 1s forwards;
+    }
+/* 共有の位置調整（親要素が .top-screen で relativeになっている前提） */
+#monster-container,
+#monster-hp-container {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* モンスター画像表示コンテナ：上から 2vmin 位置に配置（調整可能） */
+#monster-container {
+  top: 2vmin;
+}
+
+/* HP表示用コンテナ：モンスター画像の下に配置
+   例として、画像の高さが50vminなら、HPコンテナは画像下（+1～2vmin程度の隙間）に */
+#monster-hp-container {
+  top: calc(2vmin + 50vmin + 1vmin); /* 必要に応じて微調整してください */
+}
+
+/* 既存のHPバーとテキストのスタイルはそのまま利用 */
+#monster-hp-bar {
+  width: 50vmin;
+  height: 3vmin;
+  background-color: rgb(255, 2, 2);
+  margin: 0 auto; /* 中央揃え */
+}
+
+#monster-hp {
+  height: 100%;
+  background-color: rgb(0, 209, 0);
+  width: 100%;
+}
+
+#monster-hp-text {
+  text-align: center;
+  color: white;
+  font-size: 4vmin;
+  font-weight: bold;
+  margin-top: 0.5vmin;
+}
+
+
+/* シーン表示エリア */
+#scene-container {
+  position: absolute;
+  top:2vmin;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
+
+    #monster-img,
+    #scene-img {
+      height: 50vmin;
+      width: auto;
+    }
+
+    /* フラグ表示用の円グラフ風コンテナ */
+    #flag-container {
+      position: absolute;
+      top: 1vmin;
+      right: 1vmin;
+      width: 15vmin;
+      height: 24vmin;
+      /* 円部分21vmin＋タイトル分の高さ */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      z-index: 40;
+    }
+
+    #flag-title {
+      font-size: 3vmin;
+      color: white;
+      margin-bottom: 0.5vmin;
+      text-align: center;
+      white-space: pre-line;
+      font-weight: bold;
+    }
+
+    #flag-grid {
+      width: 15vmin;
+      height: 15vmin;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* 背景は main.js の updateFlagGrid() で conic-gradient が設定されます */
+    }
+
+    #settings-button {
+      position: absolute;
+      top: 1vmin;
+      left: 1vmin;
+      font-size: 10vmin;
+      cursor: pointer;
+      z-index: 50;
+      user-select: none;
+    }
+
+    /* ▼ 設定ウインドウ（初期状態は非表示） */
+    #settings-window {
+      text-align: center;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 7vmin;
+      transform: translate(-50%, -50%);
+      background-color: #333;
+      color: white;
+      padding: 4vmin;
+      border-radius: 1vmin;
+      z-index: 1000;
+      width: 80vw;
+      height: 40vh;
+      display: none;
+      /* 非表示時は none */
+      box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
+    }
+
+    /* 設定ウインドウを開いた際に適用するクラス */
+    /* このクラスを追加すると、Flexbox による縦方向の均等配置が有効になります */
+    #settings-window.active {
+      display: flex;
+      /* 非表示を解除し、Flexboxを適用 */
+      flex-direction: column;
+      /* 子要素を縦に並べる */
+      justify-content: space-evenly;
+      /* 各行（子要素）をウインドウ内で均等に配置 */
+      align-items: center;
+      /* 横方向も中央揃え（必要に応じて） */
+    }
+
+    /* 設定ウインドウ内のボタンのスタイル（そのまま） */
+    #settings-window button {
+      background-color: #555;
+      border: none;
+      color: #fff;
+      font-size: 5vmin;
+      padding: 0.5vmin 1.5vmin;
+      margin: 0.5vmin;
+      border-radius: 1vmin;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+    }
+
+    #settings-window button:hover {
+      background-color: #777;
+    }
+
+    #settings-window button:active {
+      transform: scale(0.95);
+      background-color: #999;
+    }
+
+
+    /* トグルボタン（ここでは効果音用チェックボックス）の例 */
+    /* デフォルトのスタイルをリセットし、カスタムスタイルを適用 */
+    #other-sounds-toggle {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 5vmin;
+      /* 画面サイズに対して相対的な幅 */
+      height: 5vmin;
+      /* 画面サイズに対して相対的な高さ */
+      border: 0.5vmin solid #ccc;
+      border-radius: 0.5vmin;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    /* チェックされた状態の例 */
+    #other-sounds-toggle:checked {
+      background-color: #39aaeb;
+      border-color: #ccc;
+      border-radius: 0.5vmin;
+    }
+
+    #debug-toggle {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 5vmin;
+      /* 画面サイズに対して相対的な幅 */
+      height: 5vmin;
+      /* 画面サイズに対して相対的な高さ */
+      border: 0.5vmin solid #ccc;
+      border-radius: 0.5vmin;
+      cursor: pointer;
+      vertical-align: middle;
+    }
+
+    /* チェックされた状態の例 */
+    #debug-toggle:checked {
+      background-color: #39aaeb;
+      border-color: #ccc;
+      border-radius: 0.5vmin;
+    }
+
+
+    /* ×ボタン */
+    #settings-window .close-button {
+      position: absolute;
+      top: 1vmin;
+      right: 1vmin;
+      cursor: pointer;
+      font-size: 8vmin;
+      user-select: none;
+    }
+
+/* 新規: スキップボタン専用（メタリック風） */
+.skip-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0vmin 0vmin;
+  font-size: 6vmin;
+  color: #fff;
+  border: none;
+  border-radius: 1vmin;
+  cursor: pointer;
+  z-index: 900;
+  /* 背景にグラデーションを設定して、金属の立体感を表現 */
+  background: linear-gradient(145deg, #e7e7e7, #6b6b6b);
+  /* 外側のシャドウと内側のインセットシャドウを組み合わせ、奥行きと光の反射を表現 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+  transition: opacity 0.3s ease, 
+              transform 0.2s ease, 
+              box-shadow 0.3s ease;
+}
+
+.skip-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(255, 255, 255, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2);
+}
+
+.skip-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+.skip-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+
+@media (orientation: portrait) {
+  /* 画面が縦長の場合 */
+  .text-window {
+    /* 現在は bottom: 7vmin; となっているので、これを上にずらす */
+    bottom: 12vmin;      /* 数値はお好みに調整してください */
+    padding: 3vmin;       /* ウィンドウ全体の余白も拡大 */
+    width: 95%;  
+  }
+
+  .teletext {
+    /* テロップの文字サイズと余白を大きく設定 */
+    font-size: 6vmin;     /* 既存は 4vmin となっているので、読みやすく拡大 */
+    padding: 8px 12px;    /* 必要に応じて上下左右の余白を調整 */
+  }
+
+  .button-group {
+    flex-wrap: wrap;
+    /* 必要に応じてギャップや配置も調整可能 */
+    gap: 3vmin;
+  }
+
+  
+}

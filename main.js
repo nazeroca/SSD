@@ -44,6 +44,8 @@ let flagRB = true; // スキップ可能状態を管理するフラグ
 // グローバルフラグ（ボタンが押されたときに true に設定する）
 let skipOnEndProcessingB = false;
 
+let circlecolor = '#fff';
+
 
 
 let currentEvent = null;
@@ -77,8 +79,11 @@ function initializeMonster(hp) {
   monsterMaxHP = hp;
   monsterHP = hp;
   const monsterContainer = document.getElementById('monster-container');
-  if (monsterContainer) {
+  const monsterHPContainer = document.getElementById('monster-hp-container');
+  // 両方のコンテナを表示する
+  if (monsterContainer && monsterHPContainer) {
     monsterContainer.classList.remove('hidden');
+    monsterHPContainer.classList.remove('hidden');
     updateMonsterHPBar();
   }
 }
@@ -86,7 +91,6 @@ function initializeMonster(hp) {
 function updateEventCountDisplay() {
   infoDisplay.textContent = `${eventCount}F`;
 }
-
 
 function updateMonsterHPBar() {
   const hpBar = document.getElementById('monster-hp');
@@ -102,14 +106,20 @@ function updateMonsterHPBar() {
 
 function defeatMonster() {
   const monsterContainer = document.getElementById('monster-container');
+  const monsterHPContainer = document.getElementById('monster-hp-container');
+  // 両方のコンテナを非表示にする
   if (monsterContainer) {
     monsterContainer.classList.add('hidden');
+  }
+  if (monsterHPContainer) {
+    monsterHPContainer.classList.add('hidden');
   }
   if (defeatSound && otherSoundsEnabled) {
     defeatSound.currentTime = 0;
     defeatSound.play().catch(error => console.error("Defeat sound error:", error));
   }
 }
+
 
 function showTextTypingEffect(text, callback, speed = 50) {
   textWindow.classList.remove('hidden');
@@ -183,7 +193,9 @@ function updateSkipButtonVisibility() {
     skipButton.style.display = 'block';
     if (flagRB && !skipOnEndProcessingB) {
       skipButton.disabled = false;
+      if(currentEvent == 'event00'){
       play(healSound);
+      }
       skipButton.style.opacity = '1';
     } else if (!flagRB && skipOnEndProcessingB) {
       skipButton.disabled = true;
@@ -193,56 +205,6 @@ function updateSkipButtonVisibility() {
 }
 
 
-function spawnCircle(options = {}) {
-  if (circleCount >= maxCircles) return;
-  const circle = document.createElement('div');
-  circle.classList.add('circle');
-  circle.style.backgroundColor = options.color || '#fff';
-
-  gameArea.appendChild(circle);
-  circles.push(circle);
-  const startTime = performance.now();
-
-  function animate(currentTime) {
-    const elapsed = currentTime - startTime;
-    const progress = elapsed / fallDuration;
-    if (progress < 1) {
-      const startX = gameArea.clientWidth;
-      const endX = -80;
-      const posX = startX + (endX - startX) * progress;
-      circle.style.left = posX + 'px';
-      const judgeX = gameArea.clientWidth * 0.2;
-      const center = posX + 40;
-      if (!circle.played && center - judgeX < 0) {
-        hitSound.currentTime = 0;
-        hitSound.play().catch(error => console.error('音声再生エラー:', error));
-        circle.played = true;
-
-        if (options.isExtra) {
-          if (options.extraGroupTracker && !options.extraGroupTracker.damageApplied) {
-            monsterHP--;
-            options.extraGroupTracker.damageApplied = true;
-            updateMonsterHPBar();
-            if (monsterHP === 0) defeatMonster();
-          }
-        } else {
-          if (monsterHP > 0) {
-            monsterHP--;
-            updateMonsterHPBar();
-            if (monsterHP === 0) defeatMonster();
-          }
-        }
-        circle.remove();
-      }
-      requestAnimationFrame(animate);
-    } else {
-      circle.remove();
-      circles = circles.filter(c => c !== circle);
-    }
-  }
-  requestAnimationFrame(animate);
-  circleCount++;
-}
 
 
 function showTeletext(message) {
@@ -402,38 +364,6 @@ document.getElementById('fallduration-increase').addEventListener('click', funct
 document.getElementById('settings-button').addEventListener('click', openSettings);
 document.getElementById('close-settings').addEventListener('click', closeSettings);
 
-
-// イベント名と関数の対応表をグローバル変数で定義
-
-
-// function startRandomEvent(exclude = []) {
-//   // 文字列が "event" で始まっていない場合もカバーするための正規化関数
-//   const formatKey = key => {
-//     // すでに "event" プレフィックスがついているか？
-//     if (typeof key === "string" && key.startsWith("event")) {
-//       // プレフィックスの後の数字部分を取り出し、2桁に整形
-//       const numberPart = key.slice(5);
-//       return "event" + numberPart.padStart(2, "0");
-//     } else {
-//       // 数字のみ、もしくは "event" で始まっていない場合は、"event" を付加して整形
-//       return "event" + key.toString().padStart(2, "0");
-//     }
-//   };
-
-//   // exclude 配列内のすべての項目を正規化
-//   const normalizedExclude = exclude.map(formatKey);
-
-//   // eventFunctions のキーリストから、除外対象のものを取り除く
-//   const possibleEvents = Object.keys(eventFunctions)
-//     .filter(eventKey => !normalizedExclude.includes(eventKey));
-
-//   // もし候補がなければ何もしない
-//   if (possibleEvents.length === 0) return;
-
-//   // ランダムにイベントを選び、該当する関数を実行する
-//   const nextKey = possibleEvents[Math.floor(secureRandom() * possibleEvents.length)];
-//   eventFunctions[nextKey]();
-// }
 
 function secureRandom() {
   const array = new Uint32Array(1);
@@ -599,15 +529,16 @@ function startRandomEvent(exclude = []) {
     addEvent('event11', startEvent11, 2);
     addEvent('event22', startEvent22, 4);
     addEvent('event20', startEvent20, 4);
-    addEvent('event33', startEvent33, 4);
     addEvent('event45', startEvent45, 4);
     addEvent('event47', startEvent47, 4);
     addEvent('event48', startEvent48, 4);
     addEvent('event49', startEvent49, 1);
     addEvent('event29', startEvent29, 5);
-    addEvent('event27', startEvent27, 5);
-    addEvent('event28', startEvent28, 5);
-    addEvent('event53', startEvent53, 5);
+    addEvent('event27', startEvent27, 4);
+    addEvent('event28', startEvent28, 4);
+    addEvent('event54', startEvent54, 4);
+    addEvent('event56', startEvent56, 4);
+    addEvent('event57', startEvent57, 4);
   } else if (eventCount == 16) {
     addEvent('event35', startEvent35, 5);
     addEvent('event06', startEvent06, 5);
@@ -621,6 +552,9 @@ function startRandomEvent(exclude = []) {
     addEvent('event44', startEvent44, 5);
     addEvent('event43', startEvent43, 5);
     addEvent('event42', startEvent42, 5);
+    addEvent('event53', startEvent53, 4);
+    addEvent('event55', startEvent55, 4);
+    addEvent('event33', startEvent33, 4);
   } else if (eventCount == 24) {
     addEvent('event24', startEvent24, 5);
     addEvent('event41', startEvent41, 5);
@@ -629,8 +563,7 @@ function startRandomEvent(exclude = []) {
     addEvent('event60', startEvent60, 1);
   }
   if(eventCount>24){
-    removeEvent('event60');
-    addEvent('event60', startEvent60, eventCount-23);
+    eventWeights['special'] = eventCount-23;
   }
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;

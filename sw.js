@@ -1,6 +1,6 @@
 var CACHE_NAME = 'SSD';
 var urlsToCache = [
-    '/', '/index.html', '/script.js', '/manifest.json'
+    '/', '/index.html', '/main.js', '/manifest.json', '/styles.css', '/sw.js', '/オープニング.js', './PWAimage/slime192.png', './PWAimage/slime512.png'
 ];
 
 // インストール処理

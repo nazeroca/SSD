@@ -1,3 +1,55 @@
+function spawnCircle(options = {}) {
+  if (circleCount >= maxCircles) return;
+  const circle = document.createElement('div');
+  circle.classList.add('circle');
+  circle.style.backgroundColor = circlecolor;
+
+  gameArea.appendChild(circle);
+  circles.push(circle);
+  const startTime = performance.now();
+
+  function animate(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = elapsed / fallDuration;
+    if (progress < 1) {
+      const startX = gameArea.clientWidth;
+      const endX = -80;
+      const posX = startX + (endX - startX) * progress;
+      circle.style.left = posX + 'px';
+      const judgeX = gameArea.clientWidth * 0.2;
+      const center = posX + 40;
+      if (!circle.played && center - judgeX < 0) {
+        hitSound.currentTime = 0;
+        hitSound.play().catch(error => console.error('音声再生エラー:', error));
+        circle.played = true;
+
+        if (options.isExtra) {
+          if (options.extraGroupTracker && !options.extraGroupTracker.damageApplied) {
+            monsterHP--;
+            options.extraGroupTracker.damageApplied = true;
+            updateMonsterHPBar();
+            if (monsterHP === 0) defeatMonster();
+          }
+        } else {
+          if (monsterHP > 0) {
+            monsterHP--;
+            updateMonsterHPBar();
+            if (monsterHP === 0) defeatMonster();
+          }
+        }
+        circle.remove();
+      }
+      requestAnimationFrame(animate);
+    } else {
+      circle.remove();
+      circles = circles.filter(c => c !== circle);
+    }
+  }
+  requestAnimationFrame(animate);
+  circleCount++;
+}
+
+
 function startGame(speed, count, onEnd) {
   buttonGroup.classList.add('hidden');
   showTeletext(`${speed / 1000}秒ごとの${count}回攻撃`);
@@ -15,8 +67,8 @@ function startGame(speed, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      // ノーツ生成直後に「お守りの不思議な力が発動した！」と表示し、即 onEnd を実行
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     spawnCircle();
@@ -55,7 +107,7 @@ function startGameR(speed1, speed2, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (circleCount < maxCircles) {
@@ -104,7 +156,7 @@ function startGameR2(speed1, speed2, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (circleCount < maxCircles) {
@@ -166,7 +218,7 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
@@ -230,7 +282,7 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
@@ -298,7 +350,7 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
@@ -365,7 +417,7 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
@@ -424,7 +476,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (mainSpawned < count1) {
@@ -457,7 +509,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
         skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
       defeatMonster();
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
       if (extraSpawned < count2) {
@@ -504,8 +556,8 @@ function startGameNone(speed, count, onEnd) {
       clearInterval(intervalId);
       skipOnEndProcessingB = false;
       updateSkipButtonVisibility();
-      // ノーツ生成直後に「お守りの不思議な力が発動した！」と表示し、即 onEnd を実行
-      showTextTypingEffect("お守りの不思議な力が発動した！", () => { onEnd(); });
+      // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
+      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     spawnCircleNone();
