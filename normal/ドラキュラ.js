@@ -9,7 +9,7 @@ function startEvent10() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ドラキュラ.png';
     initializeMonster(noteCount);
-    startGameP(2500, noteCount, 0.3, 1000, 10, () => {
+    startGameP(2500, noteCount, 0.1, 1000, 10, () => {
         showTextTypingEffect(`ドラキュラを倒した！`, () => {
             fadeOutIn(() => {
               startRandomEvent([currentEvent]);

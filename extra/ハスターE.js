@@ -8,7 +8,7 @@ function startEvent40() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ハスターE.png';
     initializeMonster(noteCount);
-    startGameR2(500,2500, noteCount, () => {
+    startGameR2(500,2000, noteCount, () => {
       
       showTextTypingEffect(`ハスターを倒した！`, () => {
 

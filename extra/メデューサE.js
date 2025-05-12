@@ -8,7 +8,7 @@ function startEvent24() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/メデューサE.png';
     initializeMonster(noteCount);
-    startGameP(700, noteCount, 0.08, 5000, 1, () => {
+    startGameP(700, noteCount, 0.06, 5000, 1, () => {
       
       showTextTypingEffect(`エリートメデューサを倒した！`, () => {
 

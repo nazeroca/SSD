@@ -8,7 +8,7 @@ function startEvent52() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ゴブリンE.png';
     initializeMonster(noteCount);
-    startGameP(3000, noteCount, 0.07, 1500, 10, () => {
+    startGameP(3000, noteCount, 0.08, 1500, 10, () => {
       
       showTextTypingEffect(`エリートゴブリンを倒した！`, () => {
 

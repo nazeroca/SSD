@@ -23,9 +23,9 @@ function startEvent02() {
       // 選択されたボタンの設定をそのまま利用
       document.getElementById('monster-img').src = buttonConfigs[0].monsterImage;
       initializeMonster(buttonConfigs[0].count);
-      showTextTypingEffect('青の魔導士を倒すことにした！', () => {
+      showTextTypingEffect('紫の魔導士を倒すことにした！', () => {
         startGame(buttonConfigs[0].speed, buttonConfigs[0].count, () => {
-          showTextTypingEffect(`青の魔導士を倒した！`, () => {
+          showTextTypingEffect(`紫の魔導士を倒した！`, () => {
 
               fadeOutIn(() => {
                 startRandomEvent([currentEvent]);
@@ -46,9 +46,9 @@ function startEvent02() {
       buttonGroup.classList.add('hidden');
       document.getElementById('monster-img').src = buttonConfigs[1].monsterImage;
       initializeMonster(buttonConfigs[1].count);
-      showTextTypingEffect('紫の魔導士を倒すことにした！', () => {
+      showTextTypingEffect('青の魔導士を倒すことにした！', () => {
         startGame(buttonConfigs[1].speed, buttonConfigs[1].count, () => {
-          showTextTypingEffect(`紫の魔導士を倒した！`, () => {
+          showTextTypingEffect(`青の魔導士を倒した！`, () => {
 
               fadeOutIn(() => {
                 startRandomEvent([currentEvent]);

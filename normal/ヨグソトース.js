@@ -62,7 +62,7 @@ function startEvent54() {
               showTextTypingEffectS('【ヨグソトース】',`正解である。貴様にこれを授けよう。`, () => {
                 flagRB = true;
     updateSkipButtonVisibility();
-                showTextTypingEffect(`お守りを手に入れた！`, () => {
+                showTextTypingEffect(`ロザリオを手に入れた！`, () => {
     hideSceneImage();
               fadeOutIn(() => {
                 startRandomEvent([currentEvent]);

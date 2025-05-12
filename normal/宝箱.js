@@ -31,7 +31,7 @@ function startEvent20() {
         showSceneImage('./image/財宝.png');
         flagG = true;
         updateFlagGrid();
-        showTextTypingEffect('お守りを手に入れた！', () => {
+        showTextTypingEffect('ロザリオを手に入れた！', () => {
           hideSceneImage();
           flagRB= true;
       updateSkipButtonVisibility();
