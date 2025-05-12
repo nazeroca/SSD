@@ -182,30 +182,6 @@ function showTextTypingEffectS(speaker, text, callback, speed = 50) {
 
 
 
-function updateSkipButtonVisibility() {
-  const skipButton = document.getElementById('skip-button');
-  if (!skipButton) return;
-  
-  // : ボタン有効条件, skipOnEndProcessing の値によりスタイル調整
-  if (!flagRB && !skipOnEndProcessingB) {
-    skipButton.style.display = 'none';
-  } else {
-    skipButton.style.display = 'block';
-    if (flagRB && !skipOnEndProcessingB) {
-      skipButton.disabled = false;
-      if(currentEvent == 'event00'){
-      play(healSound);
-      }
-      skipButton.style.opacity = '1';
-    } else if (!flagRB && skipOnEndProcessingB) {
-      skipButton.disabled = true;
-      skipButton.style.opacity = '0.5';
-    }
-  }
-}
-
-
-
 
 function showTeletext(message) {
   // 上部領域 (.top-screen) を取得
@@ -311,19 +287,104 @@ function closeSettings() {
 
   otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
   debugModeEnabled = document.getElementById('debug-toggle').checked;
-  console.log(debugModeEnabled);
+  updateSkipImageVisibility()
 }
 
-const skipButton = document.getElementById('skip-button');
-skipButton.addEventListener('click', function() {
+
+function updateSkipImageVisibility() {
+  console.log(skipOnEndProcessingB+'a'+flagRB)
+  const bottomScreen = document.getElementById("game-area");
+  let skipIcon = document.getElementById("skip-enabled-icon");
+  
+  // ① 表示するべき状態の場合
+  // 条件 1: 通常のロザリオ画像
   if (flagRB && !skipOnEndProcessingB) {
+    if (!skipIcon) {
+      skipIcon = document.createElement("img");
+      skipIcon.id = "skip-enabled-icon";
+      bottomScreen.appendChild(skipIcon);
+    }
+    skipIcon.src = "./image/ロザリオ.png";
+  
+  // 条件 2: 白いロザリオ画像
+  } else if (!flagRB && skipOnEndProcessingB) {
+    if (!skipIcon) {
+      skipIcon = document.createElement("img");
+      skipIcon.id = "skip-enabled-icon";
+      bottomScreen.appendChild(skipIcon);
+    }
+    skipIcon.src = "./image/白ロザリオ.png";
+  
+  // ② 表示すべき状態でない場合は削除
+  } else {
+    if (skipIcon) {
+      skipIcon.remove();
+    }
+    return;
+  }
+  
+  // --- 画像の位置とサイズの設定 ---
+  skipIcon.style.position = "absolute";
+  // 画面の向きに応じた配置
+  const settingsButton = document.getElementById("settings-button");
+  const bottomRect = bottomScreen.getBoundingClientRect();
+  
+  if (settingsButton) {
+    const settingRect = settingsButton.getBoundingClientRect();
+    if (window.innerWidth > window.innerHeight) {
+      // 横長の場合：設定ボタンの右側に表示
+      skipIcon.style.left = (settingRect.right - bottomRect.left + 5) + "px";
+      skipIcon.style.top = (settingRect.top - bottomRect.top) + "px";
+    } else {
+      // 縦長の場合：設定ボタンの下側に表示
+      skipIcon.style.top = (settingRect.bottom - bottomRect.top + 5) + "px";
+      skipIcon.style.left = (settingRect.left - bottomRect.left) + "px";
+    }
+  } else {
+    // 万が一設定ボタンが見つからなければ、デフォルト位置
+    skipIcon.style.top = "12vmin";
+    skipIcon.style.left = "1vmin";
+  }
+  
+  // 画像サイズ（例：幅 12vmin）
+  skipIcon.style.width = "12vmin";
+  skipIcon.style.height = "auto";
+}
+
+
+// --- 既存のクリック／タッチイベント ---
+// bottom領域の右80%（＝判定ラインより右）で flagRB が true の場合に skipOnEndProcessingB を true に設定
+const bottomScreen = document.getElementById("game-area");
+
+bottomScreen.addEventListener("click", function(e) {
+  if (!flagRB) return;
+  const rect = bottomScreen.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  // 判定ラインが CSS で left:20% となっているので、クリックがそれより右の場合
+  if (clickX > rect.width * 0.2) {
+    flagRB=false;
     skipOnEndProcessingB = true;
-    flagRB = false;
-    updateSkipButtonVisibility();
+    updateSkipImageVisibility();
   }
 });
 
+bottomScreen.addEventListener("touchstart", function(e) {
+  if (!flagRB) return;
+  const rect = bottomScreen.getBoundingClientRect();
+  const touchX = e.touches[0].clientX - rect.left;
+  if (touchX > rect.width * 0.2) {
+    flagRB=false;
+    skipOnEndProcessingB = true;
+    updateSkipImageVisibility();
+  }
+});
 
+// --- 例：フラグ変更時の呼び出し ---
+// イベントなどで flagRB や skipOnEndProcessingB の値が変更されたときは、必ず updateSkipImageVisibility() を呼んで表示状態を更新してください。
+// 例:
+// flagRB = true;
+// skipOnEndProcessingB = false;
+// updateSkipImageVisibility();
 
 
 // ノーツ音量の変更（20%刻み）
@@ -633,5 +694,5 @@ function startRandomEvent(exclude = []) {
 
 // 最初は必ずイベント0を実行する
 updateFlagGrid();
-updateSkipButtonVisibility();
+updateSkipImageVisibility();
 startEvent00 ();

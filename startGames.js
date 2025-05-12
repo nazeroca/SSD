@@ -58,7 +58,7 @@ function startGame(speed, count, onEnd) {
   circles = [];
 
   // ノーツ生成開始前にテスト用スキップ状態チェック（必要ならここで設定する）
-  // ※各イベント開始時に必要なら、flagRB = true; updateSkipButtonVisibility() を呼び出す
+  // ※各イベント開始時に必要なら、flagRB = true; updateSkipImageVisibility() を呼び出す
 
   intervalId = setInterval(() => {
     // 【変更】テスト用スキップが有効なら即中断
@@ -66,7 +66,7 @@ function startGame(speed, count, onEnd) {
       clearInterval(intervalId);
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
@@ -106,7 +106,7 @@ function startGameR(speed1, speed2, count, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -155,7 +155,7 @@ function startGameR2(speed1, speed2, count, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -217,7 +217,7 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -281,7 +281,7 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -349,7 +349,7 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -416,7 +416,7 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -475,7 +475,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -507,7 +507,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
     function spawnExtraOne() {
       if (skipOnEndProcessingB) {
         skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       defeatMonster();
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
@@ -555,7 +555,7 @@ function startGameNone(speed, count, onEnd) {
     if (skipOnEndProcessingB) {
       clearInterval(intervalId);
       skipOnEndProcessingB = false;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
       // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;

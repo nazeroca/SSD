@@ -418,41 +418,6 @@
       user-select: none;
     }
 
-/* 新規: スキップボタン専用（メタリック風） */
-.skip-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0vmin 0vmin;
-  font-size: 6vmin;
-  color: #fff;
-  border: none;
-  border-radius: 1vmin;
-  cursor: pointer;
-  z-index: 900;
-  /* 背景にグラデーションを設定して、金属の立体感を表現 */
-  background: linear-gradient(145deg, #e7e7e7, #6b6b6b);
-  /* 外側のシャドウと内側のインセットシャドウを組み合わせ、奥行きと光の反射を表現 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.2);
-  transition: opacity 0.3s ease, 
-              transform 0.2s ease, 
-              box-shadow 0.3s ease;
-}
-
-.skip-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 8px rgba(255, 255, 255, 0.35), inset 0 1px 2px rgba(255, 255, 255, 0.2);
-}
-
-.skip-button:active {
-  transform: translateY(1px);
-  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.15);
-}
-
-.skip-button:disabled {
-  opacity: 0.5;
-  cursor: default;
-}
 
 
 @media (orientation: portrait) {
