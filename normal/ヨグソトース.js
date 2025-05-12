@@ -61,7 +61,7 @@ function startEvent54() {
             if (choice.value === "alpha") {
               showTextTypingEffectS('【ヨグソトース】',`正解である。貴様にこれを授けよう。`, () => {
                 flagRB = true;
-    updateSkipButtonVisibility();
+    updateSkipImageVisibility();
                 showTextTypingEffect(`ロザリオを手に入れた！`, () => {
     hideSceneImage();
               fadeOutIn(() => {

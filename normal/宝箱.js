@@ -34,7 +34,7 @@ function startEvent20() {
         showTextTypingEffect('ロザリオを手に入れた！', () => {
           hideSceneImage();
           flagRB= true;
-      updateSkipButtonVisibility();
+      updateSkipImageVisibility();
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);
           });

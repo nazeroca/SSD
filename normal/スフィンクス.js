@@ -65,7 +65,7 @@ function showChoiceButtons(correctAnswer) {
         // 正解の場合
         showTextTypingEffectS('【スフィンクス】',"よかろう、ここを通れ。\nついでにこれを授けよう。", () => {
           flagRB = true;
-    updateSkipButtonVisibility();
+    updateSkipImageVisibility();
     showTextTypingEffect("ロザリオを手に入れた！", () => {
           hideSceneImage();
           fadeOutIn(() => {
