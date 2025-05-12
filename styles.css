@@ -268,8 +268,8 @@
       position: absolute;
       top: 1vmin;
       right: 1vmin;
-      width: 15vmin;
-      height: 24vmin;
+      width: 20vmin;
+      height: 34vmin;
       /* 円部分21vmin＋タイトル分の高さ */
       display: flex;
       flex-direction: column;
@@ -279,7 +279,7 @@
     }
 
     #flag-title {
-      font-size: 3vmin;
+      font-size: 4vmin;
       color: white;
       margin-bottom: 0.5vmin;
       text-align: center;
@@ -288,8 +288,8 @@
     }
 
     #flag-grid {
-      width: 15vmin;
-      height: 15vmin;
+      width: 20vmin;
+      height: 20vmin;
       border-radius: 50%;
       display: flex;
       align-items: center;
