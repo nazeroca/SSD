@@ -8,7 +8,7 @@ function startEvent14() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ゾンビ.png';
     initializeMonster(noteCount);
-    startGameR(2000,4000, noteCount, () => {
+    startGameR(1000,3000, noteCount, () => {
       
       showTextTypingEffect(`ゾンビを倒した！`, () => {
 

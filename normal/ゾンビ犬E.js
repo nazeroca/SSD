@@ -2,7 +2,7 @@ function startEvent48() {
   currentEvent = 'event48';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(10, 20);
+  let noteCount = getSecureRandomInRange(20, 25);
   showSceneImage('./image/ゾンビ犬E.png');
   showTextTypingEffect('エリートゾンビ犬が現れた！', () => {
     hideSceneImage();
