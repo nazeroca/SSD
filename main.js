@@ -28,7 +28,6 @@ let flagDR = false;
 let flagDG = false;
 let flagDB = false; 
 
-let  = true; // スキップ可能状態を管理するフラグ
 
 
 let ange = 0;
@@ -272,13 +271,26 @@ function fadeOutIn(callback) {
 
 function openSettings() {
   const settingsWindow = document.getElementById('settings-window');
-  // active クラスを追加して、display を flex に変更
   settingsWindow.classList.add('active');
-
   document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
-  // デバッグモードのトグルボタンの状態を反映
   document.getElementById('debug-toggle').checked = debugModeEnabled;
+  // currentEvent に応じて状態アクションボタンのテキストを更新
+  const stateActionButton = document.getElementById("state-action-button");
+  if (currentEvent == 'event00') {
+    stateActionButton.textContent = "ロード";
+  } else {
+    stateActionButton.textContent = "セーブ";
+  }
 }
+
+// 設定ウィンドウにある状態アクションボタンのクリックイベント
+document.getElementById("state-action-button").addEventListener("click", function() {
+  if (currentEvent == 'event00') {
+    loadGameState();
+  } else {
+    saveGameState();
+  }
+});
 
 function closeSettings() {
   const settingsWindow = document.getElementById('settings-window');
@@ -511,6 +523,68 @@ function printEventProbabilities() {
     console.log(`${group.join(", ")}: ${probabilityPercent}% each`);
   }
 }
+
+
+function saveGameState() {
+  const state = {
+    eventCount: eventCount,
+    flagR: flagR,
+    flagG: flagG,
+    flagB: flagB,
+    flagDR: flagDR,
+    flagDG: flagDG,
+    flagDB: flagDB,
+    ange: ange,
+    flagRB: flagRB,
+    skipOnEndProcessingB: skipOnEndProcessingB,
+    circlecolor: circlecolor,
+    currentEvent: currentEvent
+  };
+  localStorage.setItem("gameState", JSON.stringify(state));
+  console.log("セーブ完了:", state);
+}
+
+// ロード処理：保存されている変数群を読み込み、所定の関数を呼び出す
+function loadGameState() {
+  const stateStr = localStorage.getItem("gameState");
+  if (!stateStr) {
+    console.warn("セーブデータが見つかりません");
+    return;
+  }
+  const state = JSON.parse(stateStr);
+  eventCount = state.eventCount;
+  flagR = state.flagR;
+  flagG = state.flagG;
+  flagB = state.flagB;
+  flagDR = state.flagDR;
+  flagDG = state.flagDG;
+  flagDB = state.flagDB;
+  ange = state.ange;
+  flagRB = state.flagRB;
+  skipOnEndProcessingB = state.skipOnEndProcessingB;
+  circlecolor = state.circlecolor;
+  currentEvent = state.currentEvent;
+  console.log("ロード完了:", state);
+
+  const settingsWindow = document.getElementById('settings-window');
+  settingsWindow.classList.remove('active');
+
+  otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
+  debugModeEnabled = document.getElementById('debug-toggle').checked;
+  updateSkipImageVisibility()
+
+  hideSceneImage();
+      buttonGroup.classList.add('hidden');
+      updateFlagGrid();
+  updateSkipImageVisibility();
+  showTextTypingEffect(`${eventCount}階のデータを読み込みました。`, () => {
+      fadeOutIn(() => {
+        startRandomEvent([currentEvent]);
+      });
+      });
+  
+}
+
 
 
 

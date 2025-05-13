@@ -58,31 +58,35 @@
     </div>
   </div>
 
-  <div id="settings-window">
-    <div class="close-button" id="close-settings">×</div>
-    <div class="settings-row">
-      <label>ノーツ音：</label>
-      <button id="volume-decrease">−</button>
-      <span id="volume-value">100%</span>
-      <button id="volume-increase">+</button>
-    </div>
-    <div class="settings-row">
-      <label for="other-sounds-toggle">効果音：</label>
-      <input type="checkbox" id="other-sounds-toggle" checked>
-    </div>
-    <div class="settings-row">
-      <label>落下速度：</label>
-      <button id="fallduration-decrease">−</button>
-      <span id="fallduration-value">3000</span>
-      <button id="fallduration-increase">+</button>
-    </div>
-    <!-- 設定ウィンドウ内にデバッグモード用トグルボタンを追加 -->
-    <div class="settings-row">
-      <label for="debug-toggle">デバッグモード：
-      </label>
-      <input type="checkbox" id="debug-toggle">
-    </div>
+<div id="settings-window">
+  <div class="close-button" id="close-settings">×</div>
+  <div class="settings-row">
+    <label>ノーツ音：</label>
+    <button id="volume-decrease">−</button>
+    <span id="volume-value">100%</span>
+    <button id="volume-increase">+</button>
   </div>
+  <div class="settings-row">
+    <label for="other-sounds-toggle">効果音：</label>
+    <input type="checkbox" id="other-sounds-toggle" checked>
+  </div>
+  <div class="settings-row">
+    <label>落下速度：</label>
+    <button id="fallduration-decrease">−</button>
+    <span id="fallduration-value">3000</span>
+    <button id="fallduration-increase">+</button>
+  </div>
+  <div class="settings-row">
+    <label for="debug-toggle">デバッグモード：</label>
+    <input type="checkbox" id="debug-toggle">
+  </div>
+  <!-- デバッグモードの下、中央に1つだけ配置する状態アクションボタン -->
+  <div class="settings-row" style="text-align: center;">
+    <button id="state-action-button">セーブ</button>
+  </div>
+</div>
+
+
 
 
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>

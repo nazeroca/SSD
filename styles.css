@@ -307,25 +307,25 @@
       user-select: none;
     }
 
-    /* ▼ 設定ウインドウ（初期状態は非表示） */
-    #settings-window {
-      text-align: center;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      font-size: 7vmin;
-      transform: translate(-50%, -50%);
-      background-color: #333;
-      color: white;
-      padding: 4vmin;
-      border-radius: 1vmin;
-      z-index: 1000;
-      width: 80vw;
-      height: 40vh;
-      display: none;
-      /* 非表示時は none */
-      box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
-    }
+/* 既存の設定ウインドウのスタイル（修正後） */
+#settings-window {
+  text-align: center;
+  position: fixed;
+  top: 37.5vh;  /* ← 上部領域（.top-screen）の中央になるように変更 */
+  left: 50%;
+  font-size: 7vmin;
+  transform: translate(-50%, -50%);
+  background-color: #333;
+  color: white;
+  padding: 4vmin;
+  border-radius: 1vmin;
+  z-index: 1000;
+  width: 80vw;
+  height: 40vh;
+  display: none; /* 初期は非表示 */
+  box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
+}
+
 
     /* 設定ウインドウを開いた際に適用するクラス */
     /* このクラスを追加すると、Flexbox による縦方向の均等配置が有効になります */
@@ -339,6 +339,12 @@
       align-items: center;
       /* 横方向も中央揃え（必要に応じて） */
     }
+
+    #settings-window .settings-row {
+  width: 90%;
+  text-align: center;
+  margin: 1vmin 0;
+}
 
     /* 設定ウインドウ内のボタンのスタイル（そのまま） */
     #settings-window button {
@@ -408,6 +414,9 @@
     }
 
 
+
+/* もともと存在した矢印関連のスタイルは削除 */
+
     /* ×ボタン */
     #settings-window .close-button {
       position: absolute;
@@ -442,4 +451,19 @@
   }
 
   
+}
+
+@media (orientation: landscape) {
+  /* 横長の場合（ランドスケープ） */
+  #settings-window {
+    /* 高さをやや狭くする（例：40vh → 35vh または 32vh など、調整可能） */
+    height: 60vh;
+    /* パディングも少し狭くして、内容が収まるようにする */
+    padding: 2vmin;
+    /* フォントサイズも小さめに設定 */
+    font-size: 6vmin;
+    /*
+    /* 上部領域の高さに合わせて、中央表示用の top も必要に応じて調整 */
+    top: 37.5vh;
+  }
 }
