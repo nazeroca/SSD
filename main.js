@@ -586,6 +586,7 @@ function loadGameState() {
   updateSkipImageVisibility();
   showTextTypingEffect(`${eventCount}階のデータを読み込みました。`, () => {
       fadeOutIn(() => {
+        console.log(currentEvent)
         startRandomEvent([currentEvent]);
       });
       });
