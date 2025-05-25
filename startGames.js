@@ -68,7 +68,7 @@ function startGame(speed, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
-      // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -98,7 +98,7 @@ function startGame(speed, count, onEnd) {
 
 function startGameR(speed1, speed2, count, onEnd) {
   buttonGroup.classList.add('hidden');
-  showTeletext(`${speed1/1000}秒～${speed2/1000}秒ごとに${count}回攻撃`);
+  showTeletext(`${speed1 / 1000}秒～${speed2 / 1000}秒ごとに${count}回攻撃`);
   circleCount = 0;
   maxCircles = count;
   circles = [];
@@ -111,6 +111,7 @@ function startGameR(speed1, speed2, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -148,7 +149,7 @@ function startGameR(speed1, speed2, count, onEnd) {
 
 function startGameR2(speed1, speed2, count, onEnd) {
   buttonGroup.classList.add('hidden');
-  showTeletext(`最速${speed1/1000}秒ごとに${count}回攻撃`);
+  showTeletext(`最速${speed1 / 1000}秒ごとに${count}回攻撃`);
   circleCount = 0;
   maxCircles = count;
   circles = [];
@@ -163,6 +164,7 @@ function startGameR2(speed1, speed2, count, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -205,36 +207,37 @@ function startGameR2(speed1, speed2, count, onEnd) {
 function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   // ノーツ生成の初期化
   buttonGroup.classList.add('hidden');
-  if(speed1>speed2){
-  showTeletext(`${speed1/1000}秒から${speed2/1000}秒へ加速する攻撃`);
-  }else{
-    showTeletext(`${speed1/1000}秒から${speed2/1000}秒へ減速する攻撃`);  
+  if (speed1 > speed2) {
+    showTeletext(`${speed1 / 1000}秒から${speed2 / 1000}秒へ加速する攻撃`);
+  } else {
+    showTeletext(`${speed1 / 1000}秒から${speed2 / 1000}秒へ減速する攻撃`);
   }
   circleCount = 0;
   maxCircles = count1 + count2;
   circles = [];
   let skipEnded = false;
-  
+
 
   // ゲーム終了時のコールバックをグローバルに保持（必要な場合）
   gameOnEndCallback = onEnd;
 
   // noteIndex は生成したノーツの総数として扱う（0～maxCircles-1）
   let noteIndex = 0;
-  
+
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
       spawnCircle();
       noteIndex++;
-      
+
       let delay;
       // 1回目の区間：easeOUT的に間隔が短くなる
       if (noteIndex <= count1) {
@@ -277,31 +280,32 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
 function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd) {
   // ノーツ生成の初期化
   buttonGroup.classList.add('hidden');
-  showTeletext(`${speed1/1000}秒⇒${speed2/1000}秒⇒${speed3/1000}秒へ徐々に加減速する攻撃`);
+  showTeletext(`${speed1 / 1000}秒⇒${speed2 / 1000}秒⇒${speed3 / 1000}秒へ徐々に加減速する攻撃`);
   circleCount = 0;
   maxCircles = count1 + count2;
   circles = [];
   let skipEnded = false;
-  
+
   // ゲーム終了時のコールバックをグローバルに保持（必要な場合）
   gameOnEndCallback = onEnd;
-  
+
   // noteIndex は生成したノーツの総数として扱う（0～maxCircles-1）
   let noteIndex = 0;
-  
+
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
     if (noteIndex < maxCircles) {
       spawnCircle();
       noteIndex++;
-      
+
       let delay;
       if (noteIndex <= count1) {
         // 第1フェーズ：speed1 から speed2 へ、count1個、type1乗のease-out
@@ -315,12 +319,12 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
         let factor = 1 - Math.pow((1 - t), type2);
         delay = speed2 - (speed2 - speed3) * factor;
       }
-      
+
       setTimeout(spawnNext, delay);
     }
   }
   spawnNext();
-  
+
   // 終了チェック：全ノーツがレーンから消えているか？
   const checkEnd = () => {
     const allGone = circles.every(c => {
@@ -346,7 +350,7 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
 function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
   // ボタン群は非表示
   buttonGroup.classList.add('hidden');
-  showTeletext(`${speed1/1000}秒⇒${speed2/1000}秒⇒${speed3/1000}秒の三段階変化する攻撃`);
+  showTeletext(`${speed1 / 1000}秒⇒${speed2 / 1000}秒⇒${speed3 / 1000}秒の三段階変化する攻撃`);
   // ノーツの初期化
   circleCount = 0;
   maxCircles = count1 + count2 + count3;
@@ -366,6 +370,7 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -416,7 +421,7 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
 function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
   // ボタン群は非表示
   buttonGroup.classList.add('hidden');
-  showTeletext(`${speed1/1000}秒⇔${speed2/1000}秒で反復${sets}セット攻撃`);
+  showTeletext(`${speed1 / 1000}秒⇔${speed2 / 1000}秒で反復${sets}セット攻撃`);
 
   // ノーツの初期化
   circleCount = 0;
@@ -436,6 +441,7 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -484,20 +490,21 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
 
 function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
   buttonGroup.classList.add('hidden');
-  showTeletext(`${probability*100}%の確率で${speed2/1000}秒${count2}個の追撃発生`);
+  showTeletext(`${probability * 100}%の確率で${speed2 / 1000}秒${count2}個の追撃発生`);
   circleCount = 0;
   maxCircles = 1000;
   circles = [];
   let skipEnded = false;
 
 
-  let mainSpawned = 0; 
+  let mainSpawned = 0;
 
   function spawnMain() {
     if (skipOnEndProcessingB) {
       defeatMonster();
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -529,11 +536,12 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
     function spawnExtraOne() {
       if (skipOnEndProcessingB) {
         skipOnEndProcessingB = false;
-      updateSkipImageVisibility();
-      defeatMonster();
-      showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
-      return;
-    }
+        updateSkipImageVisibility();
+        defeatMonster();
+        skipEnded = true;
+        showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
+        return;
+      }
       if (extraSpawned < count2) {
         // extra group の各ノーツ生成時には、オプションとして isExtra と tracker を渡す
         spawnCircle({ isExtra: true, extraGroupTracker: extraGroupTracker });
@@ -551,7 +559,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
       const left = parseInt(c.style.left || '9999', 10);
       return left <= -80;
     });
-    if (allGone ) {
+    if (allGone) {
       // もし全てのノーツが消えていて、かつモンスターのHPがまだ残っている場合、強制的に敗北処理を実行
       if (monsterHP > 0) {
         defeatMonster();
@@ -569,8 +577,8 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
 
 function startGameNone(speed, count, onEnd) {
   buttonGroup.classList.add('hidden');
-  if(currentEvent!=='event54'){
-  showTeletext(`${speed / 1000}秒で${count}個の攻撃`);
+  if (currentEvent !== 'event54') {
+    showTeletext(`${speed / 1000}秒で${count}個の攻撃`);
   }
   circleCount = 0;
   maxCircles = count;
@@ -581,7 +589,7 @@ function startGameNone(speed, count, onEnd) {
       clearInterval(intervalId);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
-      // ノーツ生成直後に「ロザリオの不思議な力が発動した！」と表示し、即 onEnd を実行
+      skipEnded = true;
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }

@@ -2,7 +2,7 @@ function startEvent14() {
   currentEvent = 'event14';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(30, 40);
+  let noteCount = getSecureRandomInRange(20, 30);
   showSceneImage('./image/ゾンビ.png');
   showTextTypingEffect('ゾンビが現れた！', () => {
     hideSceneImage();

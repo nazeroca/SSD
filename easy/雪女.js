@@ -8,7 +8,7 @@ function startEvent23() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/雪女.png';
     initializeMonster(noteCount);
-    startGameA(1000,4000, 0.8,noteCount,0, () => {
+    startGameA(500,4000, 0.6,noteCount,0, () => {
       
       showTextTypingEffect(`雪女を倒した！`, () => {
 
