@@ -453,7 +453,7 @@ function getSecureRandomInRange(min, max) {
   return Math.floor(randomFraction * range) + min;
 }
 
-const eventFunctions = {
+let eventFunctions = {
   'event01': startEvent01,
   'event02': startEvent02,
   'event03': startEvent03,
@@ -470,7 +470,7 @@ const eventFunctions = {
 
 // 各イベントの重みを設定（数値が大きいほど選ばれやすくなる）
 // ここでは special イベントは低い重み(例: 0.2)となっている
-const eventWeights = {
+let eventWeights = {
   'event01': 3,
   'event02': 3,
   'event03': 3,
