@@ -539,9 +539,6 @@ function saveGameState() {
     flagR,
     flagG,
     flagB,
-    flagDR,
-    flagDG,
-    flagDB,
     ange,
     flagRB,
     skipOnEndProcessingB,
@@ -565,9 +562,6 @@ function loadGameState() {
   flagR = state.flagR;
   flagG = state.flagG;
   flagB = state.flagB;
-  flagDR = state.flagDR;
-  flagDG = state.flagDG;
-  flagDB = state.flagDB;
   ange = state.ange;
   flagRB = state.flagRB;
   skipOnEndProcessingB = state.skipOnEndProcessingB;
