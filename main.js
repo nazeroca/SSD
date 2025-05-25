@@ -772,15 +772,66 @@ function startRandomEvent(exclude = []) {
 
 // // ランダムに選出されたイベントが重みを反映して呼び出される
 
+// ヘルプウインドウ制御
+const helpButton = document.getElementById('help-button');
+const helpWindow = document.getElementById('help-window');
+const helpTitle = helpWindow.querySelector('.help-title');
+const helpBody = helpWindow.querySelector('.help-body');
+let helpHovering = false;
+let helpWindowHovering = false;
 
+// イベントごとのQtext（例：スライムイベント）
+const Qtexts = {
+  'event01': ['スライムの説明', 'スライムは弱いモンスターです。ノーツをタイミングよく押して倒しましょう。'],
+  // 他イベントも同様に追加可能
+};
 
+function showHelpWindow() {
+  let qtext = Qtexts[currentEvent] || ['ヘルプ', 'このイベントの説明はありません。'];
+  helpTitle.textContent = qtext[0];
+  helpBody.textContent = qtext[1];
+  helpWindow.classList.add('active');
+}
+function hideHelpWindow() {
+  helpWindow.classList.remove('active');
+}
 
-
-
-
-
-
-
+// PC: hoverで表示/非表示（点滅防止のため、ボタンまたはウインドウ上にいる間は表示）
+helpButton.addEventListener('mouseenter', function() {
+  helpHovering = true;
+  showHelpWindow();
+});
+helpButton.addEventListener('mouseleave', function() {
+  helpHovering = false;
+  setTimeout(() => {
+    if (!helpHovering && !helpWindowHovering) hideHelpWindow();
+  }, 30);
+});
+helpWindow.addEventListener('mouseenter', function() {
+  helpWindowHovering = true;
+});
+helpWindow.addEventListener('mouseleave', function() {
+  helpWindowHovering = false;
+  setTimeout(() => {
+    if (!helpHovering && !helpWindowHovering) hideHelpWindow();
+  }, 30);
+});
+// モバイル: 長押しで表示、離すと非表示
+let helpTouchTimer = null;
+helpButton.addEventListener('touchstart', function(e) {
+  e.preventDefault();
+  helpTouchTimer = setTimeout(showHelpWindow, 400); // 0.4秒長押しで表示
+});
+helpButton.addEventListener('touchend', function(e) {
+  clearTimeout(helpTouchTimer);
+  hideHelpWindow();
+});
+helpButton.addEventListener('touchcancel', function(e) {
+  clearTimeout(helpTouchTimer);
+  hideHelpWindow();
+});
+// ウインドウ自体からもマウスが離れたら閉じる
+helpWindow.addEventListener('mouseleave', hideHelpWindow);
 
 // 最初は必ずイベント0を実行する
 updateFlagGrid();

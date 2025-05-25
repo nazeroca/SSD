@@ -1,4 +1,4 @@
- html,
+html,
     body {
       overflow: hidden;
       /* スクロールバーを消し、スクロール自体を禁止 */
@@ -20,7 +20,7 @@
     }
 
     .top-screen {
-      flex: 3;
+      flex: 4;
       position: relative;
       background-color: #888;
     }
@@ -429,6 +429,72 @@
 
 
 
+/* ?マーク付きヘルプボックス */
+#help-button {
+  position: fixed;
+  left: 1vmin;
+  /* 下辺が画面上から80%の位置 */
+  top: calc(80vh - 12vmin);
+  width: 12vmin;
+  height: 12vmin;
+  border: 0.7vmin solid #fff;
+  border-radius: 2vmin;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8vmin;
+  color: #fff;
+  font-weight: bold;
+  box-sizing: border-box;
+  z-index: 2001;
+  cursor: pointer;
+  user-select: none;
+  transition: border-color 0.2s;
+}
+
+#help-button:active, #help-button:hover {
+  border-color: #39aaeb;
+}
+
+/* ヘルプウインドウ */
+#help-window {
+  position: fixed;
+  left: 10vw;
+  top: calc(80vh - 70vh);
+  width: 80vw;
+  height: 70vh;
+  background: #333;
+  color: #fff;
+  z-index: 2002;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 4vmin 2vmin 2vmin 2vmin;
+  box-sizing: border-box;
+}
+
+#help-window.active {
+  display: flex;
+}
+
+#help-window .help-title {
+  font-size: 7vmin;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2vmin;
+  margin-top: 2vmin;
+}
+
+#help-window .help-body {
+  font-size: 4.5vmin;
+  text-align: left;
+  width: 90%;
+  white-space: pre-wrap;
+}
+
+
 @media (orientation: portrait) {
   /* 画面が縦長の場合 */
   .text-window {
@@ -450,7 +516,19 @@
     gap: 3vmin;
   }
 
-  
+  #help-button {
+    width: 9vmin;
+    height: 9vmin;
+    font-size: 6vmin;
+    top: calc(80vh - 9vmin);
+  }
+  #settings-button {
+    font-size: 7vmin;
+  }
+  #skip-enabled-icon {
+    width: 9vmin !important;
+    /* 高さはautoのまま */
+  }
 }
 
 @media (orientation: landscape) {

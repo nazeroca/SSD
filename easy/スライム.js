@@ -1,4 +1,5 @@
 function startEvent01() {
+  Qtext = ['スライムの説明', 'スライムは弱いモンスターです。ノーツをタイミングよく押して倒しましょう。'];
   currentEvent = 'event01';
   eventCount++;
   updateEventCountDisplay();

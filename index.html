@@ -55,6 +55,7 @@
       <div class="judgeline"></div>
       <!-- 設定ボタン -->
       <div id="settings-button">⚙️</div>
+      <div id="help-button">？</div>
     </div>
   </div>
 
@@ -86,8 +87,11 @@
   </div>
 </div>
 
-
-
+<!-- ヘルプウインドウ（上部領域全体を覆う） -->
+<div id="help-window">
+  <div class="help-title"></div>
+  <div class="help-body"></div>
+</div>
 
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>
   <audio id="footstep-sound" src="./sounds/C.mp3" preload="auto"></audio>
@@ -167,6 +171,7 @@
   <!-- イベント -->
   <script src="./event/黒ドラゴン.js"></script><!-- トリプル -->
   <script src="./event/堕天使.js"></script>
+    <script src="./event/鬼ガール.js"></script>
 
   <script src="./normal/スフィンクス.js"></script>
   <script src="./normal/ヨグソトース.js"></script>
