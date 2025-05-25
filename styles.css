@@ -35,7 +35,7 @@ html,
     /* 円のノーツ */
     .circle {
       position: absolute;
-      top: 40%;
+      top: 50%;
       left: 100%;
       transform: translateY(-50%);
       width: 16vh;
