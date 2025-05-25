@@ -538,10 +538,12 @@ function saveGameState() {
     flagRB: flagRB,
     skipOnEndProcessingB: skipOnEndProcessingB,
     circlecolor: circlecolor,
-    currentEvent: currentEvent
+    currentEvent: currentEvent,
+    eventFunctions: eventFunctions,
+    eventWeights: eventWeights
   };
   localStorage.setItem("gameState", JSON.stringify(state));
-  console.log("セーブ完了:", state);
+  showTeletext("セーブしました");
 }
 
 // ロード処理：保存されている変数群を読み込み、所定の関数を呼び出す
@@ -564,6 +566,8 @@ function loadGameState() {
   skipOnEndProcessingB = state.skipOnEndProcessingB;
   circlecolor = state.circlecolor;
   currentEvent = state.currentEvent;
+  eventFunctions = state.eventFunctions;
+  eventWeights = state.eventWeights;
   console.log("ロード完了:", state);
 
   const settingsWindow = document.getElementById('settings-window');
@@ -698,7 +702,7 @@ function startRandomEvent(exclude = []) {
     addEvent('event60', startEvent60, 1);
   }
   if(eventCount>24){
-    eventWeights['special'] = eventCount-23;
+    eventWeights['event60'] = eventCount-23;
   }
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;

@@ -56,6 +56,7 @@ function startGame(speed, count, onEnd) {
   circleCount = 0;
   maxCircles = count;
   circles = [];
+  let skipEnded = false;
 
   // ノーツ生成開始前にテスト用スキップ状態チェック（必要ならここで設定する）
   // ※各イベント開始時に必要なら、flagRB = true; updateSkipImageVisibility() を呼び出す
@@ -84,7 +85,9 @@ function startGame(speed, count, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
