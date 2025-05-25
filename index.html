@@ -55,42 +55,46 @@
       <div class="judgeline"></div>
       <!-- 設定ボタン -->
       <div id="settings-button">⚙️</div>
-      <div id="help-button">？</div>
     </div>
   </div>
 
+<!-- 設定ウインドウ（ページ送り対応） -->
 <div id="settings-window">
   <div class="close-button" id="close-settings">×</div>
-  <div class="settings-row">
-    <label>ノーツ音：</label>
-    <button id="volume-decrease">−</button>
-    <span id="volume-value">100%</span>
-    <button id="volume-increase">+</button>
+  <!-- ページ送りボタン -->
+  <button id="settings-prev" class="settings-page-btn" style="display:none;">◀</button>
+  <button id="settings-next" class="settings-page-btn">▶</button>
+  <!-- ページ1: ヘルプ内容 -->
+  <div class="settings-page" id="settings-page-help">
+    <div class="help-title" id="help-title"></div>
+    <div class="help-body" id="help-body"></div>
   </div>
-  <div class="settings-row">
-    <label for="other-sounds-toggle">効果音：</label>
-    <input type="checkbox" id="other-sounds-toggle" checked>
+  <!-- ページ2: 設定内容 -->
+  <div class="settings-page" id="settings-page-main" style="display:none;">
+    <div class="settings-row">
+      <label>ノーツ音：</label>
+      <button id="volume-decrease">−</button>
+      <span id="volume-value">100%</span>
+      <button id="volume-increase">+</button>
+    </div>
+    <div class="settings-row">
+      <label for="other-sounds-toggle">効果音：</label>
+      <input type="checkbox" id="other-sounds-toggle" checked>
+    </div>
+    <div class="settings-row">
+      <label>落下速度：</label>
+      <button id="fallduration-decrease">−</button>
+      <span id="fallduration-value">3000</span>
+      <button id="fallduration-increase">+</button>
+    </div>
+    <div class="settings-row">
+      <label for="debug-toggle">デバッグモード：</label>
+      <input type="checkbox" id="debug-toggle">
+    </div>
+    <div class="settings-row" style="text-align: center;">
+      <button id="state-action-button">セーブ</button>
+    </div>
   </div>
-  <div class="settings-row">
-    <label>落下速度：</label>
-    <button id="fallduration-decrease">−</button>
-    <span id="fallduration-value">3000</span>
-    <button id="fallduration-increase">+</button>
-  </div>
-  <div class="settings-row">
-    <label for="debug-toggle">デバッグモード：</label>
-    <input type="checkbox" id="debug-toggle">
-  </div>
-  <!-- デバッグモードの下、中央に1つだけ配置する状態アクションボタン -->
-  <div class="settings-row" style="text-align: center;">
-    <button id="state-action-button">セーブ</button>
-  </div>
-</div>
-
-<!-- ヘルプウインドウ（上部領域全体を覆う） -->
-<div id="help-window">
-  <div class="help-title"></div>
-  <div class="help-body"></div>
 </div>
 
   <audio id="hit-sound" src="./sounds/A.mp3" preload="auto"></audio>

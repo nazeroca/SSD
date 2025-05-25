@@ -8,6 +8,7 @@ const litSound = document.getElementById('lit-sound');
 const defeatSound = document.getElementById('defeat-sound');
 const infoDisplay = document.getElementById('info');
 const textWindow = document.getElementById('text-window');
+const settingsButton = document.getElementById('settings-button');
 // 既存グローバル変数の上部あたりに追加
 let eventCount = 0;
 
@@ -262,50 +263,78 @@ function fadeOutIn(callback) {
   }, 1500);
 }
 
-function openSettings() {
-  const settingsWindow = document.getElementById('settings-window');
-  settingsWindow.classList.add('active');
-  document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
-  document.getElementById('debug-toggle').checked = debugModeEnabled;
-  // currentEvent に応じて状態アクションボタンのテキストを更新
-  const stateActionButton = document.getElementById("state-action-button");
-  if (currentEvent == 'event00') {
-    stateActionButton.textContent = "ロード";
-  } else {
-    stateActionButton.textContent = "セーブ";
+// セーブ・ロードボタンの表示切替とイベントリスナー
+function updateSaveLoadButton() {
+  // 何もしない（この関数は不要）
+}
+// セーブ・ロードボタンのイベントリスナー（重複登録防止のため一度だけ）
+(function() {
+  const saveBtn = document.getElementById('state-action-button');
+  const loadBtn = document.getElementById('state-load-button');
+  if (saveBtn && !saveBtn.dataset.listener) {
+    saveBtn.addEventListener('click', function() {
+      // ボタンのラベルで分岐
+      if (saveBtn.textContent === 'ロード') {
+        loadGameState();
+      } else {
+        saveGameState();
+      }
+    });
+    saveBtn.dataset.listener = '1';
   }
+  if (loadBtn && !loadBtn.dataset.listener) {
+    loadBtn.addEventListener('click', function() {
+      loadGameState();
+    });
+    loadBtn.dataset.listener = '1';
+  }
+})();
+// 設定ウインドウを開くたびにボタン表示を更新
+if (settingsButton) {
+  settingsButton.addEventListener('click', function() {
+    updateSkipImageVisibility();
+  });
 }
 
-// 設定ウィンドウにある状態アクションボタンのクリック・タッチイベント
-const stateActionButton = document.getElementById("state-action-button");
-let stateActionButtonLocked = false;
-function handleStateActionButton() {
-  if (stateActionButtonLocked) return;
-  stateActionButtonLocked = true;
-  setTimeout(() => { stateActionButtonLocked = false; }, 500); // 0.5秒ロック
+// 設定ウインドウ・ボタンのグローバル初期化
+const settingsWindow = document.getElementById('settings-window');
 
-  if (currentEvent == 'event00') {
-    loadGameState();
+// 歯車ボタンで開閉両対応
+let settingsOpen = false;
+settingsButton.addEventListener('click', function() {
+  settingsOpen = !settingsOpen;
+  if (settingsOpen) {
+    settingsWindow.classList.add('active');
+    showSettingsPage(0);
+    document.getElementById('other-sounds-toggle').checked = otherSoundsEnabled;
+    document.getElementById('debug-toggle').checked = debugModeEnabled;
+    const stateActionButton = document.getElementById("state-action-button");
+    if (currentEvent == 'event00') {
+      stateActionButton.textContent = "ロード";
+    } else {
+      stateActionButton.textContent = "セーブ";
+    }
+    updateSkipImageVisibility();
   } else {
-    saveGameState();
+    settingsWindow.classList.remove('active');
+    otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
+    debugModeEnabled = document.getElementById('debug-toggle').checked;
+    updateSkipImageVisibility();
   }
-}
-stateActionButton.addEventListener("click", handleStateActionButton);
-stateActionButton.addEventListener("touchstart", handleStateActionButton);
-
-function closeSettings() {
-  const settingsWindow = document.getElementById('settings-window');
-  // active クラスを削除して、設定ウインドウを非表示に戻す
+});
+// バツボタンでも閉じる
+const closeBtn = document.getElementById('close-settings');
+closeBtn.addEventListener('click', function() {
+  settingsOpen = false;
   settingsWindow.classList.remove('active');
-
   otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
   debugModeEnabled = document.getElementById('debug-toggle').checked;
-  updateSkipImageVisibility()
-}
+  updateSkipImageVisibility();
+});
+
 
 
 function updateSkipImageVisibility() {
-  console.log(skipOnEndProcessingB+'a'+flagRB)
   const bottomScreen = document.getElementById("game-area");
   let skipIcon = document.getElementById("skip-enabled-icon");
   
@@ -433,10 +462,6 @@ document.getElementById('fallduration-increase').addEventListener('click', funct
     document.getElementById('fallduration-value').textContent = fallDuration;
   }
 });
-
-
-document.getElementById('settings-button').addEventListener('click', openSettings);
-document.getElementById('close-settings').addEventListener('click', closeSettings);
 
 
 function secureRandom() {
@@ -760,80 +785,83 @@ function startRandomEvent(exclude = []) {
 // // イベントリストに後から追加する場合：
 // function startEvent05() { console.log("Event 05 is running"); }
 // addEvent('event05', startEvent05, 1);
-
+//
 // // 特定のイベントを削除する場合：
 // removeEvent('event02');
-
+//
 // // もし "special" イベントの出現確率をさらに下げたい場合、
 // // eventWeights['special'] = 0.1; などと調整可能
-
-// // ランダムにイベントを開始（excludeに "event06" を指定した例）
-// startRandomEvent(['event06']);
-
-// // ランダムに選出されたイベントが重みを反映して呼び出される
-
-// ヘルプウインドウ制御
-const helpButton = document.getElementById('help-button');
-const helpWindow = document.getElementById('help-window');
-const helpTitle = helpWindow.querySelector('.help-title');
-const helpBody = helpWindow.querySelector('.help-body');
-let helpHovering = false;
-let helpWindowHovering = false;
-
-// イベントごとのQtext（例：スライムイベント）
-const Qtexts = {
-  'event01': ['スライムの説明', 'スライムは弱いモンスターです。ノーツをタイミングよく押して倒しましょう。'],
-  // 他イベントも同様に追加可能
-};
-
-function showHelpWindow() {
-  let qtext = Qtexts[currentEvent] || ['ヘルプ', 'このイベントの説明はありません。'];
-  helpTitle.textContent = qtext[0];
-  helpBody.textContent = qtext[1];
-  helpWindow.classList.add('active');
-}
-function hideHelpWindow() {
-  helpWindow.classList.remove('active');
-}
-
-// PC: hoverで表示/非表示（点滅防止のため、ボタンまたはウインドウ上にいる間は表示）
-helpButton.addEventListener('mouseenter', function() {
-  helpHovering = true;
-  showHelpWindow();
-});
-helpButton.addEventListener('mouseleave', function() {
-  helpHovering = false;
-  setTimeout(() => {
-    if (!helpHovering && !helpWindowHovering) hideHelpWindow();
-  }, 30);
-});
-helpWindow.addEventListener('mouseenter', function() {
-  helpWindowHovering = true;
-});
-helpWindow.addEventListener('mouseleave', function() {
-  helpWindowHovering = false;
-  setTimeout(() => {
-    if (!helpHovering && !helpWindowHovering) hideHelpWindow();
-  }, 30);
-});
-// モバイル: 長押しで表示、離すと非表示
-let helpTouchTimer = null;
-helpButton.addEventListener('touchstart', function(e) {
-  e.preventDefault();
-  helpTouchTimer = setTimeout(showHelpWindow, 400); // 0.4秒長押しで表示
-});
-helpButton.addEventListener('touchend', function(e) {
-  clearTimeout(helpTouchTimer);
-  hideHelpWindow();
-});
-helpButton.addEventListener('touchcancel', function(e) {
-  clearTimeout(helpTouchTimer);
-  hideHelpWindow();
-});
-// ウインドウ自体からもマウスが離れたら閉じる
-helpWindow.addEventListener('mouseleave', hideHelpWindow);
+//
+// // ランダムにイベントを開始する場合：
+// startRandomEvent();
+//
+// // 除外リストを指定してランダムにイベントを開始する場合：
+// startRandomEvent(['event06', 'event08']);
+//
+// // 除外リストに存在しないイベントを強制的に開始する場合：
+// eventFunctions['event07']();
 
 // 最初は必ずイベント0を実行する
 updateFlagGrid();
 updateSkipImageVisibility();
 startEvent00 ();
+
+QText = [
+  'オープニング',
+  '【説明】\n帰ればいいのに…'
+];
+
+// セーブ・ロードボタンのUI/動作仕様を元に戻す
+function updateSaveLoadButton() {
+  const saveBtn = document.getElementById('state-action-button');
+  const loadBtn = document.getElementById('state-load-button');
+  if (saveBtn) {
+    saveBtn.onclick = function() {
+      saveGameState();
+    };
+  }
+  if (loadBtn) {
+    loadBtn.onclick = function() {
+      loadGameState();
+    };
+  }
+}
+
+// 設定ウインドウのページ切替（1:ヘルプ, 2:設定）
+function showSettingsPage(page) {
+  const helpPage = document.getElementById('settings-page-help');
+  const mainPage = document.getElementById('settings-page-main');
+  const prevBtn = document.getElementById('settings-prev');
+  const nextBtn = document.getElementById('settings-next');
+  if (!helpPage || !mainPage || !prevBtn || !nextBtn) return;
+  if (page === 0) {
+    helpPage.style.display = '';
+    mainPage.style.display = 'none';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = '';
+    updateHelpPage(); 
+  } else {
+    helpPage.style.display = 'none';
+    mainPage.style.display = '';
+    prevBtn.style.display = '';
+    nextBtn.style.display = 'none';
+  }
+  // 現在ページを記憶
+  showSettingsPage.current = page;
+}
+// ページ送りボタンのイベント付与
+(function() {
+  const prevBtn = document.getElementById('settings-prev');
+  const nextBtn = document.getElementById('settings-next');
+  if (prevBtn) prevBtn.onclick = function() { showSettingsPage(0); };
+  if (nextBtn) nextBtn.onclick = function() { showSettingsPage(1); };
+})();
+
+function updateHelpPage() {
+  const helpTitle = document.getElementById('help-title');
+  const helpBody = document.getElementById('help-body');
+  if (helpTitle && helpBody) {
+    helpTitle.innerHTML = QText[0];
+    helpBody.innerHTML = QText[1];
+  }
+}

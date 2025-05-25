@@ -1,4 +1,8 @@
 function startEvent55() {
+  QText = [
+  'VS　ロボット',
+  '【ＨＰ】???\n【説明】\n全く世界観にそぐわないロボット。体内時計で1分を計る必要がある。'
+];
   currentEvent = 'event55';
   eventCount++;
   updateEventCountDisplay();

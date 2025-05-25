@@ -309,23 +309,24 @@ html,
 
 /* 既存の設定ウインドウのスタイル（修正後） */
 #settings-window {
-  text-align: center;
   position: fixed;
-  top: 37.5vh;  /* ← 上部領域（.top-screen）の中央になるように変更 */
-  left: 50%;
-  font-size: 7vmin;
-  transform: translate(-50%, -50%);
-  background-color: #333;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 80vh;
+  background-color: rgba(51,51,51,0.85);
   color: white;
-  padding: 4vmin;
-  border-radius: 1vmin;
-  z-index: 1000;
-  width: 80vw;
-  height: 40vh;
-  display: none; /* 初期は非表示 */
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 4vmin 2vmin 2vmin 2vmin;
+  box-sizing: border-box;
+  border-radius: 0;
   box-shadow: 0 0 1vmin rgba(0, 0, 0, 0.5);
+  font-size: 6vmin;
 }
-
 
     /* 設定ウインドウを開いた際に適用するクラス */
     /* このクラスを追加すると、Flexbox による縦方向の均等配置が有効になります */
@@ -429,119 +430,50 @@ html,
 
 
 
-/* ?マーク付きヘルプボックス */
-#help-button {
-  position: fixed;
-  left: 1vmin;
-  /* 下辺が画面上から80%の位置 */
-  top: calc(80vh - 12vmin);
-  width: 12vmin;
-  height: 12vmin;
-  border: 0.7vmin solid #fff;
-  border-radius: 2vmin;
-  background: none;
+/* 設定ウインドウの2ボタンUI部分はそのまま維持 */
+
+/* ページ送り三角ボタン */
+.settings-page {
+  width: 100%;
+  height: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 8vmin;
+}
+
+.settings-page-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
   color: #fff;
-  font-weight: bold;
-  box-sizing: border-box;
-  z-index: 2001;
+  font-size: 8vmin;
+  z-index: 1100;
   cursor: pointer;
   user-select: none;
-  transition: border-color 0.2s;
+  padding: 0 2vmin;
+  opacity: 0.7;
+  transition: opacity 0.2s;
 }
 
-#help-button:active, #help-button:hover {
-  border-color: #39aaeb;
-}
+#settings-prev { left: 2vmin; }
+#settings-next { right: 2vmin; }
 
-/* ヘルプウインドウ */
-#help-window {
-  position: fixed;
-  left: 10vw;
-  top: calc(80vh - 70vh);
-  width: 80vw;
-  height: 70vh;
-  background: #333;
-  color: #fff;
-  z-index: 2002;
-  display: none;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 4vmin 2vmin 2vmin 2vmin;
-  box-sizing: border-box;
-}
+.settings-page-btn:active, .settings-page-btn:hover { opacity: 1; }
 
-#help-window.active {
-  display: flex;
-}
-
-#help-window .help-title {
-  font-size: 7vmin;
+#settings-page-help .help-title {
+  font-size: 8vmin;
   font-weight: bold;
   text-align: center;
   margin-bottom: 2vmin;
   margin-top: 2vmin;
 }
 
-#help-window .help-body {
-  font-size: 4.5vmin;
+#settings-page-help .help-body {
+  font-size: 5vmin;
   text-align: left;
   width: 90%;
   white-space: pre-wrap;
-}
-
-
-@media (orientation: portrait) {
-  /* 画面が縦長の場合 */
-  .text-window {
-    /* 現在は bottom: 7vmin; となっているので、これを上にずらす */
-    bottom: 12vmin;      /* 数値はお好みに調整してください */
-    padding: 3vmin;       /* ウィンドウ全体の余白も拡大 */
-    width: 95%;  
-  }
-
-  .teletext {
-    /* テロップの文字サイズと余白を大きく設定 */
-    font-size: 6vmin;     /* 既存は 4vmin となっているので、読みやすく拡大 */
-    padding: 8px 12px;    /* 必要に応じて上下左右の余白を調整 */
-  }
-
-  .button-group {
-    flex-wrap: wrap;
-    /* 必要に応じてギャップや配置も調整可能 */
-    gap: 3vmin;
-  }
-
-  #help-button {
-    width: 9vmin;
-    height: 9vmin;
-    font-size: 6vmin;
-    top: calc(80vh - 9vmin);
-  }
-  #settings-button {
-    font-size: 7vmin;
-  }
-  #skip-enabled-icon {
-    width: 9vmin !important;
-    /* 高さはautoのまま */
-  }
-}
-
-@media (orientation: landscape) {
-  /* 横長の場合（ランドスケープ） */
-  #settings-window {
-    /* 高さをやや狭くする（例：40vh → 35vh または 32vh など、調整可能） */
-    height: 60vh;
-    /* パディングも少し狭くして、内容が収まるようにする */
-    padding: 2vmin;
-    /* フォントサイズも小さめに設定 */
-    font-size: 6vmin;
-    /*
-    /* 上部領域の高さに合わせて、中央表示用の top も必要に応じて調整 */
-    top: 37.5vh;
-  }
 }

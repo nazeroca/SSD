@@ -1,8 +1,11 @@
 function startEvent58() {
+  QText = [
+  'VS　鬼ガール',
+  '【ＨＰ】84\n【説明】\n16階に立ちはだかる中ボス3人衆の一人。強力な攻撃を3回に分けて繰り出す。ロザリオは1回分の攻撃しか無効化できない。'
+];
   currentEvent = 'event58';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(20, 25);
   showSceneImage('./image/鬼ガール.png');
   showTextTypingEffect('鬼ガールが現れた！', () => {
     showTextTypingEffectS('鬼','また一人ザコがノコノコと現れたな…\n私が捻りつぶしてやるよ！', () => {

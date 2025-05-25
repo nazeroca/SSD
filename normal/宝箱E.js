@@ -1,4 +1,8 @@
 function startEvent33() {
+    QText = [
+  'VS　紫の宝箱',
+  '【ＨＰ】???\n【説明】\n怪しすぎる宝箱。確率は50%らしい。'
+];
   eventCount++;
   updateEventCountDisplay();
   currentEvent = 'event33';

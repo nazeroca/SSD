@@ -1,5 +1,9 @@
 function startEvent54() {
   // イベントカウント更新
+  QText = [
+  'VS　ヨグソトース',
+  '【ＨＰ】???\n【説明】\n時間を操る魔物。わずかな時間のズレを感じ取り、正解する必要がある。正解するとロザリオが貰える。'
+];
   eventCount++;
   updateEventCountDisplay();
   currentEvent = 'event54';

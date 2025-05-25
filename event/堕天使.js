@@ -1,4 +1,8 @@
 function startEvent38() {
+  QText = [
+  'VS　堕天使',
+  '【ＨＰ】30+\n【説明】\n天使が堕ちた姿。今まで倒した天使の数に応じて強くなる。'
+];
   currentEvent = 'event38';
   eventCount++;
   updateEventCountDisplay();

@@ -1,4 +1,8 @@
 function startEvent05() {
+  QText = [
+  'VS　スライム',
+  '【ＨＰ】20～30\n【説明】\nただのスライム。ボクわるいスライムじゃないよ。'
+];
   currentEvent = 'event05';
   eventCount++;
   updateEventCountDisplay();
@@ -27,6 +31,10 @@ function startEvent05() {
 
 
         showTextTypingEffect("向こうから群れを成したスライムが襲ってきた！\n急いで倒さなければ！", function() {
+          QText = [
+  'VS　スライムの群れ',
+  '【ＨＰ】20～30\n【説明】\nただのスライムの群れ。連続で襲ってくるのでペースを上げて倒さなければならない。'
+];
           if (cycleIndex < totalCycles - 1) {
             runCycle(cycleIndex + 1, totalCycles);
           } else {

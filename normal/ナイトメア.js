@@ -1,5 +1,9 @@
 // event12.js
 function startEvent12() {
+  QText = [
+  'VS　ナイトメア',
+  '【ＨＰ】15~25+\n【説明】\n実体を持たない悪夢。場合によっては永遠に目を覚ますことが出来ない。'
+];
   currentEvent = 'event12';
   eventCount++;
   updateEventCountDisplay();

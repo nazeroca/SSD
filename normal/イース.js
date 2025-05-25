@@ -1,5 +1,8 @@
 function startEvent56() {
-  // イベントカウントと表示更新
+  QText = [
+  'VS　イース',
+  '【ＨＰ】???\n【説明】\n色彩を司る魔物。落ち着いて数えれば大したことはないハズ。'
+];
   eventCount++;
   updateEventCountDisplay();
   currentEvent = 'event56';

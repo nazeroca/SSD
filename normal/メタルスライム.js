@@ -1,4 +1,8 @@
 function startEvent11() {
+  QText = [
+  'VS　メタルスライム',
+  '【ＨＰ】50\n【説明】\nこの世界のメタルスライムは逃げるのではなく強い。その分、倒せば強力なアイテムを落とす。'
+];
   currentEvent = 'event11';
   eventCount++;
   updateEventCountDisplay();

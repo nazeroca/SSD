@@ -6,6 +6,10 @@ const buttonConfigs = [
 
 // --- event1 のシナリオ ---
 function startEvent02() {
+  QText = [
+  'VS　スライム',
+  '【ＨＰ】25or40\n【説明】\n双子の魔導士。どちらかを倒せばもう一方はいなくなる。\nちなみに左の魔導士は<span style="color: fuchsia	">ヒダーリ</span>、右の魔導士は<span style="color: blue">ミーギ</span>の名を持つ。\nこっちから見てなんだね。'
+];
   currentEvent = 'event02';
   eventCount++;
   updateEventCountDisplay();

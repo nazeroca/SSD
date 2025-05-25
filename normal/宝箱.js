@@ -1,5 +1,9 @@
 // event3.js
 function startEvent20() {
+  QText = [
+  'VS　宝箱？',
+  '【ＨＰ】???\n【説明】\n開けるとわずかな確率でかなりいいものが手に入る。もちろん襲ってくることもある。なんなら逃げても襲ってくる可能性がある。'
+];
   eventCount++;
   updateEventCountDisplay();
   currentEvent = 'event20';
