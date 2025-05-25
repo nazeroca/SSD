@@ -102,6 +102,7 @@ function startGameR(speed1, speed2, count, onEnd) {
   circleCount = 0;
   maxCircles = count;
   circles = [];
+  let skipEnded = false;
 
   // 再帰的にノーツを生成する関数
   function spawnNext() {
@@ -134,7 +135,9 @@ function startGameR(speed1, speed2, count, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -149,6 +152,7 @@ function startGameR2(speed1, speed2, count, onEnd) {
   circleCount = 0;
   maxCircles = count;
   circles = [];
+  let skipEnded = false;
 
   // ゲーム終了時のコールバックを保持
   gameOnEndCallback = onEnd;
@@ -187,7 +191,9 @@ function startGameR2(speed1, speed2, count, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -207,6 +213,7 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   circleCount = 0;
   maxCircles = count1 + count2;
   circles = [];
+  let skipEnded = false;
   
 
   // ゲーム終了時のコールバックをグローバルに保持（必要な場合）
@@ -257,7 +264,9 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -272,6 +281,7 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
   circleCount = 0;
   maxCircles = count1 + count2;
   circles = [];
+  let skipEnded = false;
   
   // ゲーム終了時のコールバックをグローバルに保持（必要な場合）
   gameOnEndCallback = onEnd;
@@ -322,7 +332,9 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -339,6 +351,7 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
   circleCount = 0;
   maxCircles = count1 + count2 + count3;
   circles = [];
+  let skipEnded = false;
 
 
   // ゲーム終了時のコールバックをグローバル変数に保持
@@ -390,7 +403,9 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -407,6 +422,7 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
   circleCount = 0;
   maxCircles = sets * (count1 + count2);
   circles = [];
+  let skipEnded = false;
 
   // ゲーム終了時のコールバックをグローバルに保持
   gameOnEndCallback = onEnd;
@@ -455,7 +471,9 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -470,6 +488,7 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
   circleCount = 0;
   maxCircles = 1000;
   circles = [];
+  let skipEnded = false;
 
 
   let mainSpawned = 0; 
@@ -537,7 +556,9 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
       if (monsterHP > 0) {
         defeatMonster();
       }
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }
@@ -554,6 +575,7 @@ function startGameNone(speed, count, onEnd) {
   circleCount = 0;
   maxCircles = count;
   circles = [];
+  let skipEnded = false;
   intervalId = setInterval(() => {
     if (skipOnEndProcessingB) {
       clearInterval(intervalId);
@@ -573,7 +595,9 @@ function startGameNone(speed, count, onEnd) {
       return left <= -80;
     });
     if (allGone && circleCount >= maxCircles) {
-      onEnd();
+      if (!skipEnded) { // スキップ時はonEndを呼ばない
+        onEnd();
+      }
     } else {
       setTimeout(checkEnd, 200);
     }

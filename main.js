@@ -453,7 +453,7 @@ function getSecureRandomInRange(min, max) {
   return Math.floor(randomFraction * range) + min;
 }
 
-let eventFunctions = {
+const eventFunctions = {
   'event01': startEvent01,
   'event02': startEvent02,
   'event03': startEvent03,
@@ -470,7 +470,7 @@ let eventFunctions = {
 
 // 各イベントの重みを設定（数値が大きいほど選ばれやすくなる）
 // ここでは special イベントは低い重み(例: 0.2)となっている
-let eventWeights = {
+const eventWeights = {
   'event01': 3,
   'event02': 3,
   'event03': 3,
@@ -566,8 +566,11 @@ function loadGameState() {
   skipOnEndProcessingB = state.skipOnEndProcessingB;
   circlecolor = state.circlecolor;
   currentEvent = state.currentEvent;
-  eventFunctions = state.eventFunctions;
-  eventWeights = state.eventWeights;
+  Object.keys(eventFunctions).forEach(key => delete eventFunctions[key]);
+  Object.assign(eventFunctions, state.eventFunctions);
+
+  Object.keys(eventWeights).forEach(key => delete eventWeights[key]);
+  Object.assign(eventWeights, state.eventWeights);
   console.log("ロード完了:", state);
 
   const settingsWindow = document.getElementById('settings-window');
