@@ -45,6 +45,7 @@ function startEvent56() {
           buttonGroup.classList.add("hidden");
           if (correctColors.includes(color)) {
             showTextTypingEffect("どうやら正解だったようだ…", () => {
+              hideSceneImage();
             fadeOutIn(() => {
               startRandomEvent([currentEvent]);
             });

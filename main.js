@@ -23,13 +23,6 @@ let flagR = false;
 let flagG = false;
 let flagB = false;  
 
-
-let flagDR = false;
-let flagDG = false;
-let flagDB = false; 
-
-
-
 let ange = 0;
 
 let debugModeEnabled = false;
@@ -586,8 +579,6 @@ function loadGameState() {
   Object.keys(eventWeights).forEach(key => delete eventWeights[key]);
   Object.assign(eventWeights, state.eventWeights);
 
-  console.log("ロード後のeventFunctions:", eventFunctions);
-  console.log("ロード後のeventWeights:", eventWeights);
   console.log("ロード完了:", state);
 
   const settingsWindow = document.getElementById('settings-window');
@@ -691,9 +682,6 @@ function startRandomEvent(exclude = []) {
     addEvent('event47', startEvent47, 4);
     addEvent('event48', startEvent48, 4);
     addEvent('event49', startEvent49, 1);
-    addEvent('event29', startEvent29, 5);
-    addEvent('event27', startEvent27, 4);
-    addEvent('event28', startEvent28, 4);
     addEvent('event54', startEvent54, 4);
     addEvent('event56', startEvent56, 4);
     addEvent('event57', startEvent57, 4);
@@ -713,6 +701,9 @@ function startRandomEvent(exclude = []) {
     addEvent('event53', startEvent53, 4);
     addEvent('event55', startEvent55, 4);
     addEvent('event33', startEvent33, 4);
+    addEvent('event29', startEvent29, 2);
+    addEvent('event27', startEvent27, 2);
+    addEvent('event28', startEvent28, 2);
   } else if (eventCount == 24) {
     addEvent('event24', startEvent24, 5);
     addEvent('event41', startEvent41, 5);

@@ -6,25 +6,20 @@ function startEvent29() {
   showTextTypingEffect('ブルードラゴンが現れた！', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/青ドラゴン.png';
-    initializeMonster(75);
-    startGame(1500, 75, () => {
+    initializeMonster(100);
+    startGame(1500, 100, () => {
       showTextTypingEffect(`ブルードラゴンを倒した！`, () => {
         removeEvent(currentEvent);
-        if (flagDR && flagDB && flagDG && !flagR) {
-          showTextTypingEffect(`三種のドラゴンを倒した！赤の魔導書を入手した！\nブラックドラゴンが出現するようになった！`, () => {
+        removeEvent('event27');
+        removeEvent('event28');
+          showTextTypingEffect(`赤の魔導書を入手した！\nブラックドラゴンが出現するようになった！`, () => {
             flagR = true;
             updateFlagGrid();
-            addEvent('event30', startEvent30, 1);
+            addEvent('event30', startEvent30, 3);
             fadeOutIn(() => {
         startRandomEvent();
       });
           });
-        } else {
-          flagDB = true;
-          fadeOutIn(() => {
-        startRandomEvent();
-      });
-        }
     });
   });
   });
