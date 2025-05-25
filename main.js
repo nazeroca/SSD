@@ -526,26 +526,32 @@ function printEventProbabilities() {
 
 
 function saveGameState() {
+  // eventFunctionsを「イベント名→関数名（文字列）」に変換
+  const eventFunctionNames = {};
+  for (const key in eventFunctions) {
+    if (typeof eventFunctions[key] === "function") {
+      eventFunctionNames[key] = eventFunctions[key].name;
+    }
+  }
   const state = {
-    eventCount: eventCount,
-    flagR: flagR,
-    flagG: flagG,
-    flagB: flagB,
-    flagDR: flagDR,
-    flagDG: flagDG,
-    flagDB: flagDB,
-    ange: ange,
-    flagRB: flagRB,
-    skipOnEndProcessingB: skipOnEndProcessingB,
-    circlecolor: circlecolor,
-    currentEvent: currentEvent,
-    eventFunctions: eventFunctions,
-    eventWeights: eventWeights
+    eventCount,
+    flagR,
+    flagG,
+    flagB,
+    flagDR,
+    flagDG,
+    flagDB,
+    ange,
+    flagRB,
+    skipOnEndProcessingB,
+    circlecolor,
+    currentEvent,
+    eventFunctions: eventFunctionNames, // ←関数名のみ
+    eventWeights
   };
   localStorage.setItem("gameState", JSON.stringify(state));
   showTeletext("セーブしました");
 }
-
 // ロード処理：保存されている変数群を読み込み、所定の関数を呼び出す
 function loadGameState() {
   const stateStr = localStorage.getItem("gameState");
@@ -566,11 +572,21 @@ function loadGameState() {
   skipOnEndProcessingB = state.skipOnEndProcessingB;
   circlecolor = state.circlecolor;
   currentEvent = state.currentEvent;
-  Object.keys(eventFunctions).forEach(key => delete eventFunctions[key]);
-  Object.assign(eventFunctions, state.eventFunctions);
 
+  // eventFunctionsを関数名から再構築
+  Object.keys(eventFunctions).forEach(key => delete eventFunctions[key]);
+  for (const key in state.eventFunctions) {
+    const funcName = state.eventFunctions[key];
+    if (typeof window[funcName] === "function") {
+      eventFunctions[key] = window[funcName];
+    }
+  }
+
+  // eventWeightsはそのまま上書き
   Object.keys(eventWeights).forEach(key => delete eventWeights[key]);
   Object.assign(eventWeights, state.eventWeights);
+
+  // ...（以降は元のまま）...
   console.log("ロード完了:", state);
 
   const settingsWindow = document.getElementById('settings-window');
@@ -578,19 +594,17 @@ function loadGameState() {
 
   otherSoundsEnabled = document.getElementById('other-sounds-toggle').checked;
   debugModeEnabled = document.getElementById('debug-toggle').checked;
-  updateSkipImageVisibility()
+  updateSkipImageVisibility();
 
   hideSceneImage();
-      buttonGroup.classList.add('hidden');
-      updateFlagGrid();
+  buttonGroup.classList.add('hidden');
+  updateFlagGrid();
   updateSkipImageVisibility();
   showTextTypingEffect(`${eventCount}階のデータを読み込みました。`, () => {
-      fadeOutIn(() => {
-        console.log(currentEvent)
-        startRandomEvent([currentEvent]);
-      });
-      });
-  
+    fadeOutIn(() => {
+      startRandomEvent([currentEvent]);
+    });
+  });
 }
 
 
