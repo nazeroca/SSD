@@ -586,7 +586,8 @@ function loadGameState() {
   Object.keys(eventWeights).forEach(key => delete eventWeights[key]);
   Object.assign(eventWeights, state.eventWeights);
 
-  // ...（以降は元のまま）...
+  console.log("ロード後のeventFunctions:", eventFunctions);
+  console.log("ロード後のeventWeights:", eventWeights);
   console.log("ロード完了:", state);
 
   const settingsWindow = document.getElementById('settings-window');
