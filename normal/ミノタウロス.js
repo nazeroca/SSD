@@ -3,12 +3,12 @@ function startEvent07() {
   eventCount++;
   updateEventCountDisplay();
   showSceneImage('./image/ミノタウロス.png');
-  let noteCount = getSecureRandomInRange(28, 42);
+  let noteCount = getSecureRandomInRange(35, 50);
   showTextTypingEffect('ミノタウロスが現れた！', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ミノタウロス.png';
     initializeMonster(noteCount);
-    startGameR(500,1000, noteCount, () => {
+    startGameR(500,4000, noteCount, () => {
       showTextTypingEffect(`ミノタウロスを倒した！`, () => {
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);

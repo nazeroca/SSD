@@ -1,5 +1,5 @@
-function startEvent60() {
-  currentEvent = 'event60';
+function startevent99() {
+  currentEvent = 'event99';
   eventCount++;
   updateEventCountDisplay();
   showSceneImage('./image/魔王.png');
@@ -12,20 +12,20 @@ function startEvent60() {
         startGameNone(450, noteCount, () => {
           play(healSound);
           showTextTypingEffect('麻痺状態を解除した！', () => {
-            startEvent602()
+            startevent992()
           });
         });
       });
       } else {
         showTextTypingEffect('魔導書の効果で、敵の雷魔法を無効化した！', () => {
-          startEvent602();
+          startevent992();
         });
       }
     });
   });
 }
 
-function startEvent602() {
+function startevent992() {
   let N = 0.02;
   if (!flagB) {
     N = 0.2;
@@ -54,7 +54,7 @@ function stage2(N) {
       showTextTypingEffect(`バリアを割った！`, () => {
         hideSceneImage();
         showSceneImage('./image/魔王.png');
-        startEvent603();
+        startevent993();
       });
     } else {
       play(reflectSound);
@@ -66,7 +66,7 @@ function stage2(N) {
   });
 }
 
-function startEvent603() {
+function startevent993() {
   let delay = 5000;
   if (flagG) {
     delay = 30000;

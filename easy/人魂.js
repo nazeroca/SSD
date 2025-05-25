@@ -7,7 +7,7 @@ function startEvent25() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/人魂.png';
     initializeMonster(45);
-    startGameT(3000, 2000, 1000, 20, 15, 10, () => {
+    startGameT(3000, 2000, 1000, 20, 10, 5, () => {
       
       showTextTypingEffect(`人魂を倒した！`, () => {
 

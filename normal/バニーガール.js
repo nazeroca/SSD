@@ -70,7 +70,7 @@ function startEvent57() {
             hideSceneImage();
             document.getElementById('monster-img').src = './image/バニーガール.png';
             initializeMonster(100);
-              startGameA(1000, 500, 2, 80,20, () => {
+              startGameA(3000, 500, 2, 50,20, () => {
                 fadeOutIn(() => {
                   startRandomEvent(['event57']);
                 });
@@ -98,7 +98,7 @@ function startEvent57() {
       buttonGroup.classList.add('hidden');
         let noteCount = 210 - (score * 10);
         showTextTypingEffectS('【バニー】',"あら、やめるのね。そしたら合計"+ score + "だから、"+noteCount+"回、清算お願いね♡", () => {
-          startGameNone(1000, noteCount, () => {
+          startGameNone(1250, noteCount, () => {
             hideSceneImage();
             fadeOutIn(() => {
               startRandomEvent(['event57']);

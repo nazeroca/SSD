@@ -8,7 +8,7 @@ function startEvent45() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ゴーレムE.png';
     initializeMonster(noteCount);
-    startGame(2500, noteCount, () => {
+    startGame(3000, noteCount, () => {
       showTextTypingEffect(`エリートゴーレムを倒した！`, () => {
 
         fadeOutIn(() => {

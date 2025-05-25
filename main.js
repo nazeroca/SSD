@@ -276,14 +276,22 @@ function openSettings() {
   }
 }
 
-// 設定ウィンドウにある状態アクションボタンのクリックイベント
-document.getElementById("state-action-button").addEventListener("click", function() {
+// 設定ウィンドウにある状態アクションボタンのクリック・タッチイベント
+const stateActionButton = document.getElementById("state-action-button");
+let stateActionButtonLocked = false;
+function handleStateActionButton() {
+  if (stateActionButtonLocked) return;
+  stateActionButtonLocked = true;
+  setTimeout(() => { stateActionButtonLocked = false; }, 500); // 0.5秒ロック
+
   if (currentEvent == 'event00') {
     loadGameState();
   } else {
     saveGameState();
   }
-});
+}
+stateActionButton.addEventListener("click", handleStateActionButton);
+stateActionButton.addEventListener("touchstart", handleStateActionButton);
 
 function closeSettings() {
   const settingsWindow = document.getElementById('settings-window');
@@ -709,10 +717,10 @@ function startRandomEvent(exclude = []) {
     addEvent('event41', startEvent41, 5);
     addEvent('event40', startEvent40, 5);
     addEvent('event39', startEvent39, 5);
-    addEvent('event60', startEvent60, 1);
+    addEvent('event99', startevent99, 1);
   }
   if(eventCount>24){
-    eventWeights['event60'] = eventCount-23;
+    eventWeights['event99'] = eventCount-23;
   }
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;

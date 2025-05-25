@@ -3,7 +3,7 @@ function startEvent16() {
   eventCount++;
   updateEventCountDisplay();
   showSceneImage('./image/ダークエルフ.png');
-  let noteCount = getSecureRandomInRange(40, 60);
+  let noteCount = getSecureRandomInRange(30, 60);
   showTextTypingEffect('ダークエルフが現れた！', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/ダークエルフ.png';
