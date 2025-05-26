@@ -1,7 +1,7 @@
 function startEvent56() {
   QText = [
   'VS　イース',
-  '【ＨＰ】???\n【説明】\n色彩を司る魔物。落ち着いて数えれば大したことはないハズ。'
+  '【ＨＰ】???\n【説明】\n色彩を司る魔物。\n落ち着いて数えれば大したことはないハズ。'
 ];
   eventCount++;
   updateEventCountDisplay();

@@ -1,4 +1,8 @@
 function startEvent42() {
+        QText = [
+  'VS　雪女',
+  '【ＨＰ】20～30\n【説明】\n雪の精霊。\n徐々に遅くなる攻撃を放つ。'
+];
   currentEvent = 'event42';
   eventCount++;
   updateEventCountDisplay();

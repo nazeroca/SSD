@@ -1,4 +1,8 @@
 function startEvent17() {
+        QText = [
+  'VS　幽霊',
+  '【ＨＰ】10\n【説明】\nお菊さんと呼ばれる幽霊。\n割れている皿を見つけると怒り狂い、強力な攻撃を行う。'
+];
   currentEvent = 'event17';
   eventCount++;
   updateEventCountDisplay();

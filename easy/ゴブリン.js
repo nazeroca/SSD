@@ -1,4 +1,8 @@
 function startEvent21() {
+        QText = [
+  'VS　ゴブリン',
+  '【ＨＰ】10～20\n【説明】\n小さな緑色のモンスター。\nときどき卑怯に追撃を行う。'
+];
   currentEvent = 'event21';
   eventCount++;
   updateEventCountDisplay();

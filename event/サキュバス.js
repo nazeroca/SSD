@@ -1,10 +1,13 @@
 function startEvent59() {
+      QText = [
+  'VS　サキュバス',
+  '【ＨＰ】50\n【説明】\n人間の精を喰らう魔物。\n最初にあからさまな弱攻撃を放つが、ロザリオを持っていると強制的に発動させられる。'
+];
   let A = false;
   if (flagRB == true) {A = true;}
   currentEvent = 'event59';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(20, 25);
   showSceneImage('./image/サキュバス.png');
   showTextTypingEffect('サキュバスが現れた！', () => {
     showTextTypingEffectS('【サキュバス】', 'あら、私に挑もうっていうのね。いい度胸じゃない。', () => {

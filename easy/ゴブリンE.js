@@ -1,4 +1,8 @@
 function startEvent52() {
+        QText = [
+  'VS　エリートゴブリン',
+  '【ＨＰ】15～25\n【説明】\nゴブリンのエリート種。通常のゴブリンと比べ、追撃の発生確率が高く、強力。'
+];
   currentEvent = 'event52';
   eventCount++;
   updateEventCountDisplay();

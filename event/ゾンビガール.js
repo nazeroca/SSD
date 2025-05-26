@@ -1,4 +1,8 @@
 function startEvent60() {
+      QText = [
+  'VS　ゾンビガール',
+  '【ＨＰ】30?\n【説明】\nゾンビの少女。倒しても何度か復活し、さらに下層へ引きずり込まれる。'
+];
   currentEvent = 'event60';
   eventCount++;
   updateEventCountDisplay();

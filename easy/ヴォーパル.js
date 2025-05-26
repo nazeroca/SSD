@@ -1,4 +1,8 @@
 function startEvent31() {
+        QText = [
+  'VS　ヴォーパル',
+  '【ＨＰ】20～30\n【説明】\n羽根の生えた伝説上の兎\n攻撃が徐々に早くなる。'
+];
   currentEvent = 'event31';
   eventCount++;
   updateEventCountDisplay();

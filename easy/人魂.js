@@ -1,4 +1,8 @@
 function startEvent25() {
+        QText = [
+  'VS　人魂',
+  '【ＨＰ】45\n【説明】\n怨念をもった人の魂。\n後半の魂ほど恨みの念が強くなり、攻撃も強力になる。'
+];
   currentEvent = 'event25';
   eventCount++;
   updateEventCountDisplay();

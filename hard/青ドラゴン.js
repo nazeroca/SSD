@@ -1,4 +1,8 @@
 function startEvent29() {
+        QText = [
+  'VS　グリーンドラゴン',
+  '【ＨＰ】100\n【説明】\n特殊変異したドラゴン。\n通常のドラゴンと比べ、攻撃速度が早い。\n倒すと赤の魔導書が手に入るが、強力なモンスターが現れる可能性がある。'
+];
   currentEvent = 'event29';
   eventCount++;
   updateEventCountDisplay();
