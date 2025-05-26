@@ -70,14 +70,14 @@ buttonGroup.appendChild(controlButton);
 
         showTextTypingEffectS("結果", "押された時間: " + pressedTime.toFixed(2) + "秒", () => {
           if (pressedTime >= 59.5 && pressedTime <= 60.5) {
-            showTextTypingEffectS('ロボット', "認証ニ成功シマシタ。", () => {
+            showTextTypingEffectS('【ロボット】', "認証ニ成功シマシタ。", () => {
               hideSceneImage();
               fadeOutIn(() => { startRandomEvent([currentEvent]); });
             });
           } else {
             
 
-            showTextTypingEffectS('ロボット', "認証ニ失敗シマシタ。排除システムを起動します。", () => {
+            showTextTypingEffectS('【ロボット】', "認証ニ失敗シマシタ。排除システムを起動します。", () => {
               hideSceneImage();
               document.getElementById('monster-img').src = './image/ロボット.png';
               initializeMonster(50);

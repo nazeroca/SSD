@@ -1,21 +1,34 @@
-function startEvent48() {
-  currentEvent = 'event48';
+function startEvent60() {
+  currentEvent = 'event60';
   eventCount++;
   updateEventCountDisplay();
-  let noteCount = getSecureRandomInRange(20, 25);
-  showSceneImage('./image/ゾンビ犬E.png');
-  showTextTypingEffect('エリートゾンビ犬が現れた！', () => {
+  showSceneImage('./image/ゾンビガール.png');
+  showTextTypingEffect('ゾンビガールが現れた！', () => {
     hideSceneImage();
-    document.getElementById('monster-img').src = './image/ゾンビ犬E.png';
-    initializeMonster(noteCount);
-    startGameR(500, 1000, noteCount, () => {
-      
-      showTextTypingEffect(`エリートゾンビ犬を倒した！`, () => {
+    document.getElementById('monster-img').src = './image/ゾンビガール.png';
+    initializeMonster(30);
+    startGameR2(500, 2000, 30, () => {
+      if(zombi >0){
+      showTextTypingEffect(`ゾンビガールを倒した？`, () => {
+        showTextTypingEffectS('【ゾンビ】',`ワタシト一緒ニ…堕チマショウ…？`, () => {
+          const df = Math.floor(secureRandom()*3)+2;
+          eventCount = eventCount - df;
+          zombi = zombi - df
+        fadeOutIn(() => {
+          startRandomEvent([currentEvent]);
+        });
+        });
+    });
+  }else{
+    showTextTypingEffect(`ゾンビガールを倒した！`, () => {
 
         fadeOutIn(() => {
           startRandomEvent([currentEvent]);
         });
     });
+  }
   });
   });
 }
+
+

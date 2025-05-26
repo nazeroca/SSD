@@ -10,7 +10,7 @@ const infoDisplay = document.getElementById('info');
 const textWindow = document.getElementById('text-window');
 const settingsButton = document.getElementById('settings-button');
 // 既存グローバル変数の上部あたりに追加
-let eventCount = 0;
+let eventCount = 14;
 
 // 追加グローバル変数
 let otherSoundsEnabled = true;  // hitSound以外の音のON/OFF（初期はON）
@@ -29,6 +29,7 @@ let ange = 0;
 let debugModeEnabled = false;
 
 let flagTim = false;
+let zombi =7;
 
 
 let flagRB = true; // スキップ可能状態を管理するフラグ
@@ -218,8 +219,6 @@ function showTeletext(message) {
 
 
 
-
-
 function updateFlagGrid() {
   const grid = document.getElementById("flag-grid");
   if (!grid) return;
@@ -331,7 +330,6 @@ closeBtn.addEventListener('click', function() {
   debugModeEnabled = document.getElementById('debug-toggle').checked;
   updateSkipImageVisibility();
 });
-
 
 
 function updateSkipImageVisibility() {
@@ -626,9 +624,6 @@ function loadGameState() {
   });
 }
 
-
-
-
 function startRandomEvent(exclude = []) {
   // デバッグモードが有効の場合、任意のイベント番号入力用のプロンプトを表示
   if (debugModeEnabled) {
@@ -649,6 +644,12 @@ function startRandomEvent(exclude = []) {
     
     // 数字が3桁以上なら、先頭2桁のみ参照する
     const eventNumber = digits.length >= 3 ? digits.substring(0, 2) : digits;
+
+    // 追加: 60が入力された場合、eventCountが5未満ならエラー
+    if (eventNumber === "60" && eventCount < 5) {
+      alert("ゾンビガールを呼び出せません。");
+      return startRandomEvent(exclude);
+    }
     
     // "event" + 数字（2桁、足りなければ先頭に0を付与）でフォーマット
     const formattedKey = "event" + eventNumber.padStart(2, "0");
@@ -762,11 +763,21 @@ function startRandomEvent(exclude = []) {
     }
   }
 
-  if (eventCount === 30) {
-    startEvent49();
-  } else{
-  // 選ばれたイベントの関数を実行
-  eventFunctions[selectedKey]();
+  if (eventCount === 29) {
+    startEvent99();
+  } else if (eventCount === 14) {
+    // 追加: zombiが7でないなら60を確定で呼ぶ
+    if (typeof zombi !== 'undefined' && zombi !== 7) {
+      startEvent60();
+    } else {
+      // 58,59,60を等確率でランダムに呼ぶ
+      const events = [startEvent58, startEvent59, startEvent60];
+      const idx = Math.floor(secureRandom() * 3);
+      events[idx]();
+    }
+  } else {
+    // 選ばれたイベントの関数を実行
+    eventFunctions[selectedKey]();
   }
   
 

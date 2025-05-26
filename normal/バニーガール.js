@@ -12,7 +12,7 @@ function startEvent57() {
   showSceneImage('./image/バニーガール.png');
   // まずは案内テキストを表示してから、初回の「引く」ボタンを表示
   showTextTypingEffect('バニーガールが現れた！', () => {
-  showTextTypingEffectS('【バニー】','私とブラックジャックしましょ♡\nさ、早速1枚引いてちょうだい。', () => {
+  showTextTypingEffectS('【バニーガール】','私とブラックジャックしましょ♡\nさ、早速1枚引いてちょうだい。', () => {
     showInitialDrawButton();
   });
   });
@@ -32,7 +32,7 @@ function startEvent57() {
       buttonGroup.classList.add('hidden');
       let num = Math.floor(secureRandom() * 11) + 1; // 1～11の数字
       score += num;
-      showTextTypingEffectS('【バニー】',num+"のカードね。もちろんまだ引くわよね？", () => {
+      showTextTypingEffectS('【バニーガール】',num+"のカードね。もちろんまだ引くわよね？", () => {
         // 初回引いた後は、判断用の「引く」＋「やめる」ボタンを表示
         showDecisionButtons();
       });
@@ -101,7 +101,7 @@ function startEvent57() {
     stopBtn.onclick = () => {
       buttonGroup.classList.add('hidden');
         let noteCount = 210 - (score * 10);
-        showTextTypingEffectS('【バニー】',"あら、やめるのね。そしたら合計"+ score + "だから、"+noteCount+"回、清算お願いね♡", () => {
+        showTextTypingEffectS('【バニーガール】',"あら、やめるのね。そしたら合計"+ score + "だから、"+noteCount+"回、清算お願いね♡", () => {
           startGameNone(1250, noteCount, () => {
             hideSceneImage();
             fadeOutIn(() => {

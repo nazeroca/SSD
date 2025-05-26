@@ -8,9 +8,9 @@ function startEvent58() {
   updateEventCountDisplay();
   showSceneImage('./image/鬼ガール.png');
   showTextTypingEffect('鬼ガールが現れた！', () => {
-    showTextTypingEffectS('鬼','また一人ザコがノコノコと現れたな…\n私が捻りつぶしてやるよ！', () => {
+    showTextTypingEffectS('【鬼ガール】','また一人ザコがノコノコと現れたな…\n私が捻りつぶしてやるよ！', () => {
       spawnBlueNoteOnce();
-      showTextTypingEffectS('鬼','その青色のノーツが流れたら根本を固定してしごくこと。いいな？', () => {
+      showTextTypingEffectS('【鬼ガール】','その青色のノーツが流れたら根本を固定してしごくこと。いいな？', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/鬼ガール.png';
     initializeMonster(79);
