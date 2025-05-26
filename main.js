@@ -10,7 +10,7 @@ const infoDisplay = document.getElementById('info');
 const textWindow = document.getElementById('text-window');
 const settingsButton = document.getElementById('settings-button');
 // 既存グローバル変数の上部あたりに追加
-let eventCount = 14;
+let eventCount = 0;
 
 // 追加グローバル変数
 let otherSoundsEnabled = true;  // hitSound以外の音のON/OFF（初期はON）

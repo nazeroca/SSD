@@ -1,7 +1,7 @@
 function startEvent59() {
       QText = [
   'VS　サキュバス',
-  '【ＨＰ】50\n【説明】\n人間の精を喰らう魔物。\n最初にあからさまな弱攻撃を放つが、ロザリオを持っていると強制的に発動させられる。'
+  '【ＨＰ】60\n【説明】\n人間の精を喰らう魔物。\n最初にあからさまな弱攻撃を放つが、ロザリオを持っていると強制的に発動させられる。'
 ];
   let A = false;
   if (flagRB == true) {A = true;}
@@ -14,17 +14,17 @@ function startEvent59() {
       showTextTypingEffectS('【サキュバス】', 'まずは腕試しといこうかしら。', () => {
         hideSceneImage();
         document.getElementById('monster-img').src = './image/サキュバス.png';
-        initializeMonster(50);
+        initializeMonster(60);
         if (A) {
           flagRB=false;
     skipOnEndProcessingB = true;
           updateSkipImageVisibility();
           startGameSC(2000, 10, () => {
-            monsterHP = 40;
+            monsterHP = 50;
             updateMonsterHPBar();
             showTextTypingEffectS('【サキュバス】', 'あら、こんな弱い攻撃でソレ使っちゃうんだ。大したことなさそうね。', () => {
               showTextTypingEffectS('【サキュバス】', 'そしたら私の本気の攻撃、喰らうといいわ！', () => {
-                startGameSC2(750, 40,() => {
+                startGameSC2(750, 50,() => {
                   showTextTypingEffect(`サキュバスを倒した！`, () => {
                     fadeOutIn(() => {
                       startRandomEvent([currentEvent]);
@@ -37,7 +37,7 @@ function startEvent59() {
         } else {
           startGameSC(2000, 10, () => {
             showTextTypingEffectS('【サキュバス】', 'ふふ、ここまでは所詮腕試しよ。\n私の本気の攻撃、喰らうといいわ！', () => {
-              startGameSC2(750, 40,  () => {
+              startGameSC2(750, 50,  () => {
                 showTextTypingEffect(`サキュバスを倒した！`, () => {
                   fadeOutIn(() => {
                     startRandomEvent([currentEvent]);
