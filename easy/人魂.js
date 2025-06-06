@@ -10,7 +10,7 @@ function startEvent25() {
   showTextTypingEffect('人魂が現れた！', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/人魂.png';
-    initializeMonster(45);
+    initializeMonster(35);
     startGameT(3000, 2000, 1000, 20, 10, 5, () => {
       
       showTextTypingEffect(`人魂を倒した！`, () => {

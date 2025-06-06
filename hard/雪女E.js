@@ -11,7 +11,7 @@ function startEvent42() {
   showTextTypingEffect('エリート雪女が現れた！', () => {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/雪女E.png';
-    initializeMonster(noteCount);
+    initializeMonster(noteCount+20);
     startGameA2(500,4000,500, 0.6,noteCount,5,20, () => {
       
       showTextTypingEffect(`エリート雪女を倒した！`, () => {

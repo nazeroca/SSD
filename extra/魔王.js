@@ -1,4 +1,4 @@
-function startevent99() {
+function startEvent99() {
         QText = [
   'VS　魔王',
   '【ＨＰ】285\n【説明】\n本作のラスボス。\n魔導書の効果で、一部攻撃を無効化することが出来る。'
@@ -16,20 +16,20 @@ function startevent99() {
         startGameNone(450, noteCount, () => {
           play(healSound);
           showTextTypingEffect('麻痺状態を解除した！', () => {
-            startevent99()
+            startevent992()
           });
         });
       });
       } else {
         showTextTypingEffect('魔導書の効果で、敵の雷魔法を無効化した！', () => {
-          startevent99();
+          startevent992();
         });
       }
     });
   });
 }
 
-function startevent99() {
+function startevent992() {
   let N = 0.02;
   if (!flagB) {
     N = 0.2;

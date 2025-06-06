@@ -11,7 +11,7 @@ function startEvent03() {
       showTextTypingEffect(`天使を倒した！`, () => {
         fadeOutIn(() => {
           if(eventCount>8){
-          addEvent('event38', startEvent38, 1);
+          addEvent('event38', startEvent38, 6);
           }
           ange +=1;
           startRandomEvent([currentEvent]);

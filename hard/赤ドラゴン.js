@@ -19,7 +19,7 @@ function startEvent27() {
             showTextTypingEffect(`赤の魔導書を入手した！\nブラックドラゴンが出現するようになった！`, () => {
               flagR = true;
               updateFlagGrid();
-              addEvent('event30', startEvent30, 3);
+              addEvent('event30', startEvent30, 9);
               fadeOutIn(() => {
           startRandomEvent([currentEvent]);
         });

@@ -257,8 +257,22 @@ function fadeOutIn(callback) {
     footstepSound.play().catch(error => console.error("Footstep sound error:", error));
   }
   setTimeout(() => {
-    if (callback) callback();
-    overlay.style.opacity = '0';
+    // 設定画面が開いている場合はcallbackを保留
+    if (settingsOpen) {
+      // 設定画面が閉じられるまで待つ
+      const waitForSettingsClose = () => {
+        if (!settingsOpen) {
+          if (callback) callback();
+          overlay.style.opacity = '0';
+        } else {
+          setTimeout(waitForSettingsClose, 200);
+        }
+      };
+      waitForSettingsClose();
+    } else {
+      if (callback) callback();
+      overlay.style.opacity = '0';
+    }
   }, 1500);
 }
 
@@ -606,6 +620,8 @@ function loadGameState() {
 
   console.log("ロード完了:", state);
 
+  // ここで必ずsettingsOpen=falseにしてからsettingsWindow.classList.remove('active')
+  settingsOpen = false;
   const settingsWindow = document.getElementById('settings-window');
   settingsWindow.classList.remove('active');
 
@@ -692,55 +708,55 @@ function startRandomEvent(exclude = []) {
   if (possibleEventKeys.length === 0) return;
   
   if (eventCount == 8) {
-    addEvent('event26', startEvent26, 4);
-    addEvent('event36', startEvent36, 4);
-    addEvent('event18', startEvent18, 4);
-    addEvent('event13', startEvent13, 4);
-    addEvent('event05', startEvent05, 4);
-    addEvent('event16', startEvent16, 4);
-    addEvent('event08', startEvent08, 4);
-    addEvent('event10', startEvent10, 4);
-    addEvent('event12', startEvent12, 4);
-    addEvent('event09', startEvent09, 4);
-    addEvent('event07', startEvent07, 4);
-    addEvent('event11', startEvent11, 2);
-    addEvent('event22', startEvent22, 4);
-    addEvent('event20', startEvent20, 4);
-    addEvent('event45', startEvent45, 4);
-    addEvent('event47', startEvent47, 4);
-    addEvent('event48', startEvent48, 4);
+    addEvent('event26', startEvent26, 6);
+    addEvent('event36', startEvent36, 6);
+    addEvent('event18', startEvent18, 6);
+    addEvent('event13', startEvent13, 6);
+    addEvent('event05', startEvent05, 6);
+    addEvent('event16', startEvent16, 6);
+    addEvent('event08', startEvent08, 6);
+    addEvent('event10', startEvent10, 6);
+    addEvent('event12', startEvent12, 6);
+    addEvent('event09', startEvent09, 6);
+    addEvent('event07', startEvent07, 6);
+    addEvent('event11', startEvent11, 3);
+    addEvent('event22', startEvent22, 6);
+    addEvent('event20', startEvent20, 6);
+    addEvent('event45', startEvent45, 6);
+    addEvent('event47', startEvent47, 6);
+    addEvent('event48', startEvent48, 6);
     addEvent('event49', startEvent49, 1);
-    addEvent('event54', startEvent54, 4);
-    addEvent('event56', startEvent56, 4);
-    addEvent('event57', startEvent57, 4);
+    addEvent('event54', startEvent54, 6);
+    addEvent('event56', startEvent56, 6);
+    addEvent('event57', startEvent57, 6);
   } else if (eventCount == 16) {
-    addEvent('event35', startEvent35, 5);
-    addEvent('event06', startEvent06, 5);
-    addEvent('event32', startEvent32, 5);
-    addEvent('event19', startEvent19, 5);
-    addEvent('event34', startEvent34, 5);
-    addEvent('event37', startEvent37, 5);
-    addEvent('event51', startEvent51, 5);
-    addEvent('event50', startEvent50, 5);
-    addEvent('event46', startEvent46, 5);
-    addEvent('event44', startEvent44, 5);
-    addEvent('event43', startEvent43, 5);
-    addEvent('event42', startEvent42, 5);
-    addEvent('event53', startEvent53, 4);
-    addEvent('event55', startEvent55, 4);
-    addEvent('event33', startEvent33, 4);
-    addEvent('event29', startEvent29, 2);
-    addEvent('event27', startEvent27, 2);
-    addEvent('event28', startEvent28, 2);
+    addEvent('event35', startEvent35, 9);
+    addEvent('event06', startEvent06, 9);
+    addEvent('event32', startEvent32, 9);
+    addEvent('event19', startEvent19, 9);
+    addEvent('event34', startEvent34, 9);
+    addEvent('event37', startEvent37, 9);
+    addEvent('event51', startEvent51, 9);
+    addEvent('event50', startEvent50, 9);
+    addEvent('event46', startEvent46, 9);
+    addEvent('event44', startEvent44, 9);
+    addEvent('event43', startEvent43, 9);
+    addEvent('event42', startEvent42, 9);
+    addEvent('event53', startEvent53, 6);
+    addEvent('event55', startEvent55, 6);
+    addEvent('event33', startEvent33, 6);
+    addEvent('event29', startEvent29, 3);
+    addEvent('event27', startEvent27, 3);
+    addEvent('event28', startEvent28, 3);
   } else if (eventCount == 24) {
-    addEvent('event24', startEvent24, 5);
-    addEvent('event41', startEvent41, 5);
-    addEvent('event40', startEvent40, 5);
-    addEvent('event39', startEvent39, 5);
-    addEvent('event99', startevent99, 1);
+    addEvent('event24', startEvent24, 9);
+    addEvent('event41', startEvent41, 9);
+    addEvent('event40', startEvent40, 9);
+    addEvent('event39', startEvent39, 9);
+    addEvent('event99', startevent99, 3);
   }
   if(eventCount>24){
-    eventWeights['event99'] = eventCount-23;
+    eventWeights['event99'] = eventCount-21;
   }
   // 重みでランダムに選ぶための準備
   let totalWeight = 0;
