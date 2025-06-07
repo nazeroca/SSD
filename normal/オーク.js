@@ -8,7 +8,7 @@ function startEvent26() {
     hideSceneImage();
     document.getElementById('monster-img').src = './image/オーク.png';
     initializeMonster(noteCount);
-    startGame(1500, noteCount, () => {
+    startGame(1750, noteCount, () => {
       
       showTextTypingEffect(`オークを倒した！`, () => {
 

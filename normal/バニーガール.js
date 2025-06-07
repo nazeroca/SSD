@@ -75,9 +75,11 @@ function startEvent57() {
             document.getElementById('monster-img').src = './image/バニーガール.png';
             initializeMonster(100);
               startGameA(3000, 500, 2, 50,20, () => {
+                showTextTypingEffect("ふふ…ひどい有り様ね…。これに懲りたら、次は気を付けるのよ♡", () => {
                 fadeOutIn(() => {
                   startRandomEvent(['event57']);
                 });
+              });
               });
           });
         } else if (score === 21) {
@@ -103,9 +105,11 @@ function startEvent57() {
         let noteCount = 210 - (score * 10);
         showTextTypingEffectS('【バニーガール】',"あら、やめるのね。そしたら合計"+ score + "だから、"+noteCount+"回、清算お願いね♡", () => {
           startGameNone(1250, noteCount, () => {
+            showTextTypingEffectS('【バニーガール】',"はい、お疲れ様。また来てね♡", () => {
             hideSceneImage();
             fadeOutIn(() => {
               startRandomEvent(['event57']);
+            });
             });
           });
         });

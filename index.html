@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
-  
+
 
 <head>
   <meta charset="UTF-8">
@@ -15,37 +15,37 @@
     <div id="fade-overlay"></div>
     <div class="top-screen">
 
-  <div id="monster-container" class="hidden">
-    <img id="monster-img" src="" alt="Monster">
-  </div>
+      <div id="monster-container" class="hidden">
+        <img id="monster-img" src="" alt="Monster">
+      </div>
 
-  <!-- HP表示用コンテナ -->
-  <div id="monster-hp-container" class="hidden">
-    <div id="monster-hp-bar">
-      <div id="monster-hp"></div>
-    </div>
-    <div id="monster-hp-text"></div>
-  </div>
+      <!-- HP表示用コンテナ -->
+      <div id="monster-hp-container" class="hidden">
+        <div id="monster-hp-bar">
+          <div id="monster-hp"></div>
+        </div>
+        <div id="monster-hp-text"></div>
+      </div>
 
-<!-- シーン表示エリア -->
-<div id="scene-container" class="hidden">
-  <img id="scene-img" src="" alt="Scene Image">
-</div>
+      <!-- シーン表示エリア -->
+      <div id="scene-container" class="hidden">
+        <img id="scene-img" src="" alt="Scene Image">
+      </div>
 
-<!-- イベント回数表示（オープニング以外で更新） -->
-<div class="info" id="info"></div>
+      <!-- イベント回数表示（オープニング以外で更新） -->
+      <div class="info" id="info"></div>
 
-<!-- フラグ表示（円グラフ風） -->
-<div id="flag-container">
-  <div id="flag-title">魔導書の<br>取得状況</div>
-  <div id="flag-grid"></div>
-</div>
+      <!-- フラグ表示（円グラフ風） -->
+      <div id="flag-container">
+        <div id="flag-title">魔導書の<br>取得状況</div>
+        <div id="flag-grid"></div>
+      </div>
 
-<!-- ボタン群 -->
-<div class="button-group hidden" id="button-group"></div>
+      <!-- ボタン群 -->
+      <div class="button-group hidden" id="button-group"></div>
 
-<!-- テキストウィンドウ -->
-<div class="text-window hidden" id="text-window"></div>
+      <!-- テキストウィンドウ -->
+      <div class="text-window hidden" id="text-window"></div>
 
     </div>
 
@@ -58,44 +58,44 @@
     </div>
   </div>
 
-<!-- 設定ウインドウ（ページ送り対応） -->
-<div id="settings-window">
-  <div class="close-button" id="close-settings">×</div>
-  <!-- ページ送りボタン -->
-  <button id="settings-prev" class="settings-page-btn" style="display:none;">◀</button>
-  <button id="settings-next" class="settings-page-btn">▶</button>
-  <!-- ページ1: ヘルプ内容 -->
-  <div class="settings-page" id="settings-page-help">
-    <div class="help-title" id="help-title"></div>
-    <div class="help-body" id="help-body"></div>
+  <!-- 設定ウインドウ（ページ送り対応） -->
+  <div id="settings-window">
+    <div class="close-button" id="close-settings">×</div>
+    <!-- ページ送りボタン -->
+    <button id="settings-prev" class="settings-page-btn" style="display:none;">◀</button>
+    <button id="settings-next" class="settings-page-btn">▶</button>
+    <!-- ページ1: ヘルプ内容 -->
+    <div class="settings-page" id="settings-page-help">
+      <div class="help-title" id="help-title"></div>
+      <div class="help-body" id="help-body"></div>
+    </div>
+    <!-- ページ2: 設定内容 -->
+    <div class="settings-page" id="settings-page-main" style="display:none;">
+      <div class="settings-row">
+        <label>ノーツ音：</label>
+        <button id="volume-decrease">−</button>
+        <span id="volume-value">100%</span>
+        <button id="volume-increase">+</button>
+      </div>
+      <div class="settings-row">
+        <label for="other-sounds-toggle">効果音：</label>
+        <input type="checkbox" id="other-sounds-toggle" checked>
+      </div>
+      <div class="settings-row">
+        <label>落下速度：</label>
+        <button id="fallduration-decrease">−</button>
+        <span id="fallduration-value">3000</span>
+        <button id="fallduration-increase">+</button>
+      </div>
+      <div class="settings-row">
+        <label for="debug-toggle">デバッグモード：</label>
+        <input type="checkbox" id="debug-toggle">
+      </div>
+      <div class="settings-row" style="text-align: center;">
+        <button id="state-action-button">セーブ</button>
+      </div>
+    </div>
   </div>
-  <!-- ページ2: 設定内容 -->
-  <div class="settings-page" id="settings-page-main" style="display:none;">
-    <div class="settings-row">
-      <label>ノーツ音：</label>
-      <button id="volume-decrease">−</button>
-      <span id="volume-value">100%</span>
-      <button id="volume-increase">+</button>
-    </div>
-    <div class="settings-row">
-      <label for="other-sounds-toggle">効果音：</label>
-      <input type="checkbox" id="other-sounds-toggle" checked>
-    </div>
-    <div class="settings-row">
-      <label>落下速度：</label>
-      <button id="fallduration-decrease">−</button>
-      <span id="fallduration-value">3000</span>
-      <button id="fallduration-increase">+</button>
-    </div>
-    <div class="settings-row">
-      <label for="debug-toggle">デバッグモード：</label>
-      <input type="checkbox" id="debug-toggle">
-    </div>
-    <div class="settings-row" style="text-align: center;">
-      <button id="state-action-button">セーブ</button>
-    </div>
-  </div>
-</div>
 
   <audio id="hit" src="./sounds/hit.mp3" preload="auto"></audio>
   <audio id="foot" src="./sounds/foot.mp3" preload="auto"></audio>
@@ -104,7 +104,7 @@
   <audio id="heal" src="./sounds/heal.mp3" preload="auto"></audio>
   <audio id="bari" src="./sounds/bari.mp3" preload="auto"></audio>
   <audio id="lit" src="./sounds/lit.mp3" preload="auto"></audio>
-    <audio id="roza" src="./sounds/roza.mp3" preload="auto"></audio>
+  <audio id="roza" src="./sounds/roza.mp3" preload="auto"></audio>
 
 
   <!-- 初期 -->
@@ -139,15 +139,15 @@
   <script src="./normal/メタルスライム.js"></script><!-- なし特殊 -->
   <script src="./normal/メデューサ.js"></script><!-- 確率 -->
   <script src="./normal/宝箱.js"></script><!-- なし特殊 -->
-  
+
   <script src="./normal/青魔導書.js"></script>
- 
+
   <script src="./normal/ゴーレムE.js"></script><!-- 確率 -->
   <script src="./normal/ゾンビE.js"></script><!-- 確率 -->
   <script src="./normal/ゾンビ犬E.js"></script><!-- 確率 -->
 
   <!-- ハード16F -->
-     <script src="./hard/宝箱E.js"></script><!-- トリプル -->
+  <script src="./hard/宝箱E.js"></script><!-- トリプル -->
   <script src="./hard/クトゥグア.js"></script><!-- 確率 -->
   <script src="./hard/スレイプニル.js"></script><!-- 加速 -->
   <script src="./hard/ハーピー.js"></script><!-- 加速 -->
@@ -160,10 +160,10 @@
   <script src="./hard/ドラキュラE.js"></script><!-- 確率 -->
   <script src="./hard/オークE.js"></script><!-- 確率 -->
   <script src="./hard/デュラハンE.js"></script><!-- 確率 -->
-   <script src="./hard/赤ドラゴン.js"></script><!-- なし特殊 -->
+  <script src="./hard/赤ドラゴン.js"></script><!-- なし特殊 -->
   <script src="./hard/緑ドラゴン.js"></script><!-- 確率 -->
   <script src="./hard/青ドラゴン.js"></script><!-- なし特殊 -->
-  
+
 
 
   <!-- 魔王出現24F -->
@@ -176,36 +176,36 @@
   <!-- イベント -->
   <script src="./event/黒ドラゴン.js"></script><!-- トリプル -->
   <script src="./event/堕天使.js"></script>
-    <script src="./event/鬼ガール.js"></script>
-     <script src="./event/サキュバス.js"></script>
-       <script src="./event/ゾンビガール.js"></script>
+  <script src="./event/鬼ガール.js"></script>
+  <script src="./event/サキュバス.js"></script>
+  <script src="./event/ゾンビガール.js"></script>
 
 
   <script src="./normal/スフィンクス.js"></script>
   <script src="./normal/ヨグソトース.js"></script>
-    <script src="./normal/イース.js"></script>
-        <script src="./normal/ロボット.js"></script>
-         <script src="./normal/バニーガール.js"></script>
+  <script src="./normal/イース.js"></script>
+  <script src="./normal/ロボット.js"></script>
+  <script src="./normal/バニーガール.js"></script>
 
 
-  
-
-
-  <script src="startGames.js"></script>
   <script src="main.js"></script>
+  <script src="setting.js"></script>
+  <script src="gamesystem.js"></script>
+  <script src="startGames.js"></script>
+
 
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-      navigator.serviceWorker.register('/SSD/sw.js').then(function(registration) {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, function(err) {
-        console.log('ServiceWorker registration failed: ', err);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/SSD/sw.js').then(function (registration) {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        }, function (err) {
+          console.log('ServiceWorker registration failed: ', err);
+        });
       });
-    });
-  }
-</script>
-  
+    }
+  </script>
+
 </body>
 
 </html>

@@ -10,7 +10,7 @@ function startEvent40() {
     initializeMonster(noteCount);
     startGameR2(500,2000, noteCount, () => {
       
-      showTextTypingEffect(`ハスターを倒した！`, () => {
+      showTextTypingEffect(`エリートハスターを倒した！`, () => {
 
         fadeOutIn(() => {
           startRandomEvent([currentEvent]);
