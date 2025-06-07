@@ -65,10 +65,11 @@ function startGame(speed, count, onEnd) {
     // 【変更】テスト用スキップが有効なら即中断
     if (skipOnEndProcessingB) {
       clearInterval(intervalId);
-      defeatMonster();
+      defeatMonster(true); // ロザリオ発動時はtrue
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -108,10 +109,11 @@ function startGameR(speed1, speed2, count, onEnd) {
   function spawnNext() {
     // スキップボタンが押されている場合は即座に強制終了処理
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -161,10 +163,11 @@ function startGameR2(speed1, speed2, count, onEnd) {
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -227,10 +230,11 @@ function startGameA(speed1, speed2, type, count1, count2, onEnd) {
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -295,10 +299,11 @@ function startGameA2(speed1, speed2, speed3, type1, count1, type2, count2, onEnd
   // 再帰的にノーツを生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -367,10 +372,11 @@ function startGameT(speed1, speed2, speed3, count1, count2, count3, onEnd) {
   // ノーツを再帰的に生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -438,10 +444,11 @@ function startGameT2(speed1, speed2, count1, count2, sets, onEnd) {
   // ノーツを再帰的に生成する関数
   function spawnNext() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -501,10 +508,11 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
 
   function spawnMain() {
     if (skipOnEndProcessingB) {
-      defeatMonster();
+      defeatMonster(true);
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }
@@ -537,8 +545,9 @@ function startGameP(speed1, count1, probability, speed2, count2, onEnd) {
       if (skipOnEndProcessingB) {
         skipOnEndProcessingB = false;
         updateSkipImageVisibility();
-        defeatMonster();
+        defeatMonster(true);
         skipEnded = true;
+        play('roza');
         showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
         return;
       }
@@ -590,6 +599,7 @@ function startGameNone(speed, count, onEnd) {
       skipOnEndProcessingB = false;
       updateSkipImageVisibility();
       skipEnded = true;
+      play('roza');
       showTextTypingEffect("ロザリオの不思議な力が発動した！", () => { onEnd(); });
       return;
     }

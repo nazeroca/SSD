@@ -10,11 +10,11 @@ function startEvent99() {
   let noteCount = 50;
   showTextTypingEffect('魔王が現れた！', () => {
     showTextTypingEffectS('【魔王】', 'これでも喰らうがいい！', () => {
-      play(litSound);
+      play('lit');
       if (!flagR == true) {
         showTextTypingEffect('麻痺状態になってしまった…\n麻痺を解除するまで動けない！', () => {    
         startGameNone(450, noteCount, () => {
-          play(healSound);
+          play('heal');
           showTextTypingEffect('麻痺状態を解除した！', () => {
             startevent992()
           });
@@ -34,13 +34,13 @@ function startevent992() {
   if (!flagB) {
     N = 0.2;
     showTextTypingEffectS('【魔王】', 'ほう…我の魔法を解いたか…\nしかし、貴様にこのバリアは割れまい…', () => {
-      play(barrierSound);
+      play('bari');
       showSceneImage('./image/バリア魔王.png');
       stage2(N);
     });
   } else {
     showTextTypingEffectS('【魔王】', 'ほう…我の魔法を解いたか…\nしかし、貴様にこのバリアは割れまい…', () => {
-      play(barrierSound);
+      play('bari');
       showSceneImage('./image/バリア魔王.png');
       showTextTypingEffect('魔導書の効果で、バリアに対する攻撃力があがった！', () => {
         stage2(N);
@@ -54,14 +54,14 @@ function stage2(N) {
   let R = secureRandom();
   startGameR2Maou(400, 1500, noteCount, () => {
     if (R < N) {
-      play(defeatSound);
+      play('kill');
       showTextTypingEffect(`バリアを割った！`, () => {
         hideSceneImage();
         showSceneImage('./image/魔王.png');
         startevent993();
       });
     } else {
-      play(reflectSound);
+      play('block');
       showTextTypingEffect(`バリアはまだ割れない！`, () => {
         N += 0.02;
         stage2(N);

@@ -1,11 +1,21 @@
 const gameArea = document.getElementById('game-area');
 const buttonGroup = document.getElementById('button-group');
-const hitSound = document.getElementById('hit-sound');
-const reflectSound = document.getElementById('reflect-sound');
-const healSound = document.getElementById('heal-sound');
-const barrierSound = document.getElementById('barrier-sound');
-const litSound = document.getElementById('lit-sound');
-const defeatSound = document.getElementById('defeat-sound');
+const hitSound = document.getElementById('hit');
+const soundMap = {
+  foot: 'foot',
+  kill: 'kill',
+  block: 'block',
+  heal: 'heal',
+  bari: 'bari',
+  lit: 'lit',
+  roza: 'roza'
+};
+// 一括取得
+const sounds = {};
+for (const [key, id] of Object.entries(soundMap)) {
+  sounds[key] = document.getElementById(id);
+}
+
 const infoDisplay = document.getElementById('info');
 const textWindow = document.getElementById('text-window');
 const settingsButton = document.getElementById('settings-button');
@@ -44,14 +54,14 @@ let circlecolor = '#fff';
 
 let currentEvent = null;
 
-function play(A) {
-  if (!A) {
-    console.error("要素が見つかりません。");
+function play(soundName) {
+  const audio = sounds[soundName];
+  if (!audio) {
+    console.error("サウンドが見つかりません: ", soundName);
     return;
   }
-  // 毎回 currentTime=0 にリセットして再生
-  A.currentTime = 0;
-  A.play().catch(error => {
+  audio.currentTime = 0;
+  audio.play().catch(error => {
     console.error("再生エラー:", error);
   });
 }
@@ -98,7 +108,7 @@ function updateMonsterHPBar() {
   }
 }
 
-function defeatMonster() {
+function defeatMonster(isRosario = false) {
   const monsterContainer = document.getElementById('monster-container');
   const monsterHPContainer = document.getElementById('monster-hp-container');
   // 両方のコンテナを非表示にする
@@ -108,9 +118,9 @@ function defeatMonster() {
   if (monsterHPContainer) {
     monsterHPContainer.classList.add('hidden');
   }
-  if (defeatSound && otherSoundsEnabled) {
-    defeatSound.currentTime = 0;
-    defeatSound.play().catch(error => console.error("Defeat sound error:", error));
+  // ロザリオ発動時以外のみkillサウンド
+  if (!isRosario && otherSoundsEnabled) {
+    play('kill');
   }
 }
 
@@ -251,10 +261,8 @@ function updateFlagGrid() {
 function fadeOutIn(callback) {
   const overlay = document.getElementById('fade-overlay');
   overlay.style.opacity = '1';
-  const footstepSound = document.getElementById('footstep-sound');
-  if (footstepSound && otherSoundsEnabled) {
-    footstepSound.currentTime = 0;
-    footstepSound.play().catch(error => console.error("Footstep sound error:", error));
+  if (otherSoundsEnabled) {
+    play('foot');
   }
   setTimeout(() => {
     // 設定画面が開いている場合はcallbackを保留
