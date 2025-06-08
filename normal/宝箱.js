@@ -18,23 +18,19 @@ function startEvent20() {
     btnA.onclick = () => {
       clearTimeout(autoSelectTimer);
       hideSceneImage();
-      if (secureRandom() < 0.2 && !flagG) {
-        if (secureRandom() < 0.1 && !flagG) {
+        if (secureRandom() < 0.1) {
         buttonGroup.classList.add('hidden');
         showSceneImage('./image/財宝.png');
-        flagG = true;
-        updateFlagGrid();
-        showTextTypingEffect('緑の魔導書を手に入れた！', () => {
+         acquireRandomFlag();
+        showTextTypingEffect('魔導書を手に入れた！', () => {
           hideSceneImage();
           fadeOutIn(() => {
             startRandomEvent([currentEvent]);
           });
         });
-      }else{
+      }else if(secureRandom() < 0.2){
         buttonGroup.classList.add('hidden');
         showSceneImage('./image/財宝.png');
-        flagG = true;
-        updateFlagGrid();
         showTextTypingEffect('ロザリオを手に入れた！', () => {
           hideSceneImage();
           flagRB= true;
@@ -43,7 +39,6 @@ function startEvent20() {
             startRandomEvent([currentEvent]);
           });
         });
-      }
       } else {
         buttonGroup.classList.add('hidden');
         showSceneImage('./image/ミミック.png');

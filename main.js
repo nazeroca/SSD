@@ -537,3 +537,28 @@ const eventWeights = {
   'event31': 3
 };
 
+// イベントの追加用関数
+function addEvent(eventId, eventFunction, weight = 1) {
+  eventFunctions[eventId] = eventFunction;
+  eventWeights[eventId] = weight;
+}
+
+// イベントの削除用関数
+function removeEvent(eventId) {
+  delete eventFunctions[eventId];
+  delete eventWeights[eventId];
+}
+// いずれかの未取得魔導書フラグを1つだけtrueにする関数
+function acquireRandomFlag() {
+  const flags = [];
+  if (!flagR) flags.push('flagR');
+  if (!flagG) flags.push('flagG');
+  if (!flagB) flags.push('flagB');
+  if (flags.length === 0) return; // すべてtrueなら何もしない
+  const selected = flags[Math.floor(secureRandom() * flags.length)];
+  if (selected === 'flagR') flagR = true;
+  if (selected === 'flagG') flagG = true;
+  if (selected === 'flagB') flagB = true;
+  updateFlagGrid();
+}
+

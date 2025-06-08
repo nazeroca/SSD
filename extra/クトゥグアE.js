@@ -10,7 +10,7 @@ function startEvent39() {
     initializeMonster(noteCount);
     startGameP(3000, noteCount, 0.25, 500, 7, () => {
       
-      showTextTypingEffect(`クトゥグアを倒した！`, () => {
+      showTextTypingEffect(`エリートクトゥグアを倒した！`, () => {
 
         fadeOutIn(() => {
           startRandomEvent([currentEvent]);

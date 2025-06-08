@@ -16,9 +16,8 @@ function startEvent27() {
         removeEvent(currentEvent);
         removeEvent('event28');
         removeEvent('event29');
-            showTextTypingEffect(`赤の魔導書を入手した！\nブラックドラゴンが出現するようになった！`, () => {
-              flagR = true;
-              updateFlagGrid();
+            showTextTypingEffect(`魔導書を入手した！\nブラックドラゴンが出現するようになった！`, () => {
+              acquireRandomFlag();
               addEvent('event30', startEvent30, 9);
               fadeOutIn(() => {
           startRandomEvent([currentEvent]);

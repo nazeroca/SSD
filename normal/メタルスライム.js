@@ -22,57 +22,13 @@ function startEvent11() {
     initializeMonster(50);
     startGame(800, 50, () => {
       showTextTypingEffect(`メタルスライムを倒した！`, () => {
-        const randomIndex = Math.floor(secureRandom() * 3);
-  
-  if (randomIndex === 0) {
-    if (flagR) {
-      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
+      acquireRandomFlag();
+      showTextTypingEffect(`魔導書を入手した！`, () => {
         fadeOutIn(() => {
           startRandomEvent([currentEvent]);
         });
       });
-    } else {
-      flagR = true;
-      updateFlagGrid();
-      showTextTypingEffect(`赤の魔導書を入手した！`, () => {
-        fadeOutIn(() => {
-          startRandomEvent([currentEvent]);
-        });
-      });
-    }
-  } else if (randomIndex === 1) {
-    if (flagG) {
-      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
-        fadeOutIn(() => {
-          startRandomEvent([currentEvent]);
-        });
-      });
-    } else {
-      flagG = true;
-      updateFlagGrid();
-      showTextTypingEffect(`緑の魔導書を入手した！`, () => {
-        fadeOutIn(() => {
-          startRandomEvent([currentEvent]);
-        });
-      });
-    }
-  } else {  // randomIndex === 2
-    if (flagB) {
-      showTextTypingEffect(`魔導書を入手した！\nただ、すでに持っているものだ…`, () => {
-        fadeOutIn(() => {
-          startRandomEvent([currentEvent]);
-        });
-      });
-    } else {
-      flagB = true;
-      updateFlagGrid();
-      showTextTypingEffect(`青の魔導書を入手した！`, () => {
-        fadeOutIn(() => {
-          startRandomEvent([currentEvent]);
-        });
-      });
-    }
-  }
+
       });
     });
     };
